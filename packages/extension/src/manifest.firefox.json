@@ -1,0 +1,65 @@
+{
+  "manifest_version": 3,
+  "name": "MouseHunt Community Marketplace",
+  "version": "0.8.32",
+  "description": "A community marketplace for MouseHunt",
+  "permissions": [
+    "storage",
+    "alarms",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://www.mousehuntgame.com/*"
+  ],
+  "background": {
+    "scripts": [
+      "service-worker.js"
+    ],
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.mousehuntgame.com/*"
+      ],
+      "js": [
+        "content-script.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.mousehuntgame.com/*"
+      ],
+      "js": [
+        "main-world.js"
+      ],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    }
+  ],
+  "action": {},
+  "options_ui": {
+    "page": "options/index.html",
+    "open_in_tab": false
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "panel/*",
+        "panel.js",
+        "chunks/*",
+        "assets/*"
+      ],
+      "matches": [
+        "https://www.mousehuntgame.com/*"
+      ]
+    }
+  ],
+  "icons": {},
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "community-marketplace@mhcm"
+    }
+  }
+}

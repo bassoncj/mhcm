@@ -1,0 +1,22 @@
+{
+  "welcome": {
+    "version": 6,
+    "hash": "68c289ae8c968bc9"
+  },
+  "hitgrab-compliance": {
+    "version": 4,
+    "hash": "bb80b9d507b323f2"
+  },
+  "trading-info": {
+    "version": 2,
+    "hash": "6190b63b40faf906"
+  },
+  "privacy": {
+    "version": 3,
+    "hash": "74a88b7f1c71fad5"
+  },
+  "risk-acknowledgement": {
+    "version": 3,
+    "hash": "c0540ba4d6a2a1ed"
+  }
+}

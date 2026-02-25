@@ -1,0 +1,464 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+  min-width: 320px;
+}
+
+/* App Layout */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Pin button */
+.pin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: color 0.15s, background 0.15s;
+  position: relative;
+}
+
+.pin-btn:hover {
+  background: var(--bg-elevated);
+  color: var(--text);
+}
+
+.pin-btn.pinned {
+  color: var(--accent);
+}
+
+.pin-tooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: var(--bg-elevated);
+  color: var(--text);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 100;
+}
+
+.pin-btn:hover .pin-tooltip {
+  opacity: 1;
+}
+
+[data-theme="light"] .pin-tooltip {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.username {
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.badge.verified {
+  background: var(--buy);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+/* Connection Status — floating pill (bottom-right) */
+.connection-status {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 3px 8px 3px 6px;
+  pointer-events: none;
+  opacity: 0.7;
+  z-index: 50;
+  transition: opacity 0.2s;
+}
+
+.connection-status:not(.connected) {
+  opacity: 1;
+}
+
+.connection-status .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--error);
+  flex-shrink: 0;
+}
+
+.connection-status.connected .dot {
+  background: var(--success);
+}
+
+.connection-status.idle .dot {
+  background: var(--warning);
+  animation: idle-pulse 2s ease-in-out infinite;
+}
+
+.connection-status.afk .dot {
+  background: #6bb8d6;
+}
+
+@keyframes idle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Refresh button */
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: color 0.15s;
+}
+
+.refresh-btn:hover {
+  background: var(--bg-elevated);
+  color: var(--text);
+  opacity: 1;
+}
+
+.refresh-btn.refreshing {
+  animation: spin 0.8s linear;
+  pointer-events: none;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+/* Kebab menu */
+.kebab-container {
+  position: relative;
+}
+
+.kebab-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius);
+}
+
+.kebab-btn:hover {
+  background: var(--bg-elevated);
+  color: var(--text);
+  opacity: 1;
+}
+
+.kebab-btn.active {
+  color: var(--accent);
+}
+
+.kebab-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 140px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 200;
+  padding: 4px 0;
+}
+
+[data-theme="light"] .kebab-menu {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.kebab-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  border-radius: 0;
+}
+
+.kebab-menu-item:hover {
+  background: var(--bg-elevated);
+  opacity: 1;
+}
+
+.kebab-menu-item.active {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.kebab-menu-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+.kofi-link {
+  text-decoration: none;
+  font-size: 11px;
+}
+
+.kofi-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.tabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  padding: 10px 6px;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tabs button:hover {
+  color: var(--text);
+}
+
+.tabs button.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Mode tabs (subtabs for map modes) */
+.mode-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.mode-tabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  padding: 8px 6px;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  position: relative;
+}
+
+.mode-tabs button:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.mode-tabs button.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.mode-tabs button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: auto;
+}
+
+.mode-tabs button.has-tooltip:hover .icon-tooltip {
+  opacity: 1;
+}
+
+/* Main content */
+main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  transition: opacity 0.2s;
+}
+
+/* Disconnected state */
+.disconnected-banner {
+  padding: 6px 16px;
+  background: var(--error);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.app.disconnected main {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Market paused state — mirrors disconnected pattern */
+.market-paused > *:not(.market-paused-banner) {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.market-paused-banner {
+  padding: 6px 16px;
+  background: var(--warning);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+}
+
+/* Marketplace View */
+.marketplace-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* Coming soon view (Maps tab) */
+.coming-soon-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.coming-soon-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.coming-soon-view h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.coming-soon-view p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}

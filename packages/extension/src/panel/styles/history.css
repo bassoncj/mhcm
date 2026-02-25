@@ -1,0 +1,651 @@
+/* Transaction History */
+.state.completed {
+  color: var(--success);
+}
+
+.state.failed {
+  color: var(--error);
+}
+
+.state.active {
+  color: var(--warning);
+}
+
+.failure-reason {
+  color: var(--error);
+  cursor: help;
+}
+
+/* My Orders */
+.my-orders {
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.order-card {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.order-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.side-tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.side-tag.sell {
+  background: var(--sell);
+  color: #fff;
+}
+
+.side-tag.buy {
+  background: var(--buy);
+  color: #fff;
+}
+
+.order-map-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.order-card-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 14px;
+  font-size: 13px;
+}
+
+.order-detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 1px 0;
+}
+
+.order-detail-label {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.order-detail-value {
+  font-weight: 500;
+}
+
+.order-detail-sep {
+  color: var(--text-muted);
+  margin: 0 1px;
+}
+
+.order-date {
+  color: var(--text-muted);
+}
+
+.order-card-header-clickable {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 0;
+}
+
+.order-card-header-clickable:hover {
+  background: var(--bg-surface);
+}
+
+.order-card-header-clickable .chevron {
+  margin-left: auto;
+}
+
+.order-card-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.sniping-drawer {
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+}
+
+.sniping-drawer-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  font-size: 12px;
+}
+
+.sniping-drawer-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sniping-drawer-price {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.btn-edit {
+  background: #58a6ff;
+  color: #fff;
+  border-color: transparent;
+}
+
+.btn-edit:hover {
+  background: #79b8ff;
+}
+
+.order-card-edit {
+  margin-top: 8px;
+  padding: 8px;
+  background: var(--bg-elevated);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.edit-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.edit-field label {
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  width: 64px;
+}
+
+.edit-field .stepper-field {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.edit-field .stepper-label {
+  display: none;
+}
+
+.edit-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.edit-total {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-right: auto;
+}
+
+.edit-total.insufficient {
+  color: var(--error);
+}
+
+.btn-save {
+  background: var(--buy);
+  color: #fff;
+  border-color: transparent;
+}
+
+.btn-cancel-edit:hover {
+  background: var(--border);
+}
+
+/* Transaction History — order-grouped cards with expandable drawer */
+.transaction-history {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0 16px;
+}
+
+.history-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.history-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.history-card-header:hover {
+  background: var(--bg-surface);
+}
+
+.history-card-thumb {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.history-thumb-placeholder {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.history-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-card-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-card-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.history-card-date {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.history-card-right {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  color: var(--text-muted);
+}
+
+/* Badge variants */
+.history-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.history-badge-completed {
+  background: var(--success);
+  color: #fff;
+}
+
+.history-badge-open {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.history-badge-closed {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.history-closure-note {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 12px;
+}
+
+/* Expandable drawer */
+.history-drawer {
+  border-top: 1px solid var(--border);
+  background: var(--bg-surface);
+  padding: 6px 12px;
+  animation: drawer-open 0.15s ease-out;
+}
+
+@keyframes drawer-open {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.history-drawer-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0;
+  font-size: 12px;
+}
+
+.history-drawer-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.history-drawer-date {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.history-drawer-sep {
+  color: var(--text-muted);
+}
+
+.history-drawer-link {
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.history-drawer-link:hover {
+  text-decoration: underline;
+}
+
+.history-drawer-price {
+  margin-left: auto;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.history-drawer-price.sell {
+  color: var(--buy);
+}
+
+.history-drawer-price.buy {
+  color: var(--sell);
+}
+
+.history-drawer-qty {
+  white-space: nowrap;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.history-drawer-section {
+  padding: 4px 0;
+}
+
+.history-drawer-section + .history-drawer-section {
+  border-top: 1px solid var(--border);
+}
+
+/* RT items in history drawer */
+.rt-items-list {
+  padding-left: 16px;
+}
+
+.rt-item-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 1px 0;
+}
+
+.rt-item-dot {
+  color: var(--warning);
+}
+
+.rt-item-name {
+  color: var(--text);
+}
+
+.rt-item-qty {
+  color: var(--text-muted);
+  margin-left: auto;
+}
+
+.history-drawer-mouse {
+  padding-left: 16px;
+}
+
+/* Sniping history — hunter-grouped drawer */
+.snipe-hunter-group {
+  padding: 4px 0;
+}
+
+.snipe-hunter-group + .snipe-hunter-group {
+  border-top: 1px solid var(--border);
+}
+
+.snipe-hunter-header {
+  padding: 2px 0 4px;
+  font-size: 12px;
+}
+
+.snipe-mouse-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0 2px 8px;
+  font-size: 12px;
+}
+
+.snipe-mouse-date {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  min-width: 42px;
+}
+
+.snipe-mouse-detail {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.snipe-mouse-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.snipe-mouse-price {
+  flex-shrink: 0;
+  margin-left: auto;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.snipe-note-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  cursor: help;
+}
+
+.snipe-note-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  z-index: 100;
+}
+
+.snipe-note-icon:hover .snipe-note-tooltip {
+  opacity: 1;
+}
+
+[data-theme="light"] .snipe-note-tooltip {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 12px 0 6px;
+}
+
+.caught-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.caught-icon.caught {
+  color: var(--accent);
+}
+
+.caught-icon.missed {
+  color: var(--sell);
+}
+
+.role-sniper {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.role-maptain {
+  color: var(--buy);
+  font-weight: 600;
+}
+
+.failure-reason {
+  color: var(--sell);
+  font-size: 11px;
+}
+
+/* Transaction History Header */
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  margin-bottom: 12px;
+}
+
+.history-header h3 {
+  margin-bottom: 0;
+}
+
+/* Paginated layout: scrollable card area between fixed header and fixed pagination */
+.paginated-scroll {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.paginated-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.pagination-fixed {
+  flex-shrink: 0;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 8px 0;
+}
+
+/* Market type watermark icon — bottom-left of order cards */
+.market-watermark {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  opacity: 0.15;
+  pointer-events: none;
+  line-height: 0;
+}
+
+.market-watermark.wm-slot { color: #58a6ff; }
+.market-watermark.wm-sniping { color: #d29922; }
+.market-watermark.wm-item { color: #bc8cff; }
+.market-watermark.wm-map { color: #3fb950; }
+
+/* Market type inline icon — before history card title */
+.market-icon-inline {
+  flex-shrink: 0;
+  opacity: 0.4;
+  line-height: 0;
+}
+
+.market-icon-inline.wm-slot { color: #58a6ff; }
+.market-icon-inline.wm-sniping { color: #d29922; }
+.market-icon-inline.wm-item { color: #bc8cff; }
+.market-icon-inline.wm-map { color: #3fb950; }

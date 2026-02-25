@@ -1,0 +1,355 @@
+/* Home View */
+.home-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.home-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.home-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 2×3 Grid */
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.home-grid-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.15s;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.home-grid-card:hover {
+  border-color: var(--accent);
+}
+
+.home-grid-card.home-grid-placeholder {
+  border-style: dashed;
+  background: transparent;
+  cursor: default;
+  min-height: 88px;
+}
+
+.home-grid-card.home-grid-placeholder:hover {
+  border-color: var(--border);
+}
+
+.home-grid-thumb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+}
+
+.home-grid-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.home-grid-img-placeholder {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.home-grid-name {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.home-grid-price {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.home-grid-star {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  color: var(--warning);
+  cursor: pointer;
+  line-height: 0;
+  padding: 2px;
+}
+
+.home-grid-star:hover {
+  opacity: 0.7;
+}
+
+/* List sections (side-by-side) */
+.home-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.home-list {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  max-height: 200px;
+}
+
+.home-list-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.home-list-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background 0.1s;
+  border-bottom: 1px solid var(--border);
+}
+
+.home-list-row:last-child {
+  border-bottom: none;
+}
+
+.home-list-row:hover {
+  background: var(--bg-surface);
+}
+
+.home-list-thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.home-list-thumb img {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.group-overlay {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border-radius: 3px;
+  padding: 2px;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group-overlay-sm {
+  bottom: 1px;
+  left: 1px;
+  padding: 1px;
+  border-radius: 2px;
+}
+
+.home-list-name {
+  flex: 1;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.home-list-price {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.home-list-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+/* Back button */
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.back-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+/* Icon toggle (star/bell) with tooltip */
+.icon-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 2px;
+  opacity: 0.4;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.icon-toggle:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.icon-toggle.active {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.icon-tooltip {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-elevated);
+  color: var(--text);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 100;
+}
+
+.icon-toggle:hover .icon-tooltip {
+  opacity: 1;
+}
+
+[data-theme="light"] .icon-tooltip {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Map item icons container (in dropdown) */
+.map-item-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-right: 6px;
+}
+
+/* Trigger icons container (in selected map) */
+.trigger-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-right: 8px;
+}
+
+.trigger-icons .icon-toggle {
+  opacity: 0.6;
+}
+
+.trigger-icons .icon-toggle:hover,
+.trigger-icons .icon-toggle.active {
+  opacity: 1;
+}
+
+/* ========================================
+   Mouse Tier Manager (Admin/Mod)
+   ======================================== */
+
+.mouse-tier-manager {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mouse-tier-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.mouse-tier-filters .search-input-wrap {
+  flex: 1;
+}
+
+.tier-filter-select {
+  padding: 6px 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+}

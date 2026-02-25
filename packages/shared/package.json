@@ -1,0 +1,28 @@
+{
+  "name": "@mhcm/shared",
+  "description": "Shared TypeScript types, constants, and pricing utilities",
+  "version": "0.8.32",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bassoncj/mhcm.git",
+    "directory": "packages/shared"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

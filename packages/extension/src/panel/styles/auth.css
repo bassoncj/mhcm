@@ -1,0 +1,572 @@
+/* Auth forms */
+.auth-form {
+  max-width: 280px;
+  margin: 24px auto;
+}
+
+.auth-form h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Auth form inputs inherit from .form-input via class in HTML,
+   or we can use the element selector as fallback */
+.auth-form input {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.auth-switch a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* Verify Account */
+.verify-account {
+  max-width: 280px;
+  margin: 24px auto;
+}
+
+.verify-account h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+/* Profile Section */
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.profile-section h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-card h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.profile-name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.profile-detail-label {
+  color: var(--text-muted);
+}
+
+.profile-detail-value {
+  font-weight: 500;
+}
+
+.profile-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+/* Theme toggle */
+.theme-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.theme-toggle-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+/* Notification preferences */
+.notification-prefs-card .profile-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.notification-prefs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notification-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.notification-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.notification-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.notification-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.notification-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Notifications View */
+.notifications-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notifications-view .card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.notifications-view .card-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.subscriptions-card .empty {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.subscription-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subscription-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: var(--bg-elevated);
+  border-radius: 4px;
+}
+
+.subscription-item .map-thumb-sm {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+}
+
+.subscription-name {
+  flex: 1;
+  font-size: 13px;
+}
+
+.btn-unsubscribe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.btn-unsubscribe:hover {
+  background: var(--sell);
+  border-color: var(--sell);
+  color: #fff;
+}
+
+/* Notification subtabs — mirrors .sub-tabs pattern from moderation.css */
+.notification-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.notification-tabs button {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.notification-tabs button:hover {
+  color: var(--text);
+}
+
+.notification-tabs button.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.notification-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Logout button in profile */
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 18px;
+  background: var(--sell);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Verification code input */
+.code-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 12px 0;
+}
+
+.code-input-row input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 4px;
+  font-family: monospace;
+}
+
+.code-input-row input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Corkboard verification steps */
+.verify-steps {
+  margin: 12px 0;
+  padding-left: 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.verify-steps strong {
+  color: var(--text);
+}
+
+/* Verify account section */
+.verify-section-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.verify-email-display {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.verify-email-display strong {
+  color: var(--text);
+}
+
+.verify-resend {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.verify-resend button {
+  background: none;
+  color: var(--accent);
+  font-size: 13px;
+  padding: 5px 10px;
+}
+
+.verify-resend button:disabled {
+  color: var(--text-muted);
+}
+
+/* Verification code input (single input field) */
+.verify-account .code-input {
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 6px;
+  font-family: monospace;
+  margin-top: 4px;
+}
+
+.verify-account .code-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Discord Sign In */
+.discord-auth {
+  text-align: center;
+}
+
+.btn-discord {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 20px;
+  background: #5865F2;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-discord:hover {
+  background: #4752C4;
+  opacity: 1;
+}
+
+.btn-discord:disabled {
+  background: #5865F2;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-discord svg {
+  flex-shrink: 0;
+}
+
+.auth-info {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.btn-link-discord {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #5865F2;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-link-discord:hover {
+  background: #4752C4;
+  opacity: 1;
+}
+
+/* Fix Settings (game settings validation) */
+.fix-settings {
+  max-width: 280px;
+  margin: 24px auto;
+  text-align: center;
+}
+
+.fix-settings-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: var(--warning);
+}
+
+.fix-settings h2 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.fix-settings-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.fix-settings-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.fix-settings-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.fix-settings-item.ok {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--buy);
+}
+
+.fix-settings-item.missing {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--sell);
+}
+
+.fix-settings-instructions {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.fix-settings-btn {
+  width: 100%;
+}
+
+/* AFK Badge */
+.afk-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--error);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.afk-warning {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--warning);
+  color: #fff;
+  animation: afk-pulse 2s ease-in-out infinite;
+}
+
+@keyframes afk-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}

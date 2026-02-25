@@ -1,0 +1,37 @@
+{
+  "name": "community-marketplace",
+  "description": "Community marketplace for trading MouseHunt treasure map slots, items, sniping services, and maps",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bassoncj/mhcm.git"
+  },
+  "homepage": "https://github.com/bassoncj/mhcm",
+  "bugs": {
+    "url": "https://github.com/bassoncj/mhcm/issues"
+  },
+  "workspaces": [
+    "packages/shared",
+    "packages/server",
+    "packages/extension"
+  ],
+  "scripts": {
+    "build": "bash scripts/build.sh",
+    "deploy": "bash info/scripts/deploy-to-server.sh",
+    "package:extension": "bash scripts/package-extension.sh",
+    "build:shared": "npm run build -w packages/shared",
+    "build:server": "npm run build -w packages/server",
+    "build:extension": "npm run build -w packages/extension",
+    "dev:server": "npm run dev -w packages/server",
+    "clean": "npm run clean --workspaces --if-present",
+    "generate:faq": "node scripts/generate-faq.mjs",
+    "generate:onboarding": "node scripts/generate-onboarding.mjs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
+}

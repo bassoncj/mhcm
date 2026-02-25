@@ -1,0 +1,82 @@
+/* Community Marketplace - Extension Panel Styles */
+
+:root {
+  --bg: #0d1117;
+  --bg-surface: #161b22;
+  --bg-elevated: #1c2333;
+  --text: #e6edf3;
+  --text-muted: #7d8590;
+  --accent: #3fb950;
+  --buy: #3fb950;
+  --sell: #f85149;
+  --success: #3fb950;
+  --error: #f85149;
+  --warning: #d29922;
+  --border: #30363d;
+  --info: #58a6ff;
+  --radius: 6px;
+  --spacing-sm: 10px;
+  --spacing-md: 16px;
+  --spacing-lg: 20px;
+
+  /* Tier colors - Display theme (gold/blue/gray for order badges) */
+  --tier-display-s-bg: #f1c40f;
+  --tier-display-s-text: #1a1a1a;
+  --tier-display-a-bg: #3498db;
+  --tier-display-a-text: #fff;
+  --tier-display-b-bg: #636e72;
+  --tier-display-b-text: #fff;
+
+  /* Tier colors - Admin theme (green/gold/red for tier management) */
+  --tier-admin-s: #3fb950;
+  --tier-admin-a: #d29922;
+  --tier-admin-b: #f85149;
+
+  /* Tier colors - Filter pills (outline style) */
+  --tier-pill-s: #3fb950;
+  --tier-pill-a: #58a6ff;
+  --tier-pill-b: #d29922;
+  --tier-pill-none: #7d8590;
+
+  /* Quality/rarity colors */
+  --quality-common: #636e72;
+  --quality-rare: #6c5ce7;
+  --quality-rare-light: #42a5f5;
+  --quality-epic: #ab47bc;
+  --quality-legendary: #ffa726;
+
+  /* Role colors */
+  --role-moderator: #6c5ce7;
+  --role-demo: #e17055;
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-surface: #f6f8fa;
+  --bg-elevated: #eef1f5;
+  --text: #1f2328;
+  --text-muted: #656d76;
+  --accent: #1a7f37;
+  --buy: #1a7f37;
+  --sell: #cf222e;
+  --success: #1a7f37;
+  --error: #cf222e;
+  --warning: #9a6700;
+  --border: #d0d7de;
+  --info: #0969da;
+}
+
+[data-theme="light"] .map-selector-dropdown {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .error {
+  background: rgba(207, 34, 46, 0.08);
+}
+
+
+
+[data-theme="light"] .row-enabled {
+  background: rgba(26, 127, 55, 0.05);
+}

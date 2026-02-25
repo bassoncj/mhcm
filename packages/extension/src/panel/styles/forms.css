@@ -1,0 +1,932 @@
+/* Shared Form Elements */
+.form-input {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Buttons */
+button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.15s;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Compact action buttons — unified system.
+   Base: .btn / .btn-small (neutral bg) — add colour modifier as needed.
+   Colour: .btn-accent, .btn-danger, .btn-success, .btn-danger-outline, .btn-blue
+   Legacy aliases: .btn-cancel, .btn-edit, .btn-save, .btn-cancel-edit, .btn-cancel-sm */
+.btn,
+.btn-small,
+.btn-cancel,
+.btn-edit,
+.btn-save,
+.btn-cancel-edit,
+.btn-cancel-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-accent  { background: var(--accent); color: #fff; border-color: transparent; }
+.btn-accent:hover { opacity: 0.85; }
+.btn-danger  { background: var(--error); color: #fff; border-color: transparent; }
+.btn-danger:hover { opacity: 0.85; }
+.btn-success { background: var(--success); color: #fff; border-color: transparent; }
+.btn-success:hover { opacity: 0.85; }
+.btn-danger-outline { background: transparent; border: 1px solid var(--error); color: var(--error); }
+.btn-danger-outline:hover { background: var(--error); color: #fff; }
+.btn-warning-outline { background: transparent; border: 1px solid var(--warning); color: var(--warning); }
+.btn-warning-outline:hover { background: var(--warning); color: #fff; }
+.btn-secondary { background: var(--bg-input); border: 1px solid var(--border); color: var(--text); }
+.btn-secondary:hover { background: var(--bg-elevated); }
+.btn-blue { background: #58a6ff; color: #fff; border-color: transparent; }
+.btn-blue:hover { background: #79b8ff; }
+
+/* Legacy colour aliases */
+.btn-cancel { background: var(--sell); color: #fff; border-color: transparent; }
+.btn-cancel:hover { opacity: 0.85; }
+.btn-cancel-sm { background: var(--sell); color: #fff; border-color: transparent; padding: 2px 4px; line-height: 1; }
+.btn-cancel-sm:hover { opacity: 0.85; }
+
+/* Error / Success / Warning */
+.error {
+  color: var(--error);
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  background: rgba(248, 81, 73, 0.1);
+  border-radius: var(--radius);
+}
+
+.success {
+  color: var(--success);
+  font-size: 13px;
+}
+
+.warning {
+  color: var(--warning);
+  font-size: 13px;
+}
+
+.empty {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 13px;
+  padding: 8px 0;
+}
+
+/* Section headings */
+.create-order h3,
+.my-orders h3,
+.transaction-history h3 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Map thumbnails */
+.map-thumb {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+.map-thumb-sm {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+/* Tier badges */
+.tier {
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tier-s {
+  background: var(--tier-display-s-bg);
+  color: var(--tier-display-s-text);
+}
+
+.tier-a {
+  background: var(--tier-display-a-bg);
+  color: var(--tier-display-a-text);
+}
+
+.tier-b {
+  background: var(--tier-display-b-bg);
+  color: var(--tier-display-b-text);
+}
+
+/* Mini tier badges for buy orders */
+.accepted-tiers-mini {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.tier-mini {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+.tier-mini-s {
+  background: var(--tier-display-s-bg);
+  color: var(--tier-display-s-text);
+}
+
+.tier-mini-a {
+  background: var(--tier-display-a-bg);
+  color: var(--tier-display-a-text);
+}
+
+.tier-mini-b {
+  background: var(--tier-display-b-bg);
+  color: var(--tier-display-b-text);
+}
+
+.tier-mini-all {
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid var(--accent);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.price.sell {
+  color: var(--sell);
+  font-weight: 600;
+}
+
+.price.buy {
+  color: var(--buy);
+  font-weight: 600;
+}
+
+.side.sell {
+  color: var(--sell);
+  font-weight: 600;
+}
+
+.side.buy {
+  color: var(--buy);
+  font-weight: 600;
+}
+
+.status.open {
+  color: var(--text);
+}
+
+.status.partially_filled {
+  color: var(--warning);
+}
+
+.status.filled {
+  color: var(--success);
+}
+
+.status.cancelled {
+  color: var(--text-muted);
+}
+
+/* Create Order */
+.create-order {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+
+.create-order label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.create-order input:not(.stepper-value) {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.create-order input:not(.stepper-value):focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Stepper input (- [value] +) */
+.stepper-field {
+  margin-bottom: 8px;
+}
+
+.stepper-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.stepper-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.stepper {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.stepper-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  padding: 0;
+  border: none;
+  background: var(--bg-elevated);
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.stepper-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.stepper-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.stepper-value {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  border: none;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.stepper-value::-webkit-inner-spin-button,
+.stepper-value::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stepper-value:focus {
+  outline: none;
+  background: var(--bg-elevated);
+}
+
+/* Inline stepper: grid layout for uniform alignment across rows.
+   Three columns: [icon+label] [stepper] [suffix] — all rows share
+   the same column widths so icons, inputs, and checkboxes align. */
+.stepper-field-inline {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0 8px;
+}
+
+.stepper-field-inline .stepper-label {
+  margin-bottom: 0;
+  white-space: nowrap;
+  min-width: 56px;
+}
+
+.stepper-field-inline .stepper {
+  min-width: 0;
+}
+
+.stepper-suffix {
+  min-width: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.side-toggle {
+  display: flex;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.side-toggle button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.side-toggle button:hover {
+  color: var(--text);
+  background: transparent;
+}
+
+.side-toggle button.active.buy {
+  color: var(--buy);
+  border-bottom-color: var(--buy);
+  background: transparent;
+}
+
+.side-toggle button.active.sell {
+  color: var(--sell);
+  border-bottom-color: var(--sell);
+  background: transparent;
+}
+
+/* Tier selector for buy orders */
+.tier-selector {
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.tier-selector-label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.tier-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.tier-dropdown-trigger:hover {
+  border-color: var(--text-muted);
+}
+
+.tier-dropdown-trigger.open {
+  border-color: var(--accent);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.tier-dropdown-trigger.error {
+  border-color: var(--error);
+}
+
+.tier-dropdown-trigger svg {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 0.15s;
+}
+
+.tier-dropdown-trigger.open svg {
+  transform: rotate(180deg);
+}
+
+.tier-dropdown-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tier-dropdown-placeholder {
+  color: var(--text-muted);
+}
+
+.tier-dropdown-all {
+  color: var(--text);
+}
+
+.tier-dropdown-selected {
+  display: flex;
+  gap: 4px;
+}
+
+.tier-badge-inline {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.tier-badge-inline.tier-s {
+  background: var(--tier-display-s-bg);
+  color: var(--tier-display-s-text);
+}
+
+.tier-badge-inline.tier-a {
+  background: var(--tier-display-a-bg);
+  color: var(--tier-display-a-text);
+}
+
+.tier-badge-inline.tier-b {
+  background: var(--tier-display-b-bg);
+  color: var(--tier-display-b-text);
+}
+
+.tier-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  border-top: none;
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  z-index: 100;
+}
+
+/* Option row: grid with two columns [checkbox | content] */
+/* Using .tier-dropdown-menu prefix for higher specificity than .create-order label */
+.tier-dropdown-menu .tier-dropdown-option {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  column-gap: 8px;
+  padding: 8px 10px;
+  margin-bottom: 0;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.tier-dropdown-menu .tier-dropdown-option:hover {
+  background: var(--bg-elevated);
+}
+
+/* Column A (left): checkbox centered */
+.tier-dropdown-menu .tier-option-col-a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tier-dropdown-menu .tier-option-col-a input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Column B (right): two rows stacked */
+.tier-dropdown-menu .tier-option-col-b {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* Row 1: badge + label side by side */
+.tier-dropdown-menu .tier-option-row1 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.tier-badge-option {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.tier-badge-option.tier-s {
+  background: var(--tier-display-s-bg);
+  color: var(--tier-display-s-text);
+}
+
+.tier-badge-option.tier-a {
+  background: var(--tier-display-a-bg);
+  color: var(--tier-display-a-text);
+}
+
+.tier-badge-option.tier-b {
+  background: var(--tier-display-b-bg);
+  color: var(--tier-display-b-text);
+}
+
+.tier-option-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* Row 2: helper text */
+.tier-option-row2 {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.tier-error {
+  font-size: 12px;
+  color: var(--error);
+  margin-top: 4px;
+}
+
+.create-order select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.create-order select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.create-order button[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+}
+
+/* Badges */
+.badge {
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.badge.self {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+}
+
+.badge.badge-group {
+  background: var(--bg-elevated);
+  color: var(--accent);
+  border: 1px solid var(--border);
+}
+
+.selector-badge {
+  flex-shrink: 0;
+  margin-right: 4px;
+}
+
+.badge.disabled-badge {
+  background: var(--border);
+  color: var(--text-muted);
+  margin-left: 6px;
+}
+
+.badge.demo-badge {
+  background: var(--role-demo);
+  color: #fff;
+  margin-left: 6px;
+}
+
+.disabled-type {
+  opacity: 0.5;
+}
+
+.badge.role-admin {
+  background: var(--accent);
+  color: #fff;
+}
+
+.badge.role-moderator {
+  background: var(--role-moderator);
+  color: #fff;
+}
+
+.badge.status-active {
+  background: var(--success);
+  color: #fff;
+}
+
+.badge.status-suspended {
+  background: var(--error);
+  color: #fff;
+}
+
+/* Icon utilities */
+.icon-success {
+  color: var(--success);
+}
+
+.icon-error {
+  color: var(--error);
+}
+
+.icon-warning {
+  color: var(--warning);
+}
+
+/* SB Balance display */
+.sb-balance {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.total-cost {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.total-cost.insufficient {
+  color: var(--error);
+}
+
+.available-sb {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.available-sb-note {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* Callout component — reusable info/warning/error block */
+.callout {
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.callout-info {
+  display: flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--info) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--info) 30%, transparent);
+  color: var(--info);
+}
+
+.callout-warning {
+  background: color-mix(in srgb, var(--warning) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent);
+  color: var(--warning);
+}
+
+.callout-error {
+  background: color-mix(in srgb, var(--error) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--error) 30%, transparent);
+  color: var(--error);
+}
+
+.callout.callout-loading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+}
+
+.callout-spinner {
+  animation: spin 1s linear infinite;
+  flex-shrink: 0;
+}
+
+/* Info icon + tooltip inside callout */
+.callout-info-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  cursor: help;
+  opacity: 0.7;
+}
+
+.callout-info-trigger:hover {
+  opacity: 1;
+}
+
+.callout-info-trigger .callout-tooltip {
+  position: absolute;
+  right: calc(100% + 6px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 100;
+}
+
+.callout-info-trigger:hover .callout-tooltip {
+  opacity: 1;
+}
+
+/* Chevron in map selector */
+.map-selector-trigger .chevron {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* RT toggle — reuses .toggle-switch/.toggle-slider pattern at compact size.
+   Stacked vertically: [toggle] then label lines below.
+   Total height should match stepper input (36px). */
+.rt-toggle-suffix {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 0;
+  min-width: 36px;
+  height: 36px;
+}
+
+/* Small toggle switch (28×14) — same pattern as .toggle-switch but compact */
+.toggle-switch-sm {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.toggle-switch-sm input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-switch-sm .toggle-slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--border);
+  border-radius: 7px;
+  transition: 0.2s;
+}
+
+.toggle-switch-sm .toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 10px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--text);
+  border-radius: 50%;
+  transition: 0.2s;
+}
+
+.toggle-switch-sm input:checked + .toggle-slider {
+  background-color: var(--warning);
+}
+
+.toggle-switch-sm input:checked + .toggle-slider::before {
+  transform: translateX(14px);
+  background-color: #fff;
+}
+
+.toggle-switch-sm input:disabled + .toggle-slider {
+  opacity: 0.35;
+}
+
+.rt-toggle-label {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--warning);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+.rt-toggle-suffix:has(input:disabled) {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.rt-price-text {
+  color: var(--warning);
+}
+
+/* Stepper disabled state — dim full row unless inline (keep suffix interactive) */
+.stepper-field:not(.stepper-field-inline):has(.stepper-value:disabled) {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.stepper-field-inline:has(.stepper-value:disabled) .stepper-label,
+.stepper-field-inline:has(.stepper-value:disabled) .stepper {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Filter chips for Orders / Transaction History tabs */
+.order-filter-chips {
+  display: flex;
+  gap: 4px;
+  padding: 6px 0;
+}

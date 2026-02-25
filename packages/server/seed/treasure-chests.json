@@ -1,0 +1,2067 @@
+[
+  {
+    "name": "2012 Halloween Treasure Chest",
+    "type": "halloween_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/949e5b76fa8a83eaa515527beea25e57.png"
+  },
+  {
+    "name": "2012 Rare Halloween Treasure Chest",
+    "type": "rare_halloween_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/5439756dcc935bbf8435b9a61aeffbdb.png"
+  },
+  {
+    "name": "2013 Naughty Treasure Chest",
+    "type": "naughty_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d094c9eccaf768b3b241c33a55052c14.png"
+  },
+  {
+    "name": "2013 Nice Treasure Chest",
+    "type": "nice_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/05045cd308066c2c8d7d7132a6ad9855.png"
+  },
+  {
+    "name": "2013 Rare Naughty Treasure Chest",
+    "type": "rare_naughty_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/aa657aebd138700a865ef7a73c2cf302.png"
+  },
+  {
+    "name": "2013 Rare Nice Treasure Chest",
+    "type": "rare_nice_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b318a03347cc52ff72a3ee7831a3f6b8.png"
+  },
+  {
+    "name": "2013 Rare Undead Halloween Treasure Chest",
+    "type": "rare_halloween_undead_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a5530843dc001037982774baa4508edd.png"
+  },
+  {
+    "name": "2013 Undead Halloween Treasure Chest",
+    "type": "halloween_undead_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/5531e8f8e34936b04112c68f82e83d74.png"
+  },
+  {
+    "name": "2014 Birthday Treasure Chest",
+    "type": "birthday_2014_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cf3a7397c020ec011b5310b292688e3c.png"
+  },
+  {
+    "name": "2014 Halloween Treasure Chest",
+    "type": "halloween_spooky_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/358c5e907f2df0fa81003dbe96a4ee41.png"
+  },
+  {
+    "name": "2014 Naughty Treasure Chest",
+    "type": "naughty_2014_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f54c3d224e070aa48be3e4905bc31b68.png"
+  },
+  {
+    "name": "2014 Nice Treasure Chest",
+    "type": "nice_2014_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c0011d13874bcaff55a36bdd55b606ae.png"
+  },
+  {
+    "name": "2014 Rare Birthday Treasure Chest",
+    "type": "rare_birthday_2014_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b3952017197d64f8af66f1b62c439cd1.png"
+  },
+  {
+    "name": "2014 Rare Halloween Treasure Chest",
+    "type": "rare_halloween_spooky_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/58a1f6ba87afd79d9af46a2b08fb0656.png"
+  },
+  {
+    "name": "2014 Rare Naughty Treasure Chest",
+    "type": "rare_naughty_2014_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f7eb568325356672f7b7552bf8df1613.png"
+  },
+  {
+    "name": "2014 Rare Nice Treasure Chest",
+    "type": "rare_nice_2014_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/76608a6b3ac3bdb13ee35fa966c9923d.png"
+  },
+  {
+    "name": "2015 Birthday Treasure Chest",
+    "type": "birthday_2015_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/95749e7682b9e99dbfb759aaab0a40e7.png"
+  },
+  {
+    "name": "2015 Naughty Treasure Chest",
+    "type": "naughty_2015_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/04de9f1771c3719460af66e413af876b.png"
+  },
+  {
+    "name": "2015 Nice Treasure Chest",
+    "type": "nice_2015_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8d4917ef307f59ea9623e49268f9be85.png"
+  },
+  {
+    "name": "2015 Rare Birthday Treasure Chest",
+    "type": "rare_birthday_2015_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3c7ea3657c6fa086181eded6a3e005e5.png"
+  },
+  {
+    "name": "2015 Rare Naughty Treasure Chest",
+    "type": "rare_naughty_2015_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/85d22e577522e7caed66560c76033d0e.png"
+  },
+  {
+    "name": "2015 Rare Nice Treasure Chest",
+    "type": "rare_nice_2015_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/279f38204474f6d7c7a9c71dd4b21e12.png"
+  },
+  {
+    "name": "2016 Birthday Treasure Chest",
+    "type": "birthday_2016_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d714372a10fb5c5bab43030ed50c5910.png"
+  },
+  {
+    "name": "2016 Eerie Halloween Treasure Chest",
+    "type": "easy_treasure_chest_halloween_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c9a6eaed621073a8e20c67e4115efaef.png"
+  },
+  {
+    "name": "2016 Haunted Halloween Treasure Chest",
+    "type": "hard_treasure_chest_halloween_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ce995973c1fad626d8d6aa82e24ec741.png"
+  },
+  {
+    "name": "2016 Naughty Treasure Chest",
+    "type": "naughty_2016_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4f037d556695cc29c9eee7d31adf688e.png"
+  },
+  {
+    "name": "2016 Nice Treasure Chest",
+    "type": "nice_2016_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/bd7e385c285cf05c172bcd018786b9e2.png"
+  },
+  {
+    "name": "2016 Rare Birthday Treasure Chest",
+    "type": "rare_birthday_2016_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a6571a6aef881d6a51b12f270dbde72c.png"
+  },
+  {
+    "name": "2016 Rare Eerie Halloween Treasure Chest",
+    "type": "rare_easy_treasure_chest_halloween_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a2015dd198e2a29b03286b2e8b079d4f.png"
+  },
+  {
+    "name": "2016 Rare Haunted Halloween Treasure Chest",
+    "type": "rare_hard_treasure_chest_halloween_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/31b006d15a82bbd3686c23fd7821eae8.png"
+  },
+  {
+    "name": "2016 Rare Naughty Treasure Chest",
+    "type": "rare_naughty_2016_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3baf6c33d41251f0d229acd8fa369c8c.png"
+  },
+  {
+    "name": "2016 Rare Nice Treasure Chest",
+    "type": "rare_nice_2016_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9a087dbb9284609ff195c965e7f742fb.png"
+  },
+  {
+    "name": "2016 Rare Spooky Halloween Treasure Chest",
+    "type": "rare_medium_treasure_chest_halloween_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9f78715455ab2421f32061097285ac97.png"
+  },
+  {
+    "name": "2016 Rare Terrifying Halloween Treasure Chest",
+    "type": "rare_elab_treasure_chest_halloween_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3115e421f71999269516b83c81bd3807.png"
+  },
+  {
+    "name": "2016 Spooky Halloween Treasure Chest",
+    "type": "medium_treasure_chest_halloween_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c47b274716f0b66c63ef83767f45ff4a.png"
+  },
+  {
+    "name": "2016 Terrifying Halloween Treasure Chest",
+    "type": "elab_treasure_chest_halloween_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b5c81f3abea68424dbce17d555bbe864.png"
+  },
+  {
+    "name": "2017 Birthday Treasure Chest",
+    "type": "birthday_2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/35c45917b1ca091884f2b9c322a99a35.png"
+  },
+  {
+    "name": "2017 Eerie Halloween Treasure Chest",
+    "type": "easy_hween2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/42636e09e97684f1ccf8a3553335d407.png"
+  },
+  {
+    "name": "2017 Haunted Halloween Treasure Chest",
+    "type": "hard_hween2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/47091125f819663a0d36f99cffb57c0a.png"
+  },
+  {
+    "name": "2017 Naughty Treasure Chest",
+    "type": "naughty_2017_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1a82578759ef3eb1eaaaa8473dbfa751.png"
+  },
+  {
+    "name": "2017 Nice Treasure Chest",
+    "type": "nice_2017_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3931df4332a92d9e216a2043fd64b485.png"
+  },
+  {
+    "name": "2017 Rare Birthday Treasure Chest",
+    "type": "rare_birthday_2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/890e6a0d8bd9a31e7b1bf4bd6f048da0.png"
+  },
+  {
+    "name": "2017 Rare Eerie Halloween Treasure Chest",
+    "type": "rare_easy_hween2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/28510a0202dc3074ce728b67c51591e2.png"
+  },
+  {
+    "name": "2017 Rare Haunted Halloween Treasure Chest",
+    "type": "rare_hard_hween2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/893059f9eab8e55903e74b398bd1373b.png"
+  },
+  {
+    "name": "2017 Rare Naughty Treasure Chest",
+    "type": "rare_naughty_2017_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cfb81e4e39f3bb264d5787866f2766a0.png"
+  },
+  {
+    "name": "2017 Rare Nice Treasure Chest",
+    "type": "rare_nice_2017_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/79ebbcc90ac3214f77d5ffac576b2061.png"
+  },
+  {
+    "name": "2017 Rare Spooky Halloween Treasure Chest",
+    "type": "rare_medium_hween2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6cccfcfe73b98ee5d063a3aaac779c6e.png"
+  },
+  {
+    "name": "2017 Rare Terrifying Halloween Treasure Chest",
+    "type": "rare_elab_hween2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f7ff96e8070014364f67a4193fcd7ec2.png"
+  },
+  {
+    "name": "2017 Spooky Halloween Treasure Chest",
+    "type": "medium_hween2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ae17371b8406f25ea324f90f9db1a010.png"
+  },
+  {
+    "name": "2017 Terrifying Halloween Treasure Chest",
+    "type": "elab_hween2017_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6711e12dbe3213fc25cb3bede0473886.png"
+  },
+  {
+    "name": "2018 Birthday Treasure Chest",
+    "type": "birthday_2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7f3c35eacffb378626e69563b8a60c93.png"
+  },
+  {
+    "name": "2018 Gilded Birthday Treasure Chest",
+    "type": "g_birthday_2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/299aa5942699ae0c1d47f68b0c8f7114.png"
+  },
+  {
+    "name": "2018 Gilded Treasure Chest",
+    "type": "gilded_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c66f4b55b2e7562570d13a302862483e.png"
+  },
+  {
+    "name": "2018 Naughty Treasure Chest",
+    "type": "naughty_2018_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c8dcf36fc24d7c29f5107d64d9660742.png"
+  },
+  {
+    "name": "2018 Nice Treasure Chest",
+    "type": "nice_2018_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/2046945f4a6fa03eac52e1e90edf0787.png"
+  },
+  {
+    "name": "2018 Rare Birthday Treasure Chest",
+    "type": "rare_birthday_2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/51d8d8bde393bcf0e594a123f60c1804.png"
+  },
+  {
+    "name": "2018 Rare Gilded Birthday Treasure Chest",
+    "type": "rare_g_birthday_2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/52cf7ccd12f06cb6ad7ceda7a0649c6f.png"
+  },
+  {
+    "name": "2018 Rare Gilded Treasure Chest",
+    "type": "rare_gilded_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7ac38ab9d294b24388a146d64ec97702.png"
+  },
+  {
+    "name": "2018 Rare Naughty Treasure Chest",
+    "type": "rare_naughty_2018_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/dbf39dc169bde27632a8cc3a6dcc1a5d.png"
+  },
+  {
+    "name": "2018 Rare Nice Treasure Chest",
+    "type": "rare_nice_2018_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9871a4ad83ac446dd65c43458b130121.png"
+  },
+  {
+    "name": "2019 Birthday Treasure Chest",
+    "type": "birthday_2019_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/40c9ebea1b9d398e4ba644f880b2acbf.png"
+  },
+  {
+    "name": "2019 Gilded Birthday Treasure Chest",
+    "type": "g_birthday_2019_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b0b2916596f2612db00b6c37cba64457.png"
+  },
+  {
+    "name": "2019 Naughty Treasure Chest",
+    "type": "naughty_2019_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6eb1ee92be063fee018e64e87b2cd7cf.png"
+  },
+  {
+    "name": "2019 Rare Birthday Treasure Chest",
+    "type": "rare_birthday_2019_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/32666abaad40f41e1882417c3cb2ec0d.png"
+  },
+  {
+    "name": "2019 Rare Gilded Birthday Treasure Chest",
+    "type": "rare_g_birthday_2019_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8348469928fc18c0f31279e09ee89fde.png"
+  },
+  {
+    "name": "2019 Rare Naughty Treasure Chest",
+    "type": "rare_naughty_2019_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/23407d573093e95db9aca63924bfdcab.png"
+  },
+  {
+    "name": "2020 Birthday Treasure Chest",
+    "type": "birthday_2020_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a3485ebdd845a02e4dbb374760055e56.png"
+  },
+  {
+    "name": "2020 Elite Slayer Treasure Chest",
+    "type": "boss_elite_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/af269798a242703baeb69acb075b070b.png"
+  },
+  {
+    "name": "2020 Gilded Birthday Treasure Chest",
+    "type": "g_birthday_2020_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1cf50c31e91ba4310450e28dfcc6d914.png"
+  },
+  {
+    "name": "2020 Naughty Treasure Chest",
+    "type": "naughty_2020_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/59f48e9c5e017057c02de5b30673e4bf.png"
+  },
+  {
+    "name": "2020 Rare Birthday Treasure Chest",
+    "type": "rare_birthday_2020_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3bf56a7a237ccfcad42f36344a6e6f9d.png"
+  },
+  {
+    "name": "2020 Rare Elite Slayer Treasure Chest",
+    "type": "rare_boss_elite_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b6035544c40702ad9bd8f786b7b703f3.png"
+  },
+  {
+    "name": "2020 Rare Gilded Birthday Treasure Chest",
+    "type": "rare_g_birthday_2020_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/fe01cc18e7eaaedfc7bf18be563f3daf.png"
+  },
+  {
+    "name": "2020 Rare Naughty Treasure Chest",
+    "type": "rare_naughty_2020_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/206df58c4f51f800e222f335cae4591a.png"
+  },
+  {
+    "name": "2021 Naughty Treasure Chest",
+    "type": "naughty_2021_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/dd02d1397370e08015a164e6a0654b85.png"
+  },
+  {
+    "name": "2021 Nice Treasure Chest",
+    "type": "nice_2021_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/26c4544b5d01823a3d18521d1059e064.png"
+  },
+  {
+    "name": "2021 Rare Naughty Treasure Chest",
+    "type": "rare_naughty_2021_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/82bc12cdde6149bc8d9ba3e42f22bcb4.png"
+  },
+  {
+    "name": "2021 Rare Nice Treasure Chest",
+    "type": "rare_nice_2021_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b9337a34c9fb044611088bbc4728f9ea.png"
+  },
+  {
+    "name": "2023 Gilded Treasure Chest",
+    "type": "gilded_coin_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cb98a0bee4f426c5d9c72124801cab5a.png"
+  },
+  {
+    "name": "2023 Lantern Lighter Treasure Chest",
+    "type": "lantern_lighter_treasure_chest_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "2023 Rare Gilded Treasure Chest",
+    "type": "rare_gilded_coin_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b856af69390ee847dc74dbaa6448d652.png"
+  },
+  {
+    "name": "2023 Rare Lantern Lighter Treasure Chest",
+    "type": "rare_lantern_lighter_treasure_chest_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "2024 Gilded Birthday Treasure Chest",
+    "type": "g_birthday_2021_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6b153f59c93de4c551ec9467dc2c9b00.png"
+  },
+  {
+    "name": "2024 Rare Gilded Birthday Treasure Chest",
+    "type": "rare_g_birthday_2021_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4bd82ed4f6c26ce8e7059606b0875247.png"
+  },
+  {
+    "name": "Acolyte Realm Treasure Chest",
+    "type": "catacombs_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b743319b18d644723f344c80b4a6c09e.png"
+  },
+  {
+    "name": "Archduke/Archduchess Toxic Spill Treasure Chest",
+    "type": "toxic_elite_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/70f364179ce07bd7063b44400b2100f8.png"
+  },
+  {
+    "name": "Arduous Chrome Slayer Treasure Chest",
+    "type": "chrome_boss_arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/337f47526223a2c2f2000c9a1f2dae1e.png"
+  },
+  {
+    "name": "Arduous Chrome Treasure Chest",
+    "type": "chrome_arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/16f564a7bd6a4bc489f289e9cdca1f40.png"
+  },
+  {
+    "name": "Arduous Slayer Treasure Chest",
+    "type": "boss_arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c557c50e6bf335ed3ade8be333a76974.png"
+  },
+  {
+    "name": "Arduous Treasure Chest",
+    "type": "arduous_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/0359e3c5488d91e89071ac60db114996.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 1)",
+    "type": "arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1b2a75cacba2de160ca6b59bf4b12949.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 10)",
+    "type": "arduous_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3ffe2a3b7cf7f164daabbb9962c1c0a9.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 2)",
+    "type": "arduous_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/856eb1b745d6498b55c07b501f306279.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 3)",
+    "type": "arduous_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/54f97a582cca04d173c10bd0ce2d3f27.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 4)",
+    "type": "arduous_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cb5b2e0ed263491d07d1c0d042bc4c65.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 5)",
+    "type": "arduous_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1e5bab59b3ccdb6aaa4046b712571626.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 6)",
+    "type": "arduous_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a1edfa67085210c1045019c445e18a00.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 7)",
+    "type": "arduous_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/305bf930b310871103dc8821e335d97c.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 8)",
+    "type": "arduous_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c8123be051e5d8539606125174d5b033.png"
+  },
+  {
+    "name": "Arduous Treasure Chest (Season 9)",
+    "type": "arduous_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Athletic Lunar Treasure Chest",
+    "type": "athletic_lunar_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/521147053aab46830fbd54e16dd62fe6.png"
+  },
+  {
+    "name": "Birthday Treasure Chest",
+    "type": "birthday_2021_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/64daaf6ada8900d42cba0575a29e4246.png"
+  },
+  {
+    "name": "Bountiful Beanstalk Treasure Chest",
+    "type": "beanstalk_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b96c21278700159c00ec9a08b5ac8011.png"
+  },
+  {
+    "name": "Bounty Reward",
+    "type": "bounty_reward_f_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/e2118167bb63e74dc42f54d3793912c0.png"
+  },
+  {
+    "name": "Bounty Reward (Season 1)",
+    "type": "bounty_reward_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/67f9b708385830fea5b2be2f7f2d0faf.png"
+  },
+  {
+    "name": "Bristle Woods Rift Treasure Chest",
+    "type": "bristle_woods_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/396015632ea1466b55a55cd300721e4d.png"
+  },
+  {
+    "name": "Burroughs Rift Treasure Chest",
+    "type": "burroughs_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8a0b8315bc0fae697ad9c9d05e66337f.png"
+  },
+  {
+    "name": "Count/Countess Toxic Spill Treasure Chest",
+    "type": "toxic_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3d4e0aa39566fb8e571bd941539e37ff.png"
+  },
+  {
+    "name": "Digby Treasure Chest",
+    "type": "digby_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/0575df30ea44eaa4dccf56a59611541e.png"
+  },
+  {
+    "name": "Draconic Depths Treasure Chest",
+    "type": "draconic_depths_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ad0a311524e7e74b67966eff4b4a3000.png"
+  },
+  {
+    "name": "Duke/Duchess Toxic Spill Treasure Chest",
+    "type": "toxic_elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/dc8a3d9da6fab23f2a894322e73d84c3.png"
+  },
+  {
+    "name": "Easy Chrome Slayer Treasure Chest",
+    "type": "chrome_boss_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9ddeb6ca42cf2d46910c4db23063f286.png"
+  },
+  {
+    "name": "Easy Chrome Treasure Chest",
+    "type": "chrome_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a82f92b07b71cab3a152214fcb4e1cdd.png"
+  },
+  {
+    "name": "Easy Grand Ghostship Treasure Chest",
+    "type": "low_hween2020_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/249cfce5a4fbf3814ba6b364f998b571.png"
+  },
+  {
+    "name": "Easy Slayer Treasure Chest",
+    "type": "boss_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4717f428600e2ff47434e4c4ed8df40d.png"
+  },
+  {
+    "name": "Easy Treasure Chest",
+    "type": "easy_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cb09e61f86daf1ee00785e941cbdee7f.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 1)",
+    "type": "easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b1b5e85930a66894f066ce909b22d944.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 10)",
+    "type": "easy_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/fbec140f3a4fa2f58bc6247526857fba.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 2)",
+    "type": "easy_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/e4b254c024de445306ec92e7dd9f9a99.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 3)",
+    "type": "easy_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/394ab29e630147991c6d4bf02794ea5b.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 4)",
+    "type": "easy_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ec44405459a0b6b3e4f8fe2e3ea597cf.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 5)",
+    "type": "easy_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d602d835e8ecd99d341f3f3f1ffcb4c1.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 6)",
+    "type": "easy_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f3ae5d6cad6347e5dd2b225c771b1fae.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 7)",
+    "type": "easy_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/980c529618e24a78cb4b24d65f4f35ed.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 8)",
+    "type": "easy_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/138fd2638c0660d958897b09df669fd8.png"
+  },
+  {
+    "name": "Easy Treasure Chest (Season 9)",
+    "type": "easy_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Eerie Halloween Treasure Chest",
+    "type": "easy_hween2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/eecd4ae05fd7f2ee4c993c29ded48e0c.png"
+  },
+  {
+    "name": "Elaborate Chrome Slayer Treasure Chest",
+    "type": "chrome_boss_elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d1d369e5a5bd0758f6140c6a3ba7f098.png"
+  },
+  {
+    "name": "Elaborate Chrome Treasure Chest",
+    "type": "chrome_elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/162f7ba9c542269f70c9dfb4f551b312.png"
+  },
+  {
+    "name": "Elaborate Slayer Treasure Chest",
+    "type": "boss_elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/dca530b0bc7e695968123b7fd30c7bc4.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest",
+    "type": "elaborate_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/74e06bfa7a564fabebc69c53afd73c83.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 1)",
+    "type": "elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/25dfa561560a05cf5dc6f0991ff1ed30.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 10)",
+    "type": "elaborate_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/70b8030d57553ef3a0739b0ce3238bef.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 2)",
+    "type": "elaborate_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/10dbeaa5610465c582841b5d88f6b029.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 3)",
+    "type": "elaborate_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1f20be41308a4cf97cf3a163fbd421ac.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 4)",
+    "type": "elaborate_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3112fa69edbdedd26ea82ad8c1e10339.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 5)",
+    "type": "elaborate_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d6e0f2bcb548478eb646f029f45a1446.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 6)",
+    "type": "elaborate_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ce69f55fa7830ef70069aeb3eeb35f9b.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 7)",
+    "type": "elaborate_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/41385a77faf661ed437cf05bd76fd5f7.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 8)",
+    "type": "elaborate_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/e91f7462f92e6fcbc3fb2d98798e90eb.png"
+  },
+  {
+    "name": "Elaborate Treasure Chest (Season 9)",
+    "type": "elaborate_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Elite Chrome Slayer Treasure Chest",
+    "type": "chrome_boss_elite_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/49463153e075584041cb13c5dad17db8.png"
+  },
+  {
+    "name": "Elite Chrome Treasure Chest",
+    "type": "chrome_elite_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/98059b1b18110589a851f4794ec35c8d.png"
+  },
+  {
+    "name": "Elite Slayer Treasure Chest",
+    "type": "boss_elite_2021_treasure_chest_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Elite Treasure Chest",
+    "type": "elite_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/e93ae0c6b024923033f3d9650afba058.png"
+  },
+  {
+    "name": "Elite Treasure Chest (Season 10)",
+    "type": "elite_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/af63548db1b8a1eaface9582e9e80240.png"
+  },
+  {
+    "name": "Elite Treasure Chest (Season 3)",
+    "type": "elite_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/e042654ebe292f3ed6235713bea571ef.png"
+  },
+  {
+    "name": "Elite Treasure Chest (Season 4)",
+    "type": "elite_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/05941ec15d45993172e42c6b333dc987.png"
+  },
+  {
+    "name": "Elite Treasure Chest (Season 5)",
+    "type": "elite_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/01770e58d4314d82962435a7c9193be1.png"
+  },
+  {
+    "name": "Elite Treasure Chest (Season 6)",
+    "type": "elite_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/30dabf177b0443c7a0de1d618c0a735a.png"
+  },
+  {
+    "name": "Elite Treasure Chest (Season 7)",
+    "type": "elite_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/61791367ffa68ef99d19b5c8a525a0a8.png"
+  },
+  {
+    "name": "Elite Treasure Chest (Season 8)",
+    "type": "elite_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9050844a9e607a03cba199948a7a0622.png"
+  },
+  {
+    "name": "Elite Treasure Chest (Season 9)",
+    "type": "elite_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Empyrean Sky Palace Treasure Chest",
+    "type": "sky_palace_treasure_chest_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Empyrean Treasure Trove",
+    "type": "empyrean_floating_loot_cache_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/0b138b8c462ed20f55661d9efc233f54.png"
+  },
+  {
+    "name": "Farming and Fishing Treasure Chest",
+    "type": "farming_fishing_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cb412eea25326987179583e512832acb.png"
+  },
+  {
+    "name": "Folklore Forest Prelude Treasure Chest",
+    "type": "ff_prelude_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/03b89ef1ad3a6822d1e559a9c32acb3d.png"
+  },
+  {
+    "name": "Fort Rox Treasure Chest",
+    "type": "fort_rox_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/fcf6957f685f62c6548f7ff3b87bd53b.png"
+  },
+  {
+    "name": "Fungal Cavern Treasure Chest",
+    "type": "fungal_cavern_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4a824db3b0fac9cae4abdad9fdfca87c.png"
+  },
+  {
+    "name": "Furoma Rift Treasure Chest",
+    "type": "furoma_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/0d3ed1da09593571bd3172609b507541.png"
+  },
+  {
+    "name": "Giant Rainbow Treasure Chest",
+    "type": "giant_rainbow_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/84f4002c496c597b42b369af7ce1e8b9.png"
+  },
+  {
+    "name": "Gilded Birthday Treasure Chest",
+    "type": "g_birthday_2025_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/16ebe002cd3d61d92ab4eac62a8fdece.png"
+  },
+  {
+    "name": "Gilded Time Traveler's Treasure Chest",
+    "type": "g_time_2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/962d9ab31dff0e0aa2bceeab760bb4dc.png"
+  },
+  {
+    "name": "Gilded Treasure Chest",
+    "type": "gilded_coin_2024_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6b63fd6362a667ba2336e794999f5e48.png"
+  },
+  {
+    "name": "Gnawnia Rift Treasure Chest",
+    "type": "gnawnia_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/696353afbabb3383bbbdd9886c4a7c02.png"
+  },
+  {
+    "name": "Gnawnia Treasure Chest",
+    "type": "gnawnia_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7fc771a80f6968fd519096e47d42dce0.png"
+  },
+  {
+    "name": "Golden Jade Treasure Chest",
+    "type": "relic_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f705d202337563e5474eea6e171d0226.png"
+  },
+  {
+    "name": "Grand Duke/Duchess Toxic Spill Treasure Chest",
+    "type": "toxic_arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/911e393aec2c21b1652eb8f9f44224bf.png"
+  },
+  {
+    "name": "Halloween Treasure Chest",
+    "type": "halloween_f_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8c097f073a2297f33f100a3af015afeb.png"
+  },
+  {
+    "name": "Halloween Treat Treasure Chest",
+    "type": "treat_hween2021_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cdf6ee1ff7d8bb5f06337f7dc1fe5ce1.png"
+  },
+  {
+    "name": "Halloween Trick Treasure Chest",
+    "type": "trick_hween2021_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4f2f705bc6f6b4aceed6709eac849eb2.png"
+  },
+  {
+    "name": "Hard Chrome Slayer Treasure Chest",
+    "type": "chrome_boss_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/75e64ce916000b79a0793de4f2edac97.png"
+  },
+  {
+    "name": "Hard Chrome Treasure Chest",
+    "type": "chrome_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9c7751fe54ae79e65f5be99cb2d61a7e.png"
+  },
+  {
+    "name": "Hard Grand Ghostship Treasure Chest",
+    "type": "high_hween2020_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/99eb1c18d858bdf7095d4a6b872f4889.png"
+  },
+  {
+    "name": "Hard Slayer Treasure Chest",
+    "type": "boss_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7c71ba9d02deaea8a17d51458141c2e4.png"
+  },
+  {
+    "name": "Hard Treasure Chest",
+    "type": "hard_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/bce917ab0e1deedeff0b91f4fc1d48bc.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 1)",
+    "type": "hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/da5f58a65321754622f8b1fdaddf8d13.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 10)",
+    "type": "hard_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/496f5cea8554dfe0d9b3ba8c1d130f76.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 2)",
+    "type": "hard_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/11fb68b98ea4493517e2a9b044ef03a5.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 3)",
+    "type": "hard_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ae5c26828a3cfccd5ca7582e468dbc81.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 4)",
+    "type": "hard_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/19d0105f4db0e35feac566a1dadbfaac.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 5)",
+    "type": "hard_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a2624f38635eada0f4fd457d9f018e72.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 6)",
+    "type": "hard_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d9b535f053fe511fbd299043b394943a.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 7)",
+    "type": "hard_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/787d28a5c0475c924a24b3b9eacc0490.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 8)",
+    "type": "hard_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a1549206ff37dd6491082e8fc34f3fb4.png"
+  },
+  {
+    "name": "Hard Treasure Chest (Season 9)",
+    "type": "hard_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Haunted Halloween Treasure Chest",
+    "type": "hard_hween2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/757d49fb7f3d1fa82d9e77d65e26c13a.png"
+  },
+  {
+    "name": "Hero Toxic Spill Treasure Chest",
+    "type": "toxic_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/49a827f80015f1b1f8bd573e548038e8.png"
+  },
+  {
+    "name": "High Altitude Treasure Trove",
+    "type": "heavy_floating_loot_cache_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/64dca410567202f96c2b0a9e731fde75.png"
+  },
+  {
+    "name": "Icebreaker Treasure Chest",
+    "type": "icebreaker_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/0dbcef18480a47e0dd142e6e1959cb25.png"
+  },
+  {
+    "name": "Labyrinth Treasure Chest",
+    "type": "labyrinth_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/30ec63c2eeb9d3fd609e462888ca7941.png"
+  },
+  {
+    "name": "Lantern Lighter Treasure Chest",
+    "type": "lny_treasure_chest_2024_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Large Rainbow Treasure Chest",
+    "type": "large_rainbow_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/084b9641c58fe86deedeb24acf6ad411.png"
+  },
+  {
+    "name": "Lightning Treasure Chest",
+    "type": "lightning_slayer_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/2982bc5f7da01e297e8b67988efaa643.png"
+  },
+  {
+    "name": "Living Garden Treasure Chest",
+    "type": "living_garden_treasure_chest_f_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Living Garden Treasure Chest (Season 1)",
+    "type": "living_garden_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/0baae8a87268a72ab86dc3f7778804a6.png"
+  },
+  {
+    "name": "Living Garden Treasure Chest (Season 2)",
+    "type": "living_garden_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8258f272e0e78d2a8ae0e3c49c6dc80c.png"
+  },
+  {
+    "name": "Lord/Lady Toxic Spill Treasure Chest",
+    "type": "toxic_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ebe8f0fa23e2ee8f89ac602334903a24.png"
+  },
+  {
+    "name": "Low Altitude Treasure Trove",
+    "type": "light_floating_loot_cache_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/5edc04ef3564449cec6d098c577dd623.png"
+  },
+  {
+    "name": "Lunar New Year Treasure Chest",
+    "type": "lunar_new_year_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/afef0a0c10e0be84df14543d3f3c0753.png"
+  },
+  {
+    "name": "M1000 Solo Pursuit Treasure Chest",
+    "type": "m1k_solo_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7dc9f46b4672ace5c00a987d83295633.png"
+  },
+  {
+    "name": "M1000 Team Research Expedition Treasure Chest",
+    "type": "m1k_team_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/5bec81a10b906adad2c4194359848256.png"
+  },
+  {
+    "name": "Medium Chrome Slayer Treasure Chest",
+    "type": "chrome_boss_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cff5ea07397386590f08dd58f06a846e.png"
+  },
+  {
+    "name": "Medium Chrome Treasure Chest",
+    "type": "chrome_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/79790fa654350933ec6aa055fcf330ab.png"
+  },
+  {
+    "name": "Medium Slayer Treasure Chest",
+    "type": "boss_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3d63508cebaed043a2dae4f165f4f38d.png"
+  },
+  {
+    "name": "Medium Treasure Chest",
+    "type": "medium_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/21165e9461769cee0edda3bde2057a45.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 1)",
+    "type": "medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b2d8b91170ab7dd2459ce16768ee33d4.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 10)",
+    "type": "medium_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3d2128f2802678f099cde17d2bded601.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 2)",
+    "type": "medium_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/31ff01090f9d0245fa2a39baf42b6cf3.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 3)",
+    "type": "medium_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1e65a9aa1a333eb5fb7a7ba79d05740e.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 4)",
+    "type": "medium_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d7ff0686f1eed31307ce698a171231bb.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 5)",
+    "type": "medium_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d5c12ed4cbc8535ce22e42f8df68443b.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 6)",
+    "type": "medium_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/463347fb58c1a9f822bde58c8fbb4281.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 7)",
+    "type": "medium_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1ca9c9d62aa9884c1c87ac002f1e6425.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 8)",
+    "type": "medium_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8b8311621f358b1400fb159d004f55fd.png"
+  },
+  {
+    "name": "Medium Treasure Chest (Season 9)",
+    "type": "medium_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Mousoleum Treasure Chest",
+    "type": "undead_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/560612e77f248822934e815a9b9e1579.png"
+  },
+  {
+    "name": "Moussu Picchu Treasure Chest",
+    "type": "moussu_picchu_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/57c0204080f9c702d2ed49340f7e46f7.png"
+  },
+  {
+    "name": "Muridae Protector's Treasure Chest",
+    "type": "muridae_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/2d5be19a46a36cc9dd0bd1780c30628b.png"
+  },
+  {
+    "name": "Naughty Treasure Chest",
+    "type": "naughty_2022_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/66a5afb6d2bd2307d768eb459fe27912.png"
+  },
+  {
+    "name": "New Year's Party Treasure Chest",
+    "type": "new_years_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/108c8fb37a60feacdc49cbafee776bbc.png"
+  },
+  {
+    "name": "Nice Treasure Chest",
+    "type": "nice_2022_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c5bd6cd3e1069b2843a09ec62b464a2b.png"
+  },
+  {
+    "name": "Origin of Dragons Treasure Chest",
+    "type": "origin_of_dragons_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/5fd3ab25202a158ef51a0ad66d30530e.png"
+  },
+  {
+    "name": "Over Easy Treasure Chest",
+    "type": "egg_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ac84e1964ff718d136776e71eeedd58e.png"
+  },
+  {
+    "name": "Over Eggstreme Treasure Chest",
+    "type": "egg_eggstreme_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1b6b2c092eb88b0cb062aaaa721a9529.png"
+  },
+  {
+    "name": "Over Hard Treasure Chest",
+    "type": "egg_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9bb69589d05582db8ebc8e0887eb18ec.png"
+  },
+  {
+    "name": "Over Medium Treasure Chest",
+    "type": "egg_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/68a80be5a606791a31f804bff7532973.png"
+  },
+  {
+    "name": "Queso Canyon Grand Tour Treasure Chest",
+    "type": "queso_canyon_tour_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c1edef754bb3607d14648d8ccce625bd.png"
+  },
+  {
+    "name": "Queso Canyoneer Treasure Chest",
+    "type": "queso_canyoneer_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/eb2db65c15901a6e2d2e7523ab9d7c23.png"
+  },
+  {
+    "name": "Queso Geyser Treasure Chest",
+    "type": "geyser_dweller_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b2ea4be6ed1dafd5f0eecfca9c1f31a3.png"
+  },
+  {
+    "name": "Rare Acolyte Realm Treasure Chest",
+    "type": "rare_catacombs_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1dabd39e299961cf96f76267c208e71a.png"
+  },
+  {
+    "name": "Rare Archduke/Archduchess Toxic Spill Treasure Chest",
+    "type": "rare_toxic_elite_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c3c2f24182b8699f97b099b17f73c3ba.png"
+  },
+  {
+    "name": "Rare Arduous Chrome Slayer Treasure Chest",
+    "type": "rare_c_boss_arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c77cf850698664c39145011130782520.png"
+  },
+  {
+    "name": "Rare Arduous Chrome Treasure Chest",
+    "type": "rare_chrome_arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7841eee96ca714ce8200ab4f9ab21603.png"
+  },
+  {
+    "name": "Rare Arduous Slayer Treasure Chest",
+    "type": "rare_boss_arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/07775de337d2b6d484784fddad6eb1ff.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest",
+    "type": "rare_arduous_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/909f525ae5ffdf992ab33d6b842525f4.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 1)",
+    "type": "rare_arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a6a97e6ad1c8b1fb6b412537b4f67f89.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 10)",
+    "type": "rare_arduous_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f4a1bf0835476f43b4aebd77aea4a924.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 2)",
+    "type": "rare_arduous_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a0775df0fd0081e44f4e40e47b225ebe.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 3)",
+    "type": "rare_arduous_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b11550fd3db1cbe0935c2a72f73ffc28.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 4)",
+    "type": "rare_arduous_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/178e631923a258610aefe2bbe9d69147.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 5)",
+    "type": "rare_arduous_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3dfe3d8134f676f0bbeed4303c04c24e.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 6)",
+    "type": "rare_arduous_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7514be859b269f4d170066d66e134755.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 7)",
+    "type": "rare_arduous_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/67494a53b4ebbb753ae3827f999955cb.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 8)",
+    "type": "rare_arduous_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/44efe9af86d23871cb37d853fe8b235c.png"
+  },
+  {
+    "name": "Rare Arduous Treasure Chest (Season 9)",
+    "type": "rare_arduous_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Athletic Lunar Treasure Chest",
+    "type": "rare_athletic_lunar_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/47306364cd3e31483c4888d1206bf308.png"
+  },
+  {
+    "name": "Rare Birthday Treasure Chest",
+    "type": "rare_birthday_2021_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b0e3ea238dabf6500d45ae6ce8c3e778.png"
+  },
+  {
+    "name": "Rare Bountiful Beanstalk Treasure Chest",
+    "type": "rare_beanstalk_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f8fdd458575ab955e68889689ad066a7.png"
+  },
+  {
+    "name": "Rare Bounty Reward",
+    "type": "rare_bounty_reward_f_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/db1848f28f75c9cd4d472a56856cef23.png"
+  },
+  {
+    "name": "Rare Bounty Reward (Season 1)",
+    "type": "rare_bounty_reward_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/98cb70b583de7d47c7c9db9d146c2cd0.png"
+  },
+  {
+    "name": "Rare Bristle Woods Rift Treasure Chest",
+    "type": "rare_bristle_woods_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/93ef3d470cb10b5aa65ecf87d34a4b2b.png"
+  },
+  {
+    "name": "Rare Burroughs Rift Treasure Chest",
+    "type": "rare_burroughs_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/baa28128627faf26cfd880f3630a371b.png"
+  },
+  {
+    "name": "Rare Count/Countess Toxic Spill Treasure Chest",
+    "type": "rare_toxic_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4abf29cd5081f547b6cdf5b277c597e2.png"
+  },
+  {
+    "name": "Rare Digby Treasure Chest",
+    "type": "rare_digby_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/de0d6e24959380070c6affdfa6b88c26.png"
+  },
+  {
+    "name": "Rare Draconic Depths Treasure Chest",
+    "type": "rare_draconic_depths_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/2191e919eed1b1160dad2640eea13cec.png"
+  },
+  {
+    "name": "Rare Duke/Duchess Toxic Spill Treasure Chest",
+    "type": "rare_toxic_elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/42d633393c225e73c9643059a9929726.png"
+  },
+  {
+    "name": "Rare Easy Chrome Slayer Treasure Chest",
+    "type": "rare_c_boss_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/0497ce366d3115260bfa376ba9013545.png"
+  },
+  {
+    "name": "Rare Easy Chrome Treasure Chest",
+    "type": "rare_chrome_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3d11229396f794a519efea2a5fb15308.png"
+  },
+  {
+    "name": "Rare Easy Grand Ghostship Treasure Chest",
+    "type": "rare_low_hween2020_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f69dc1734813c3870bea4f890d8d7a2c.png"
+  },
+  {
+    "name": "Rare Easy Slayer Treasure Chest",
+    "type": "rare_boss_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/29e1e341f581833c73d6223145a1dad7.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest",
+    "type": "rare_easy_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/60713c957a9ebacf988d310630d5dc4e.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 1)",
+    "type": "rare_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/88b78e9e32dcecb1227d98062c2878e0.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 10)",
+    "type": "rare_easy_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ba2547368edbabda256ceda1b2dcad7f.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 2)",
+    "type": "rare_easy_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/5efad204d38eb2993a296d21815f7a62.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 3)",
+    "type": "rare_easy_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4b2be185228a2dfa08319b45b2fcd1b7.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 4)",
+    "type": "rare_easy_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/401adab38efc4e13829ab45a0b2194d2.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 5)",
+    "type": "rare_easy_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b495b239a59d1b2687c801a71e3f7a37.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 6)",
+    "type": "rare_easy_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f14efaef9bbe94d5a0b47df3c344e2a9.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 7)",
+    "type": "rare_easy_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/2dc669c1e73ee2630cd513d199a67332.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 8)",
+    "type": "rare_easy_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d850c1ac58e0b1c161f8f1c5b7c27d34.png"
+  },
+  {
+    "name": "Rare Easy Treasure Chest (Season 9)",
+    "type": "rare_easy_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Eerie Halloween Treasure Chest",
+    "type": "rare_easy_hween2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8cd67e3ef64d33d0dd64ff15cac5b840.png"
+  },
+  {
+    "name": "Rare Elaborate Chrome Slayer Treasure Chest",
+    "type": "rare_c_boss_elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d7dc0c33c22092b3ebc6dfc981910baa.png"
+  },
+  {
+    "name": "Rare Elaborate Chrome Treasure Chest",
+    "type": "rare_chrome_elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/889a68eaff472b295a4557e2a544a711.png"
+  },
+  {
+    "name": "Rare Elaborate Slayer Treasure Chest",
+    "type": "rare_boss_elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/53cd786d69a6fadf4022fcc368459b02.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest",
+    "type": "rare_elaborate_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/81f77c31a76d39f8d5793c68fcf36aef.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 1)",
+    "type": "rare_elaborate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4723ae4207e7cb4300d378231df1fbb1.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 10)",
+    "type": "rare_elaborate_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/258ff674b60a4a50063a039868dfaaa6.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 2)",
+    "type": "rare_elaborate_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cf9544b6d8eb35e9d408e1bd9fde4e90.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 3)",
+    "type": "rare_elaborate_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d641dfd542013572be5c0b632e57494f.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 4)",
+    "type": "rare_elaborate_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/2ab107ec7db1ba7667d7c431295bf012.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 5)",
+    "type": "rare_elaborate_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a7c76fa3adf56820d64e5d666848f8b7.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 6)",
+    "type": "rare_elaborate_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f4edf7c9247ad6065a0677787efb4098.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 7)",
+    "type": "rare_elaborate_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3c286a977044d8423cbd02af9194e140.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 8)",
+    "type": "rare_elaborate_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9af3839070358beee00539e76814da17.png"
+  },
+  {
+    "name": "Rare Elaborate Treasure Chest (Season 9)",
+    "type": "rare_elaborate_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Elite Chrome Slayer Treasure Chest",
+    "type": "rare_c_boss_elite_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/96e389fa5c1135697abdfaa584962a99.png"
+  },
+  {
+    "name": "Rare Elite Chrome Treasure Chest",
+    "type": "rare_chrome_elite_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4d958f7fc6ed2dbceb8856df65818747.png"
+  },
+  {
+    "name": "Rare Elite Slayer Treasure Chest",
+    "type": "rare_boss_elite_2021_treasure_chest_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Elite Treasure Chest",
+    "type": "rare_elite_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7a4be55125e8381bae01074c64d4ad7f.png"
+  },
+  {
+    "name": "Rare Elite Treasure Chest (Season 10)",
+    "type": "rare_elite_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d05af915a2dbe760de20c6a10496cdd9.png"
+  },
+  {
+    "name": "Rare Elite Treasure Chest (Season 3)",
+    "type": "rare_elite_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/0fe7a4c7233c6cae5bfca6977b2f9ce1.png"
+  },
+  {
+    "name": "Rare Elite Treasure Chest (Season 4)",
+    "type": "rare_elite_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6a610153192a0e269c179c80cd8fa40a.png"
+  },
+  {
+    "name": "Rare Elite Treasure Chest (Season 5)",
+    "type": "rare_elite_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/99175acff5041271d63c4abbedf497a0.png"
+  },
+  {
+    "name": "Rare Elite Treasure Chest (Season 6)",
+    "type": "rare_elite_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9c453984c4eabf4e07900387d973ee9e.png"
+  },
+  {
+    "name": "Rare Elite Treasure Chest (Season 7)",
+    "type": "rare_elite_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c3735f32d78d5f14c0e633280d291682.png"
+  },
+  {
+    "name": "Rare Elite Treasure Chest (Season 8)",
+    "type": "rare_elite_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9fcb4f9926b4b0a1ad05c984ce14e403.png"
+  },
+  {
+    "name": "Rare Elite Treasure Chest (Season 9)",
+    "type": "rare_elite_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Empyrean Sky Palace Treasure Chest",
+    "type": "rare_sky_palace_treasure_chest_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Farming and Fishing Treasure Chest",
+    "type": "rare_farming_fishing_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/67443fe321b162b887788aeb0d174e9c.png"
+  },
+  {
+    "name": "Rare Folklore Forest Prelude Treasure Chest",
+    "type": "rare_ff_prelude_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4ec1934d061bc5ed7bf74c9aaf077f72.png"
+  },
+  {
+    "name": "Rare Fort Rox Treasure Chest",
+    "type": "rare_fort_rox_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d826e142ca31d88063d32532911e3056.png"
+  },
+  {
+    "name": "Rare Fungal Cavern Treasure Chest",
+    "type": "rare_fungal_cavern_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f239f7509150ab5d4fce773837e3f90c.png"
+  },
+  {
+    "name": "Rare Furoma Rift Treasure Chest",
+    "type": "rare_furoma_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a64fc2ede93d4eee162af636743025eb.png"
+  },
+  {
+    "name": "Rare Giant Rainbow Treasure Chest",
+    "type": "rare_giant_rainbow_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/36001bf53507da4d6f72669182fbb90e.png"
+  },
+  {
+    "name": "Rare Gilded Birthday Treasure Chest",
+    "type": "rare_g_birthday_2025_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8d4dbf25c8d0e3b63e4416b28448f643.png"
+  },
+  {
+    "name": "Rare Gilded Time Traveler's Treasure Chest",
+    "type": "rare_g_time_2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c4f5be3bd32cff8b8bc3cfe37aecdc41.png"
+  },
+  {
+    "name": "Rare Gilded Treasure Chest",
+    "type": "rare_gilded_coin_2024_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/bd90b97b0bae6118ae0b1eb6045eabf5.png"
+  },
+  {
+    "name": "Rare Gnawnia Rift Treasure Chest",
+    "type": "rare_gnawnia_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7de2168c27ed477428b078d870e88413.png"
+  },
+  {
+    "name": "Rare Gnawnia Treasure Chest",
+    "type": "rare_gnawnia_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9524676cdb4e6887a8465a8f402d0525.png"
+  },
+  {
+    "name": "Rare Golden Jade Treasure Chest",
+    "type": "rare_relic_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7f79c1f76c5b49795cde17e02d845a77.png"
+  },
+  {
+    "name": "Rare Grand Duke/Duchess Toxic Spill Treasure Chest",
+    "type": "rare_toxic_arduous_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/03808c765d6fee37fb8d2b2372d18182.png"
+  },
+  {
+    "name": "Rare Halloween Treasure Chest",
+    "type": "rare_halloween_f_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/68675be9737382264740794cc050dec9.png"
+  },
+  {
+    "name": "Rare Halloween Treat Treasure Chest",
+    "type": "rare_treat_hween2021_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9c1ebc8149a12bc1f10e53fded1e3bbf.png"
+  },
+  {
+    "name": "Rare Halloween Trick Treasure Chest",
+    "type": "rare_trick_hween2021_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/100b2730d1410be84565bdd0bd5ab67a.png"
+  },
+  {
+    "name": "Rare Hard Chrome Slayer Treasure Chest",
+    "type": "rare_c_boss_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d881a3832278341616c57ab8cf7692a3.png"
+  },
+  {
+    "name": "Rare Hard Chrome Treasure Chest",
+    "type": "rare_chrome_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/67df292dd9fb060697f8272b4c20aa69.png"
+  },
+  {
+    "name": "Rare Hard Grand Ghostship Treasure Chest",
+    "type": "rare_high_hween2020_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3b5e78967b2e338bcdbe34b9c66755b3.png"
+  },
+  {
+    "name": "Rare Hard Slayer Treasure Chest",
+    "type": "rare_boss_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/bf475646490bc496409ba40b851767b3.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest",
+    "type": "rare_hard_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/e80e9399c671d9c99f454404747eee9b.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 1)",
+    "type": "rare_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/73f690abc9c6d22316db7bbc32647c3d.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 10)",
+    "type": "rare_hard_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/40f5bb90d678ecfb0bfc205c666c7cb7.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 2)",
+    "type": "rare_hard_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1479dda17775a1fb217745398ab3f39d.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 3)",
+    "type": "rare_hard_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3f4306cfd3c8d508d4528a863536cefd.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 4)",
+    "type": "rare_hard_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/817c0c9b6e2bd71a9b402c5716851eb2.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 5)",
+    "type": "rare_hard_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d75e8e77a51a4a28c3216fd5e7dbca9a.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 6)",
+    "type": "rare_hard_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/33b7e51f71b14bf0b21ff6a0d37605f8.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 7)",
+    "type": "rare_hard_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8b9b065005b496630a8236e694b7b0e2.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 8)",
+    "type": "rare_hard_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f8d39ae19a60e981f6da79a4151bb0a3.png"
+  },
+  {
+    "name": "Rare Hard Treasure Chest (Season 9)",
+    "type": "rare_hard_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Haunted Halloween Treasure Chest",
+    "type": "rare_hard_hween2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1fe703a06855a907c5b6adf8eaabac67.png"
+  },
+  {
+    "name": "Rare Hero Toxic Spill Treasure Chest",
+    "type": "rare_toxic_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d86aadf7f07f90d89c2b45aebd17f1cc.png"
+  },
+  {
+    "name": "Rare Icebreaker Treasure Chest",
+    "type": "rare_icebreaker_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4f179ae8df5a2e409a048f8cf342af12.png"
+  },
+  {
+    "name": "Rare Labyrinth Treasure Chest",
+    "type": "rare_labyrinth_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/2ecd980c053f37e61193066f260cd072.png"
+  },
+  {
+    "name": "Rare Lantern Lighter Treasure Chest",
+    "type": "rare_lny_treasure_chest_2024_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Large Rainbow Treasure Chest",
+    "type": "rare_large_rainbow_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b79584d2ec77489f564bc91b6e09acf3.png"
+  },
+  {
+    "name": "Rare Lightning Treasure Chest",
+    "type": "rare_lightning_slayer_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/fd6e7045f3b23783bbfb7a2128967322.png"
+  },
+  {
+    "name": "Rare Living Garden Treasure Chest",
+    "type": "rare_living_garden_treasure_chest_f_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Living Garden Treasure Chest (Season 1)",
+    "type": "rare_living_garden_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b9b8c48acceb6d704f531bf022181152.png"
+  },
+  {
+    "name": "Rare Living Garden Treasure Chest (Season 2)",
+    "type": "rare_living_garden_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8f2fb33beff338777f3c28995df27d6d.png"
+  },
+  {
+    "name": "Rare Lord/Lady Toxic Spill Treasure Chest",
+    "type": "rare_toxic_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b90e2de40f5b659a995e35aa131f37ab.png"
+  },
+  {
+    "name": "Rare Lunar New Year Treasure Chest",
+    "type": "rare_lunar_new_year_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b25e4d5532853d701beaf375b64d15f8.png"
+  },
+  {
+    "name": "Rare M1000 Solo Pursuit Treasure Chest",
+    "type": "rare_m1k_solo_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b183ffd5ed82d10d9513a2b07164b1bb.png"
+  },
+  {
+    "name": "Rare M1000 Team Research Expedition Treasure Chest",
+    "type": "rare_m1k_team_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/8ec0c00e414b03680d5c5e1283b89f09.png"
+  },
+  {
+    "name": "Rare Medium Chrome Slayer Treasure Chest",
+    "type": "rare_c_boss_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f445920d7f18c7085c7945f5962a66f5.png"
+  },
+  {
+    "name": "Rare Medium Chrome Treasure Chest",
+    "type": "rare_chrome_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1caab27a718e5100f47e71afd719caa7.png"
+  },
+  {
+    "name": "Rare Medium Slayer Treasure Chest",
+    "type": "rare_boss_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/945940d7f7d2a5a8279a307597beace8.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest",
+    "type": "rare_medium_rh_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/035d43d411d9c92d9bb063d30c15b7c1.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 1)",
+    "type": "rare_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/38ba073c45a0654bba98f19f43a7017e.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 10)",
+    "type": "rare_medium_treasure_chest_s10_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6b2a065347bfb6c4bc44bbbe27cd684e.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 2)",
+    "type": "rare_medium_treasure_chest_s2_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d2b8b923b02f74e77d6f7883c9b99f70.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 3)",
+    "type": "rare_medium_treasure_chest_s3_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/716109da06f722266667e3c0c4dbae57.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 4)",
+    "type": "rare_medium_treasure_chest_s4_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/bf80e85e27ba7f1ae4dd9b3fdf2141d1.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 5)",
+    "type": "rare_medium_treasure_chest_s5_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/95a96cfd2dc9dd27790c05bdc247a961.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 6)",
+    "type": "rare_medium_treasure_chest_s6_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6d9cc13526b385246cd38eb739ee8638.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 7)",
+    "type": "rare_medium_treasure_chest_s7_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b681c069dfb2601d73a096ad7ecfb41c.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 8)",
+    "type": "rare_medium_treasure_chest_s8_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ec209229e8142ae2984e54e06dbf725f.png"
+  },
+  {
+    "name": "Rare Medium Treasure Chest (Season 9)",
+    "type": "rare_medium_treasure_chest_s9_convertible",
+    "thumbnail": null
+  },
+  {
+    "name": "Rare Mousoleum Treasure Chest",
+    "type": "rare_undead_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/064ced366f75743a760b5c4fc6b5c7f2.png"
+  },
+  {
+    "name": "Rare Moussu Picchu Treasure Chest",
+    "type": "rare_moussu_picchu_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/e179d6bc840f96a14811e7d195b6dc02.png"
+  },
+  {
+    "name": "Rare Muridae Protector's Treasure Chest",
+    "type": "rare_muridae_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4ddd1dfe1bae028f154d34b9524bcad1.png"
+  },
+  {
+    "name": "Rare Naughty Treasure Chest",
+    "type": "rare_naughty_2022_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/2c858e4e806a04fa867ec59551a35f2d.png"
+  },
+  {
+    "name": "Rare New Year's Party Treasure Chest",
+    "type": "rare_new_years_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6316ec940fcd51138a8fd3834e25b9d9.png"
+  },
+  {
+    "name": "Rare Nice Treasure Chest",
+    "type": "rare_nice_2022_list_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/217ff018a8fe06f752c589a1da4b2069.png"
+  },
+  {
+    "name": "Rare Origin of Dragons Treasure Chest",
+    "type": "rare_origin_of_dragons_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/fafc62a8400dc01dbd48d9d109f27bd8.png"
+  },
+  {
+    "name": "Rare Over Easy Treasure Chest",
+    "type": "rare_egg_easy_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1b1049808e41a88b88fc26e2ef7f1cfb.png"
+  },
+  {
+    "name": "Rare Over Eggstreme Treasure Chest",
+    "type": "rare_egg_eggstreme_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/174022017c2130ab6c09ddd2bd697f0f.png"
+  },
+  {
+    "name": "Rare Over Hard Treasure Chest",
+    "type": "rare_egg_hard_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/7cc59c720ef4bc1c208b55d15730cef8.png"
+  },
+  {
+    "name": "Rare Over Medium Treasure Chest",
+    "type": "rare_egg_medium_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/53a869411bfb6fb2063399835bff05bf.png"
+  },
+  {
+    "name": "Rare Queso Canyon Grand Tour Treasure Chest",
+    "type": "rare_queso_canyon_tour_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/bd9ebf5b25c443da3d9d49cc39dc5fd7.png"
+  },
+  {
+    "name": "Rare Queso Canyoneer Treasure Chest",
+    "type": "rare_queso_canyoneer_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9e85ec1ad6cc23d3f3056a8cb6874dd9.png"
+  },
+  {
+    "name": "Rare Queso Geyser Treasure Chest",
+    "type": "rare_geyser_dweller_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/fdca60f9934cd3c15eaf228b6c1672dd.png"
+  },
+  {
+    "name": "Rare Rift Halloween Treasure Chest",
+    "type": "rare_rift_halloween_f_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6e6fdf283d6a45f8ffe9cd0a7cb66c8f.png"
+  },
+  {
+    "name": "Rare Rift Stalker Treasure Chest",
+    "type": "rare_riftstalker_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d844a4cee5503cc5c3bd2b713b5321f1.png"
+  },
+  {
+    "name": "Rare Rift Walker Treasure Chest",
+    "type": "rare_riftwalker_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d6486db8610dc3d011533f8d43a6d324.png"
+  },
+  {
+    "name": "Rare School of Sorcery Treasure Chest",
+    "type": "rare_school_of_sorcery_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/501ab4490592e8b6f9c741ae4abf9e4a.png"
+  },
+  {
+    "name": "Rare Shelder Treasure Chest",
+    "type": "rare_shelder_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/eaea30538e229048c7764ad9009fd89c.png"
+  },
+  {
+    "name": "Rare Sky Pirate Treasure Chest",
+    "type": "rare_sky_pirate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6d4d9d210aea20fdd94c8967656151ec.png"
+  },
+  {
+    "name": "Rare Small Rainbow Treasure Chest",
+    "type": "rare_small_rainbow_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/06c64686a1a3ffac58ecd397b7f5862f.png"
+  },
+  {
+    "name": "Rare Spooky Halloween Treasure Chest",
+    "type": "rare_medium_hween2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/d752a01ccf7655c012809c81d40910cc.png"
+  },
+  {
+    "name": "Rare Sunken City Treasure Chest",
+    "type": "rare_sunken_city_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/cedc53d043f80e8e8cb0210673f5c6c1.png"
+  },
+  {
+    "name": "Rare Terrifying Halloween Treasure Chest",
+    "type": "rare_elab_hween2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1521e940c25eed159afcc8729d66ba1c.png"
+  },
+  {
+    "name": "Rare Time Traveler's Treasure Chest",
+    "type": "rare_timetravel_2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/b10249044696fe71d2bfb29b8e9ac699.png"
+  },
+  {
+    "name": "Rare Tribal Isles Treasure Chest",
+    "type": "rare_isles_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/dfdecc39a24e407162932493f0c08ec2.png"
+  },
+  {
+    "name": "Rare Valentine's Matchmaker Treasure Chest",
+    "type": "rare_valentines_matchmaker_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/5553aa520e0a488048515b1950a7c1b6.png"
+  },
+  {
+    "name": "Rare Valentine's Treasure Chest",
+    "type": "rare_valentines_2015_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ac9942525a02c53f139443e2e541cb4f.png"
+  },
+  {
+    "name": "Rare Valour Rift Treasure Chest",
+    "type": "rare_valour_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/ce63d9203f80a4a159e1998eee70811f.png"
+  },
+  {
+    "name": "Rare Valour Treasure Chest",
+    "type": "rare_valour_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/62d1e33ba29b2f401c03b2f370f5c666.png"
+  },
+  {
+    "name": "Rare Warpath Treasure Chest",
+    "type": "rare_warpath_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/2a205f33ccda0647f28911780312a2bf.png"
+  },
+  {
+    "name": "Rare Whisker Woods Rift Treasure Chest",
+    "type": "rare_whisker_woods_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/529fff7bf2ac3862fe829d5918a89003.png"
+  },
+  {
+    "name": "Rare Whisker Woods Treasure Chest",
+    "type": "rare_whisker_woods_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/951263477c597a7cb749e7cde8f747f9.png"
+  },
+  {
+    "name": "Rare Zugzwang Treasure Chest",
+    "type": "rare_zugzwang_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f6f9fc5bea5ccc83c301b7957d7a0959.png"
+  },
+  {
+    "name": "Rift Halloween Treasure Chest",
+    "type": "rift_halloween_f_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/4c4227ec63badac80884d619f25cdd97.png"
+  },
+  {
+    "name": "Rift Stalker Treasure Chest",
+    "type": "riftstalker_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/bfa2b19e630a095c69807d959f8265f8.png"
+  },
+  {
+    "name": "Rift Walker Treasure Chest",
+    "type": "riftwalker_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/a76a3d58d94079fc08c3976a253be0eb.png"
+  },
+  {
+    "name": "School of Sorcery Treasure Chest",
+    "type": "school_of_sorcery_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/31102305f7416a308a586a92a4f001e2.png"
+  },
+  {
+    "name": "Shelder Treasure Chest",
+    "type": "shelder_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c5c386fc9dde072f81ba8a9d0a3399fe.png"
+  },
+  {
+    "name": "Sky Pirate Treasure Chest",
+    "type": "sky_pirate_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/5bc9978445a55d5713706cffa53cc347.png"
+  },
+  {
+    "name": "Small Rainbow Treasure Chest",
+    "type": "small_rainbow_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/caf082ce6ce33db32a2441f8ed57b147.png"
+  },
+  {
+    "name": "Spooky Halloween Treasure Chest",
+    "type": "medium_hween2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/3563765a4788415f78b5eb040c9a042f.png"
+  },
+  {
+    "name": "Sunken City Treasure Chest",
+    "type": "sunken_city_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/dbb612648838d86f3638d5f72080957f.png"
+  },
+  {
+    "name": "Terrifying Halloween Treasure Chest",
+    "type": "elab_hween2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/58a9e845be71ddf4f2d87173ee774c0a.png"
+  },
+  {
+    "name": "Time Traveler's Treasure Chest",
+    "type": "timetravel_2018_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c0fe509ac13dfbe0bba2151106d4a792.png"
+  },
+  {
+    "name": "Tribal Isles Treasure Chest",
+    "type": "isles_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/1becd20b891bf9ddcad0f59379f6e1b0.png"
+  },
+  {
+    "name": "Valentine's Matchmaker Treasure Chest",
+    "type": "valentines_matchmaker_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/92117706a47ef78f022e5e9a86cb27a6.png"
+  },
+  {
+    "name": "Valentine's Treasure Chest",
+    "type": "valentines_2015_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/182058ea2b8d06f2a3850369a6a7137c.png"
+  },
+  {
+    "name": "Valour Rift Treasure Chest",
+    "type": "valour_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/9547b1473424874c7eea9bf5028c188b.png"
+  },
+  {
+    "name": "Valour Treasure Chest",
+    "type": "valour_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c7154df52da5722b2acad4622cd9c959.png"
+  },
+  {
+    "name": "Warpath Treasure Chest",
+    "type": "warpath_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/90b280bee8e6dc65a4030fb34856b0a5.png"
+  },
+  {
+    "name": "Whisker Woods Rift Treasure Chest",
+    "type": "whisker_woods_rift_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/6d27ca4b7fd8a805479a9411543428a3.png"
+  },
+  {
+    "name": "Whisker Woods Treasure Chest",
+    "type": "whisker_woods_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/f568310f57c811dfe1f048ef0fca9ef4.png"
+  },
+  {
+    "name": "Zugzwang Treasure Chest",
+    "type": "zugzwang_treasure_chest_convertible",
+    "thumbnail": "https://www.mousehuntgame.com/images/items/convertibles/transparent_thumb/c7b9a6e040b38d46fcf11d88522d2c41.png"
+  }
+]

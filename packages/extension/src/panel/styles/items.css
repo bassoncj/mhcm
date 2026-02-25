@@ -1,0 +1,114 @@
+/* ===================================================================
+   Item Marketplace
+   =================================================================== */
+
+/* Classification filter button (sits next to ItemSelector in selector-row) */
+.item-filter-wrap {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.item-filter-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  line-height: 1;
+  z-index: 1;
+}
+
+/* Classification multi-select dropdown */
+.item-classification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 100;
+  margin-top: 4px;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.3));
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.item-classification-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px;
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.item-classification-option:hover {
+  background: var(--bg-hover);
+}
+
+.item-classification-option input[type="checkbox"] {
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.item-classification-clear {
+  margin-top: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.item-classification-clear:hover {
+  text-decoration: underline;
+}
+
+/* Sell-side inventory info in create order */
+.sell-inventory-info {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 4px 0;
+}
+
+.sell-inventory-info.loading {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.sell-inventory-info.none {
+  color: var(--sell);
+}
+
+/* Item classification badge in moderation panel */
+.item-classification {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Admin sync button */
+.btn-sync { white-space: nowrap; }
+.btn-sync.syncing svg { animation: spin 1s linear infinite; }
