@@ -22,6 +22,8 @@ import {
   addNotifiedMapId,
   addTrackedSnipingTxn,
   removeTrackedSnipingTxn,
+  addTrackedMaptainTxn,
+  removeTrackedMaptainTxn,
   setMyOrders,
   setSellOrderValidationPending,
   clearSellOrderValidationTimeout,
@@ -519,6 +521,26 @@ function handleGameStateUpdate(
       setCachedActiveMaps(cached);
       broadcastRawToPanel({ type: "game_state", payload: { activeMaps: cached } });
     }
+
+    // Maptain-side departure detection: check if sniper has left the map
+    if (getState().wsConnected && Array.isArray(payload.activeHunterSnUserIds)) {
+      const activeIds = new Set<string>(payload.activeHunterSnUserIds);
+      for (const tracked of getState().trackedMaptainTxns.values()) {
+        if (tracked.mhMapId !== payload.mapId) continue;
+        if (tracked.reportedDeparture) continue;
+        if (!activeIds.has(tracked.sniperSnUserId)) {
+          verboseLog("snipe-sw", `MAPTAIN DETECT DEPARTURE: sniper ${tracked.sniperSnUserId} absent from map ${payload.mapId} (txn #${tracked.id})`);
+          tracked.reportedDeparture = true;
+          send({
+            type: "sniper_left_map",
+            payload: {
+              transactionId: tracked.id,
+              reportedBy: "maptain" as const,
+            },
+          });
+        }
+      }
+    }
   } else if (payload.type === "player_rank") {
     setPlayerTitleId(payload.titleId, payload.titleName ?? undefined);
     broadcastRawToPanel({
@@ -922,6 +944,42 @@ function handleCatchesDetected(
             payload: {
               transactionId: tracked.id,
               mouseTypeId: targetGoalId,
+            },
+          });
+        }
+        tracked.reportedCompletedIds.add(targetGoalId);
+      }
+    }
+  }
+
+  // Maptain-side detection: detect sniper goals from maptain's XHR data
+  for (const tracked of getState().trackedMaptainTxns.values()) {
+    if (tracked.mhMapId !== mapId) continue;
+    if (tracked.goalType !== goalType) continue;
+
+    const sniperCompletedSet = catchesBySniper.get(tracked.sniperSnUserId);
+    if (!sniperCompletedSet) continue;
+
+    for (const targetGoalId of tracked.targetGoalIds) {
+      if (sniperCompletedSet.has(targetGoalId) && !tracked.reportedCompletedIds.has(targetGoalId)) {
+        if (goalType === "item") {
+          verboseLog("snipe-sw", `  MAPTAIN DETECT FIND: item ${targetGoalId} on map ${mapId} (txn #${tracked.id})`);
+          send({
+            type: "item_found",
+            payload: {
+              transactionId: tracked.id,
+              itemTypeId: targetGoalId,
+              reportedBy: "maptain" as const,
+            },
+          });
+        } else {
+          verboseLog("snipe-sw", `  MAPTAIN DETECT CATCH: mouse ${targetGoalId} on map ${mapId} (txn #${tracked.id})`);
+          send({
+            type: "mouse_caught",
+            payload: {
+              transactionId: tracked.id,
+              mouseTypeId: targetGoalId,
+              reportedBy: "maptain" as const,
             },
           });
         }
@@ -1538,8 +1596,8 @@ setMessageHandler((message: ServerMessage) => {
   if (message.type === "sniping_transaction_update") {
     const txn = message.payload.transaction;
     verboseLog("snipe-sw", `TXN UPDATE: txn #${txn.id}, state=${txn.state}, goalType=${txn.goalType}`);
-    if (txn.state === "sniping") {
-      // Active hunting phase – track for catch/find detection
+    if (txn.state === "sniping" || txn.state === "verifying_goal_completed") {
+      // Active hunting phase - track for catch/find detection (sniper-side)
       const gt = txn.goalType || "mouse";
       let targetGoalIds: number[];
       let alreadyCompleted: Set<number>;
@@ -1566,19 +1624,35 @@ setMessageHandler((message: ServerMessage) => {
       touchCatchDataTimestamp(txn.mhMapId);
       startCatchStalenessPolling();
       verboseLog("snipe-sw", `  tracking txn #${txn.id}: map=${txn.mhMapId}, sniper=${txn.sniperMhSnUserId}, goalType=${gt}, targets=[${targetGoalIds.join(",")}] (${getState().trackedSnipingTxns.size} total tracked)`);
+
+      // Maptain-side tracking: detect sniper goals/departures via XHR interception
+      const mySnUserId = getState().playerIdentity?.snUserId;
+      if (mySnUserId && txn.maptainMhSnUserId === mySnUserId) {
+        addTrackedMaptainTxn({
+          id: txn.id,
+          mhMapId: txn.mhMapId,
+          sniperSnUserId: txn.sniperMhSnUserId,
+          goalType: gt,
+          targetGoalIds,
+          reportedCompletedIds: new Set(alreadyCompleted),
+          reportedDeparture: false,
+        });
+        verboseLog("snipe-sw", `  maptain tracking txn #${txn.id}: sniper=${txn.sniperMhSnUserId}`);
+      }
     } else if (txn.state === "completed" || txn.state === "failed") {
-      // Terminal state – stop tracking
+      // Terminal state - stop tracking, clean up verification state
       verboseLog("snipe-sw", `  untracking txn #${txn.id} (${txn.state})`);
       removeTrackedSnipingTxn(txn.id);
+      removeTrackedMaptainTxn(txn.id);
+      verificationAttemptSeen.delete(txn.id);
       if (getState().trackedSnipingTxns.size === 0) stopCatchStalenessPolling();
-      // Only refresh game tab on success – failed txns that never reached the
-      // game API don't change game state, and refreshing on every failure
-      // hammers the game with page reloads during rapid fail/rematch cycles.
+      // Only refresh game tab on success
       if (txn.state === "completed") refreshGameTab();
-    } else if (txn.state === "awaiting_payment" || txn.state === "transferring" || txn.state === "awaiting_leave") {
-      // Progressed past sniping – stop tracking catches for this txn
+    } else if (txn.state === "awaiting_payment" || txn.state === "transferring" || txn.state === "awaiting_leave" || txn.state === "verifying_sniper_left") {
+      // Progressed past sniping - stop tracking catches for this txn
       verboseLog("snipe-sw", `  untracking txn #${txn.id} (past sniping: ${txn.state})`);
       removeTrackedSnipingTxn(txn.id);
+      removeTrackedMaptainTxn(txn.id);
       if (getState().trackedSnipingTxns.size === 0) stopCatchStalenessPolling();
     }
 
@@ -1675,6 +1749,9 @@ setMessageHandler((message: ServerMessage) => {
 
   if (message.type === "map_transaction_update") {
     const txn = message.payload.transaction;
+    if (txn.state === "completed" || txn.state === "failed") {
+      verificationAttemptSeen.delete(txn.id);
+    }
     if (txn.state === "completed") {
       refreshGameTab();
       // Map sold/purchased notifications
@@ -2168,6 +2245,7 @@ async function executeMapStep(
 
       case "map_transfer_sb": {
         // Transfer SB from buyer to seller
+        const transferTimestampUtc = new Date().toISOString();
         const response = await chrome.tabs.sendMessage(tabId, {
           source: "mhcm-service-worker",
           type: "execute_api_call",
@@ -2184,7 +2262,7 @@ async function executeMapStep(
             transactionId,
             step,
             success: response?.success ?? false,
-            error: response?.error,
+            ...(response?.success ? { transferTimestampUtc } : { error: response?.error }),
           },
         });
         break;
@@ -2962,6 +3040,9 @@ async function handleVerifyTransfer(payload: {
   transferTimestampUtc?: string;
   mapId?: number;
   expectedHunterSnUserId?: string;
+  mapClass?: string;
+  expectedMapType?: string;
+  goal?: string;
 }): Promise<void> {
   const { transactionId, verificationType, attemptNumber } = payload;
 
@@ -2970,19 +3051,27 @@ async function handleVerifyTransfer(payload: {
   verificationAttemptSeen.set(transactionId, attemptNumber);
 
   let verified = false;
+  let error: string | undefined;
   try {
-    verified = await runVerification(payload);
+    const result = await runVerification(payload);
+    if (typeof result === "object") {
+      verified = result.verified;
+      error = result.error;
+    } else {
+      verified = result;
+    }
   } catch (err) {
     console.warn("[mhcm] verify_transfer error:", err);
+    error = "exception";
   }
 
   send({
     type: "verify_transfer_result",
-    payload: { transactionId, verificationType, verified },
+    payload: { transactionId, verificationType, verified, ...(error && { error }) },
   });
 }
 
-async function runVerification(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<boolean> {
+async function runVerification(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<CheckResult> {
   const { verificationType } = payload;
 
   if (verificationType === "item_receipt" || verificationType === "sb_receipt") {
@@ -3001,39 +3090,57 @@ async function runVerification(payload: Parameters<typeof handleVerifyTransfer>[
     return checkMapOwnership(payload);
   }
 
-  // scroll_opened, goal_completed – implemented in future phases
+  if (verificationType === "scroll_opened") {
+    return checkScrollOpened(payload);
+  }
+
+  if (verificationType === "map_valid") {
+    return checkMapValid(payload);
+  }
+
+  if (verificationType === "map_free") {
+    return checkMapFree(payload);
+  }
+
+  if (verificationType === "goal_completed") {
+    return checkGoalCompleted(payload);
+  }
+
   console.warn(`[mhcm] verify_transfer: unhandled verificationType "${verificationType}"`);
   return false;
 }
 
-async function checkInviteReceived(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<boolean> {
+/** Infra failure (soft) vs definitive fraud (plain false). */
+type CheckResult = boolean | { verified: false; error: string };
+
+async function checkInviteReceived(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<CheckResult> {
   const { mapId } = payload;
   if (mapId == null) {
     console.warn("[mhcm] checkInviteReceived: missing mapId");
-    return false;
+    return { verified: false, error: "invalid_challenge" };
   }
 
   const uh = getState().playerIdentity?.uniqueHash;
-  if (!uh) return false;
+  if (!uh) return { verified: false, error: "no_identity" };
 
   const result = await executeApiViaContentScript("getReceivedInvites", [uh]);
-  if (!result.success || !Array.isArray(result.data)) return false;
+  if (!result.success || !Array.isArray(result.data)) return { verified: false, error: "api_unavailable" };
 
   return result.data.some((inv: any) => Number(inv.map_id) === mapId);
 }
 
-async function checkMapHunterPresence(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<boolean> {
+async function checkMapHunterPresence(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<CheckResult> {
   const { mapId, expectedHunterSnUserId, verificationType } = payload;
   if (mapId == null || !expectedHunterSnUserId) {
     console.warn("[mhcm] checkMapHunterPresence: missing mapId or expectedHunterSnUserId");
-    return false;
+    return { verified: false, error: "invalid_challenge" };
   }
 
   const uh = getState().playerIdentity?.uniqueHash;
-  if (!uh) return false;
+  if (!uh) return { verified: false, error: "no_identity" };
 
   const result = await executeApiViaContentScript("getMapInfo", [uh, mapId]);
-  if (!result.success || !result.data) return false;
+  if (!result.success || !result.data) return { verified: false, error: "api_unavailable" };
 
   const hunters: any[] = result.data.hunters ?? [];
   const isPresent = hunters.some(
@@ -3044,28 +3151,143 @@ async function checkMapHunterPresence(payload: Parameters<typeof handleVerifyTra
   return verificationType === "party_left" ? !isPresent : isPresent;
 }
 
-async function checkMapOwnership(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<boolean> {
-  const { mapId } = payload;
-  if (mapId == null) {
-    console.warn("[mhcm] checkMapOwnership: missing mapId");
-    return false;
+async function checkGoalCompleted(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<CheckResult> {
+  const { mapId, goal, goalKey } = payload;
+  if (mapId == null || !goal || !goalKey) {
+    console.warn("[mhcm] checkGoalCompleted: missing mapId, goal, or goalKey");
+    return { verified: false, error: "invalid_challenge" };
   }
 
   const uh = getState().playerIdentity?.uniqueHash;
-  if (!uh) return false;
+  if (!uh) return { verified: false, error: "no_identity" };
 
   const result = await executeApiViaContentScript("getMapInfo", [uh, mapId]);
-  if (!result.success || !result.data) return false;
+  if (!result.success || !result.data) return { verified: false, error: "api_unavailable" };
+
+  const goalCategory = goal === "item" ? "item" : "mouse";
+  const goals: any[] = result.data.goals?.[goalCategory] ?? [];
+
+  // Find the specific goal by its type key and check if it's marked complete
+  const matchingGoal = goals.find((g: any) => g.type === goalKey);
+  if (!matchingGoal) return false;
+
+  return matchingGoal.is_complete === true;
+}
+
+async function checkMapOwnership(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<CheckResult> {
+  const { mapId } = payload;
+  if (mapId == null) {
+    console.warn("[mhcm] checkMapOwnership: missing mapId");
+    return { verified: false, error: "invalid_challenge" };
+  }
+
+  const uh = getState().playerIdentity?.uniqueHash;
+  if (!uh) return { verified: false, error: "no_identity" };
+
+  const result = await executeApiViaContentScript("getMapInfo", [uh, mapId]);
+  if (!result.success || !result.data) return { verified: false, error: "api_unavailable" };
 
   return result.data.is_owner === true;
 }
 
-async function checkMessageReceipt(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<boolean> {
+/**
+ * Buyer verifies the seller IS on the newly opened map and is the owner.
+ * Called for verifying_scroll_opened: mapId is from seller's step result.
+ * Returns true if seller is an active hunter on that map AND is_owner === true.
+ */
+async function checkScrollOpened(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<CheckResult> {
+  const { mapId, expectedHunterSnUserId, expectedMapType } = payload;
+  if (mapId == null || !expectedHunterSnUserId) {
+    console.warn("[mhcm] checkScrollOpened: missing mapId or expectedHunterSnUserId");
+    return { verified: false, error: "invalid_challenge" };
+  }
+
+  const uh = getState().playerIdentity?.uniqueHash;
+  if (!uh) return { verified: false, error: "no_identity" };
+
+  const result = await executeApiViaContentScript("getMapInfo", [uh, mapId]);
+  if (!result.success || !result.data) return { verified: false, error: "api_unavailable" };
+
+  const hunters: any[] = result.data.hunters ?? [];
+  const seller = hunters.find(
+    (h: any) => String(h.sn_user_id) === String(expectedHunterSnUserId) && h.is_active === true
+  );
+  if (!seller || seller.captain !== true) return false;
+
+  // Verify map type matches expected (if provided)
+  if (expectedMapType && result.data.reward?.type !== expectedMapType) return false;
+
+  return true;
+}
+
+/**
+ * Buyer verifies the seller's map is the correct type, seller is captain,
+ * and (for completed maps) all goals are complete.
+ * Called for verifying_map_valid: mapId is from the invite the buyer received.
+ */
+async function checkMapValid(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<CheckResult> {
+  const { mapId, expectedHunterSnUserId, expectedMapType, goal } = payload;
+  if (mapId == null || !expectedHunterSnUserId || !expectedMapType) {
+    console.warn("[mhcm] checkMapValid: missing required fields");
+    return { verified: false, error: "invalid_challenge" };
+  }
+
+  const uh = getState().playerIdentity?.uniqueHash;
+  if (!uh) return { verified: false, error: "no_identity" };
+
+  const result = await executeApiViaContentScript("getMapInfo", [uh, mapId]);
+  if (!result.success || !result.data) return { verified: false, error: "api_unavailable" };
+
+  // 1. Verify map type matches listing
+  if (result.data.reward?.type !== expectedMapType) return false;
+
+  // 2. Verify seller is active captain
+  const hunters: any[] = result.data.hunters ?? [];
+  const seller = hunters.find(
+    (h: any) => String(h.sn_user_id) === String(expectedHunterSnUserId) && h.is_active === true
+  );
+  if (!seller || seller.captain !== true) return false;
+
+  // 3. Completed maps only: verify all goals complete
+  if (goal) {
+    const goalKey = goal === "item" ? "item" : "mouse";
+    const goals: any[] = result.data.goals?.[goalKey] ?? [];
+    if (goals.length === 0) return false;
+    if (!goals.every((g: any) => g.is_complete === true)) return false;
+  }
+
+  return true;
+}
+
+/**
+ * Buyer verifies the seller is NOT on a map of the given class.
+ * Called for verifying_map_free: checks seller's profile for active maps.
+ * Returns true if seller has no active map of that class (safe to open scroll).
+ */
+async function checkMapFree(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<CheckResult> {
+  const { expectedHunterSnUserId, mapClass } = payload;
+  if (!expectedHunterSnUserId || !mapClass) {
+    console.warn("[mhcm] checkMapFree: missing expectedHunterSnUserId or mapClass");
+    return { verified: false, error: "invalid_challenge" };
+  }
+
+  const uh = getState().playerIdentity?.uniqueHash;
+  if (!uh) return { verified: false, error: "no_identity" };
+
+  const result = await executeApiViaContentScript("getHunterProfile", [uh, expectedHunterSnUserId]);
+  if (!result.success || !result.data) return { verified: false, error: "api_unavailable" };
+
+  const activeMapClasses: string[] = result.data.activeMapClasses ?? [];
+  // True = seller NOT on a map of this class (free to receive a new one)
+  return !activeMapClasses.includes(mapClass);
+}
+
+async function checkMessageReceipt(payload: Parameters<typeof handleVerifyTransfer>[0]): Promise<CheckResult> {
   const { senderMhUserId, itemDisplayName, quantity, transferTimestampUtc } = payload;
 
   if (!senderMhUserId || !itemDisplayName || quantity == null || !transferTimestampUtc) {
     console.warn("[mhcm] checkMessageReceipt: missing challenge fields");
-    return false;
+    return { verified: false, error: "invalid_challenge" };
   }
 
   const [result, utcOffset] = await Promise.all([
@@ -3079,7 +3301,7 @@ async function checkMessageReceipt(payload: Parameters<typeof handleVerifyTransf
     })(),
   ]);
 
-  if (!result.success || !Array.isArray(result.data)) return false;
+  if (!result.success || !Array.isArray(result.data)) return { verified: false, error: "api_unavailable" };
 
   const transferTs = Date.parse(transferTimestampUtc);
   const windowStart = transferTs - 2_000;

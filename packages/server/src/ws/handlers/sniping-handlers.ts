@@ -144,18 +144,18 @@ export function handleSnipingMessage(
     }
 
     case "mouse_caught":
-      verboseLog("snipe-ws", `RECV mouse_caught from user ${userId}: txn #${message.payload.transactionId}, mouse=${message.payload.mouseTypeId}`);
-      handleGoalCompleted(message.payload.transactionId, "mouse", message.payload.mouseTypeId);
+      verboseLog("snipe-ws", `RECV mouse_caught from user ${userId}: txn #${message.payload.transactionId}, mouse=${message.payload.mouseTypeId}, reportedBy=${message.payload.reportedBy ?? "unknown"}`);
+      handleGoalCompleted(message.payload.transactionId, "mouse", message.payload.mouseTypeId, userId);
       return true;
 
     case "item_found":
-      verboseLog("snipe-ws", `RECV item_found from user ${userId}: txn #${message.payload.transactionId}, item=${message.payload.itemTypeId}`);
-      handleGoalCompleted(message.payload.transactionId, "item", message.payload.itemTypeId);
+      verboseLog("snipe-ws", `RECV item_found from user ${userId}: txn #${message.payload.transactionId}, item=${message.payload.itemTypeId}, reportedBy=${message.payload.reportedBy ?? "unknown"}`);
+      handleGoalCompleted(message.payload.transactionId, "item", message.payload.itemTypeId, userId);
       return true;
 
     case "sniper_left_map":
-      verboseLog("snipe-ws", `RECV sniper_left_map from user ${userId}: txn #${message.payload.transactionId}`);
-      handleSniperLeftMap(message.payload.transactionId);
+      verboseLog("snipe-ws", `RECV sniper_left_map from user ${userId}: txn #${message.payload.transactionId}, reportedBy=${message.payload.reportedBy ?? "unknown"}`);
+      handleSniperLeftMap(message.payload.transactionId, message.payload.reportedBy);
       return true;
 
     case "sniping_step_result":

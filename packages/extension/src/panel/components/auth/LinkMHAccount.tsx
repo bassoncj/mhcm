@@ -1,6 +1,7 @@
 import { useState, useEffect } from "preact/hooks";
 import { mhAccount, mhLinkPending, mhLinkError, mhLinkVerifyCode, mhLinkVerifying } from "../../signals/auth.js";
 import { playerIdentity } from "../../signals/game-state.js";
+import { wsConnected } from "../../signals/connection.js";
 import { wsSend } from "../../hooks/useServiceWorker.js";
 import { logout } from "../../hooks/useAuth.js";
 import { IconLogOut } from "../common/Icons.js";
@@ -13,10 +14,22 @@ export function LinkMHAccount() {
   const error = mhLinkError.value;
   const verifyCode = mhLinkVerifyCode.value;
   const verifying = mhLinkVerifying.value;
+  const connected = wsConnected.value;
 
-  // Auto-initiate link when identity is detected and no code yet
+  // If WS reconnects while stuck in verifying state (mh_link_result success was
+  // lost in a disconnect), reset so confirm_mh_link fires again below.
   useEffect(() => {
-    if (identity && !verifyCode && !pending && !error) {
+    if (connected && verifying) {
+      mhLinkVerifying.value = false;
+      mhLinkVerifyCode.value = null;
+    }
+  }, [connected]);
+
+  // Auto-initiate link when identity is detected, WS is connected, and no code yet.
+  // Depends on `connected` so it retries if the WS wasn't open on first render
+  // (the confirm_mh_link message is silently dropped when WS is not yet connected).
+  useEffect(() => {
+    if (identity && connected && !verifyCode && !error) {
       mhLinkPending.value = true;
       wsSend({
         type: "confirm_mh_link",
@@ -26,7 +39,7 @@ export function LinkMHAccount() {
         },
       });
     }
-  }, [identity?.userId]);
+  }, [identity?.userId, connected]);
 
   // No MH identity detected
   if (!identity) {

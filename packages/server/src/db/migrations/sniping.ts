@@ -300,6 +300,64 @@ export function migrateSniping(db: Database.Database): void {
     console.log("[db] migration: sniping_transactions recreated with pending_payment state");
   }
 
+  // Phase 5 cross-verification: add verifying_goal_completed, verifying_sb_receipt, verifying_sniper_left
+  const stSchemaForVerify = db.prepare(
+    "SELECT sql FROM sqlite_master WHERE type='table' AND name='sniping_transactions'"
+  ).get() as { sql: string } | undefined;
+
+  if (stSchemaForVerify && !stSchemaForVerify.sql.includes("verifying_goal_completed")) {
+    console.log("[db] migration: adding verification states to sniping_transactions CHECK constraint");
+    db.exec("PRAGMA foreign_keys = OFF");
+    db.exec("DROP TABLE IF EXISTS sniping_transactions_new");
+    // Move any stuck rows out of verification states (safety net for unexpected restart)
+    db.exec("UPDATE sniping_transactions SET state = 'sniping' WHERE state IN ('verifying_goal_completed', 'verifying_sb_receipt')");
+    db.exec("UPDATE sniping_transactions SET state = 'awaiting_leave' WHERE state = 'verifying_sniper_left'");
+    const stColsForVerify = db.prepare("PRAGMA table_info(sniping_transactions)").all() as Array<{ name: string }>;
+    const stColNamesForVerify = new Set(stColsForVerify.map((c) => c.name));
+    db.exec(`
+      CREATE TABLE sniping_transactions_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sniper_user_id INTEGER NOT NULL REFERENCES users(id),
+        maptain_user_id INTEGER NOT NULL REFERENCES users(id),
+        ${stColNamesForVerify.has("mouse_group_id") ? "mouse_group_id INTEGER REFERENCES sniping_mouse_groups(id)," : ""}
+        ${stColNamesForVerify.has("item_group_id") ? "item_group_id INTEGER REFERENCES sniping_item_groups(id)," : ""}
+        ${stColNamesForVerify.has("goal_type") ? "goal_type TEXT NOT NULL DEFAULT 'mouse' CHECK (goal_type IN ('mouse', 'item'))," : ""}
+        mh_map_id INTEGER NOT NULL,
+        total_price INTEGER NOT NULL,
+        state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
+          'pending', 'inviting', 'invite_sent', 'sniping', 'verifying_goal_completed',
+          'awaiting_payment', 'pending_payment', 'transferring', 'verifying_sb_receipt',
+          'awaiting_leave', 'verifying_sniper_left',
+          'completed', 'failed'
+        )),
+        sniper_mh_sn_user_id TEXT NOT NULL,
+        maptain_mh_sn_user_id TEXT NOT NULL,
+        failure_reason TEXT,
+        ${stColNamesForVerify.has("is_demo") ? "is_demo INTEGER NOT NULL DEFAULT 0," : ""}
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )
+    `);
+    db.exec(`
+      INSERT INTO sniping_transactions_new
+      SELECT id, sniper_user_id, maptain_user_id,
+        ${stColNamesForVerify.has("mouse_group_id") ? "mouse_group_id," : ""}
+        ${stColNamesForVerify.has("item_group_id") ? "item_group_id," : ""}
+        ${stColNamesForVerify.has("goal_type") ? "goal_type," : ""}
+        mh_map_id, total_price, state, sniper_mh_sn_user_id, maptain_mh_sn_user_id,
+        failure_reason,
+        ${stColNamesForVerify.has("is_demo") ? "is_demo," : ""}
+        COALESCE(created_at, datetime('now')),
+        COALESCE(updated_at, created_at, datetime('now'))
+      FROM sniping_transactions
+    `);
+    db.exec("DROP TABLE sniping_transactions");
+    db.exec("ALTER TABLE sniping_transactions_new RENAME TO sniping_transactions");
+    db.exec("CREATE INDEX idx_sniping_transactions_state ON sniping_transactions(state)");
+    db.exec("PRAGMA foreign_keys = ON");
+    console.log("[db] migration: sniping_transactions recreated with verification states");
+  }
+
   // is_demo columns for sniping and item tables
   const snipingDemoTables = [
     "sniping_orders", "sniping_transactions",

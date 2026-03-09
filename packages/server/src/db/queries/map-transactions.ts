@@ -19,6 +19,8 @@ export interface MapTransactionRow {
   buyer_mh_sn_user_id: string;
   failure_reason: string | null;
   retry_count: number;
+  /** Buyer's captured timestamp immediately before the SB transfer API call. */
+  sb_transfer_ts: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -238,6 +240,14 @@ export function getAvgPriceByMapType(): Record<string, number> {
     result[key] = row.avg_price;
   }
   return result;
+}
+
+export function setMapSbTransferTs(transactionId: number, ts: string): void {
+  getDb()
+    .prepare(
+      `UPDATE map_transactions SET sb_transfer_ts = ?, updated_at = datetime('now') WHERE id = ?`
+    )
+    .run(ts, transactionId);
 }
 
 export function findActiveMapTransactionForBuyOrder(buyOrderId: number): MapTransactionRow | undefined {

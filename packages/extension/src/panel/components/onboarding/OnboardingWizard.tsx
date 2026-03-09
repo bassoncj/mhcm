@@ -5,7 +5,7 @@ import { onboardingComplete, onboardingTasks } from "../../signals/onboarding.js
 import { wsSend } from "../../hooks/useServiceWorker.js";
 import { DoodleBackground } from "./DoodleBackground.js";
 
-// Step icon components — keyed by the `icon` field in onboarding metadata
+// Step icon components – keyed by the `icon` field in onboarding metadata
 function StepIconWand({ size = 28 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -135,7 +135,7 @@ export function OnboardingWizard() {
     if (!isFinalStep) {
       setCurrentIdx(currentIdx + 1);
     } else {
-      // Final step — dismiss if all tasks are now complete (optimistically or actually)
+      // Final step – dismiss if all tasks are now complete (optimistically or actually)
       const allDone = onboardingTasks.value.every((t) => t.completedAt !== null);
       if (allDone) {
         onboardingComplete.value = true;

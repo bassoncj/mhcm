@@ -448,7 +448,7 @@ export function ModerationPanel() {
                           </div>
                         </div>
 
-                        {/* Mouse Tier Overrides — only for mouse-goal maps */}
+                        {/* Mouse Tier Overrides – only for mouse-goal maps */}
                         {mt.goal === "mouse" && (
                         <div class="map-mouse-tiers-section">
                           <h4>Mouse Tier Overrides</h4>
@@ -586,7 +586,7 @@ export function ModerationPanel() {
                         </div>
                         )}
 
-                        {/* Item Tier Overrides — only for item-goal maps */}
+                        {/* Item Tier Overrides – only for item-goal maps */}
                         {mt.goal === "item" && (
                         <div class="map-mouse-tiers-section">
                           <h4>Item Tier Overrides</h4>

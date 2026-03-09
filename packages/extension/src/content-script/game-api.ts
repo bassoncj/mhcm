@@ -420,7 +420,7 @@ export async function postToCorkBoard(
 export async function getHunterProfile(
   uh: string,
   snuid: string
-): Promise<{ boardPage: MHBoardPage; userId: number; snUserId: string }> {
+): Promise<{ boardPage: MHBoardPage; userId: number; snUserId: string; activeMapClasses: string[] }> {
   const data = await gamePost(MH_ENDPOINTS.PAGE, {
     uh,
     page_class: "HunterProfile",
@@ -431,10 +431,18 @@ export async function getHunterProfile(
   const subtab = data?.page?.tabs?.profile?.subtabs?.[0];
   const boardPage: MHBoardPage = subtab?.message_board_view;
 
+  // Active map classes from the profile target's QuestRelicHunter maps array.
+  // Each map entry has a map_class field ("treasure", "event", or "poster").
+  const maps: any[] = data?.user?.quests?.QuestRelicHunter?.maps ?? [];
+  const activeMapClasses: string[] = maps
+    .map((m: any) => m?.map_class)
+    .filter((c: any): c is string => typeof c === "string" && c.length > 0);
+
   return {
     boardPage,
     userId: data?.user?.user_id,
     snUserId: snuid,
+    activeMapClasses,
   };
 }
 

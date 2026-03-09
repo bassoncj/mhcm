@@ -15,9 +15,9 @@ Thanks for your interest in contributing to MH Community Marketplace!
 
 This is a monorepo with three packages:
 
-- **`packages/shared`** — Types, constants, and pricing utilities shared between server and extension
-- **`packages/server`** — Node.js backend with WebSocket handlers, order matching, and SQLite
-- **`packages/extension`** — Browser extension with Preact UI, service worker, and content scripts
+- **`packages/shared`** – Types, constants, and pricing utilities shared between server and extension
+- **`packages/server`** – Node.js backend with WebSocket handlers, order matching, and SQLite
+- **`packages/extension`** – Browser extension with Preact UI, service worker, and content scripts
 
 Build order matters: `shared` must build before `server` and `extension`. The root `npm run build` handles this automatically.
 
@@ -31,7 +31,7 @@ Build order matters: `shared` must build before `server` and `extension`. The ro
 
 ## Code Style
 
-- TypeScript throughout — no `any` unless absolutely necessary
+- TypeScript throughout – no `any` unless absolutely necessary
 - Preact with Signals for UI state (not React)
 - SQLite queries are synchronous (better-sqlite3)
 - Keep imports organized: external packages first, then internal

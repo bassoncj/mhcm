@@ -1,5 +1,6 @@
 import type { SnipingTransactionState } from "@mhcm/shared";
 import { getDb } from "../connection.js";
+import { demoTxnFilter } from "../../demo/demo-mode.js";
 
 export interface SnipingTransactionRow {
   id: number;
@@ -350,10 +351,10 @@ export function findSnipingTransactionsByUser(
 ): SnipingTransactionRow[] {
   return getDb()
     .prepare(
-      `SELECT * FROM sniping_transactions
-       WHERE (sniper_user_id = ? OR maptain_user_id = ?)
-         AND state != 'failed'
-       ORDER BY created_at DESC
+      `SELECT * FROM sniping_transactions st
+       WHERE (st.sniper_user_id = ? OR st.maptain_user_id = ?)
+         AND st.state != 'failed'${demoTxnFilter("st", "sniping")}
+       ORDER BY st.created_at DESC
        LIMIT ?`
     )
     .all(userId, userId, limit) as SnipingTransactionRow[];

@@ -60,9 +60,10 @@ export function findTransactionsByUser(
 ): TransactionRow[] {
   return getDb()
     .prepare(
-      `SELECT * FROM transactions
-       WHERE (seller_user_id = ? OR buyer_user_id = ?) AND state != 'failed'
-       ORDER BY created_at DESC
+      `SELECT * FROM transactions t
+       WHERE (t.seller_user_id = ? OR t.buyer_user_id = ?) AND t.state != 'failed'
+         ${demoTxnFilter("t", "slots")}
+       ORDER BY t.created_at DESC
        LIMIT 50`
     )
     .all(userId, userId) as TransactionRow[];

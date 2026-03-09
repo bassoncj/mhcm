@@ -290,7 +290,7 @@ export function migrateSlots(db: Database.Database): void {
         state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
           'pending', 'risk_checking', 'validating', 'inviting', 'invite_sent', 'accepting',
           'cancelling_invite', 'invite_accepted', 'transferring', 'pending_payment',
-          'verifying_invite_sent', 'verifying_sb_receipt',
+          'verifying_invite_sent', 'verifying_map_valid', 'verifying_sb_receipt',
           'awaiting_map_completion', 'claiming_chest', 'opening_chest', 'transferring_rt',
           'completed', 'failed'
         )),

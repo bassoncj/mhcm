@@ -704,7 +704,7 @@ export function TransactionHistory() {
   let handlePageChange: (p: number) => void;
 
   if (filter === "all") {
-    // Synced navigation — all markets on same page
+    // Synced navigation – all markets on same page
     const allTotalPages = Math.max(
       historyTotalPages.value,
       snipingHistoryTotalPages.value,

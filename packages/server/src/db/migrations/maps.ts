@@ -174,6 +174,189 @@ export function migrateMaps(db: Database.Database): void {
     console.log("[db] migration: added supports_rt to map_types");
   }
 
+  // Phase 3 verification states: add verifying_* states and sb_transfer_ts column
+  const mapTxnSchemaVerify = db.prepare(
+    "SELECT sql FROM sqlite_master WHERE type='table' AND name='map_transactions'"
+  ).get() as { sql: string } | undefined;
+
+  if (mapTxnSchemaVerify && !mapTxnSchemaVerify.sql.includes("verifying_invite_sent")) {
+    console.log("[db] migration: adding verification states and sb_transfer_ts to map_transactions");
+    db.exec("PRAGMA foreign_keys = OFF");
+    db.exec("DROP TABLE IF EXISTS map_transactions_verify_new");
+    db.exec(`
+      CREATE TABLE map_transactions_verify_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sell_order_id INTEGER NOT NULL REFERENCES map_orders(id),
+        buy_order_id INTEGER NOT NULL REFERENCES map_orders(id),
+        seller_user_id INTEGER NOT NULL REFERENCES users(id),
+        buyer_user_id INTEGER NOT NULL REFERENCES users(id),
+        map_type_id INTEGER NOT NULL REFERENCES map_types(id),
+        mode TEXT NOT NULL CHECK (mode IN ('unopened', 'completed')),
+        price INTEGER NOT NULL,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
+          'pending', 'risk_checking', 'validating_seller', 'validating_buyer',
+          'inviting', 'verifying_invite_sent', 'verifying_map_valid', 'transferring_sb', 'verifying_sb_receipt',
+          'opening_scroll', 'accepting', 'verifying_invite_accepted',
+          'transferring_ownership', 'verifying_ownership',
+          'seller_leaving', 'verifying_seller_left',
+          'reversing_sb', 'cancelling_invite', 'pending_completion',
+          'completed', 'failed'
+        )),
+        mh_map_id INTEGER,
+        scroll_item_type TEXT,
+        seller_mh_sn_user_id TEXT NOT NULL,
+        buyer_mh_sn_user_id TEXT NOT NULL,
+        failure_reason TEXT,
+        retry_count INTEGER NOT NULL DEFAULT 0,
+        sb_transfer_ts TEXT,
+        is_demo INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )
+    `);
+    // Copy existing rows; is_demo may or may not exist on the old table
+    const oldCols = db.prepare("PRAGMA table_info(map_transactions)").all() as { name: string }[];
+    const hasIsDemoOld = oldCols.some((c) => c.name === "is_demo");
+    db.exec(`
+      INSERT INTO map_transactions_verify_new (
+        id, sell_order_id, buy_order_id, seller_user_id, buyer_user_id,
+        map_type_id, mode, price, quantity, state, mh_map_id, scroll_item_type,
+        seller_mh_sn_user_id, buyer_mh_sn_user_id, failure_reason, retry_count,
+        is_demo, created_at, updated_at
+      )
+      SELECT
+        id, sell_order_id, buy_order_id, seller_user_id, buyer_user_id,
+        map_type_id, mode, price, quantity, state, mh_map_id, scroll_item_type,
+        seller_mh_sn_user_id, buyer_mh_sn_user_id, failure_reason, retry_count,
+        ${hasIsDemoOld ? "is_demo" : "0"},
+        COALESCE(created_at, datetime('now')),
+        COALESCE(updated_at, created_at, datetime('now'))
+      FROM map_transactions
+    `);
+    db.exec("DROP TABLE map_transactions");
+    db.exec("ALTER TABLE map_transactions_verify_new RENAME TO map_transactions");
+    db.exec("CREATE INDEX idx_map_transactions_state ON map_transactions(state)");
+    db.exec("CREATE INDEX idx_map_transactions_users ON map_transactions(seller_user_id, buyer_user_id)");
+    db.exec("PRAGMA foreign_keys = ON");
+    console.log("[db] migration: map_transactions recreated with verification states and sb_transfer_ts");
+  }
+
+  // Phase 4 verification states: add verifying_map_free and verifying_scroll_opened
+  const mapTxnSchemaPhase4 = db.prepare(
+    "SELECT sql FROM sqlite_master WHERE type='table' AND name='map_transactions'"
+  ).get() as { sql: string } | undefined;
+
+  if (mapTxnSchemaPhase4 && !mapTxnSchemaPhase4.sql.includes("verifying_map_free")) {
+    console.log("[db] migration: adding verifying_map_free and verifying_scroll_opened states to map_transactions");
+    db.exec("PRAGMA foreign_keys = OFF");
+    db.exec("DROP TABLE IF EXISTS map_transactions_phase4_new");
+    db.exec(`
+      CREATE TABLE map_transactions_phase4_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sell_order_id INTEGER NOT NULL REFERENCES map_orders(id),
+        buy_order_id INTEGER NOT NULL REFERENCES map_orders(id),
+        seller_user_id INTEGER NOT NULL REFERENCES users(id),
+        buyer_user_id INTEGER NOT NULL REFERENCES users(id),
+        map_type_id INTEGER NOT NULL REFERENCES map_types(id),
+        mode TEXT NOT NULL CHECK (mode IN ('unopened', 'completed')),
+        price INTEGER NOT NULL,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
+          'pending', 'risk_checking', 'validating_seller', 'validating_buyer',
+          'inviting', 'verifying_invite_sent', 'verifying_map_valid', 'transferring_sb', 'verifying_sb_receipt',
+          'verifying_map_free', 'opening_scroll', 'verifying_scroll_opened',
+          'accepting', 'verifying_invite_accepted',
+          'transferring_ownership', 'verifying_ownership',
+          'seller_leaving', 'verifying_seller_left',
+          'reversing_sb', 'cancelling_invite', 'pending_completion',
+          'completed', 'failed'
+        )),
+        mh_map_id INTEGER,
+        scroll_item_type TEXT,
+        seller_mh_sn_user_id TEXT NOT NULL,
+        buyer_mh_sn_user_id TEXT NOT NULL,
+        failure_reason TEXT,
+        retry_count INTEGER NOT NULL DEFAULT 0,
+        sb_transfer_ts TEXT,
+        is_demo INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )
+    `);
+    db.exec(`
+      INSERT INTO map_transactions_phase4_new
+      SELECT id, sell_order_id, buy_order_id, seller_user_id, buyer_user_id,
+        map_type_id, mode, price, quantity, state, mh_map_id, scroll_item_type,
+        seller_mh_sn_user_id, buyer_mh_sn_user_id, failure_reason, retry_count,
+        sb_transfer_ts, is_demo,
+        COALESCE(created_at, datetime('now')),
+        COALESCE(updated_at, created_at, datetime('now'))
+      FROM map_transactions
+    `);
+    db.exec("DROP TABLE map_transactions");
+    db.exec("ALTER TABLE map_transactions_phase4_new RENAME TO map_transactions");
+    db.exec("CREATE INDEX idx_map_transactions_state ON map_transactions(state)");
+    db.exec("CREATE INDEX idx_map_transactions_users ON map_transactions(seller_user_id, buyer_user_id)");
+    db.exec("PRAGMA foreign_keys = ON");
+    console.log("[db] migration: map_transactions recreated with verifying_map_free and verifying_scroll_opened");
+  }
+
+  // Remove verifying_invite_accepted from map_transactions CHECK constraint
+  const mapTxnSchemaNoInviteAccepted = db.prepare(
+    "SELECT sql FROM sqlite_master WHERE type='table' AND name='map_transactions'"
+  ).get() as { sql: string } | undefined;
+
+  if (mapTxnSchemaNoInviteAccepted && mapTxnSchemaNoInviteAccepted.sql.includes("verifying_invite_accepted")) {
+    console.log("[db] migration: removing verifying_invite_accepted state from map_transactions");
+    db.exec("PRAGMA foreign_keys = OFF");
+    // Move any rows stuck in verifying_invite_accepted to transferring_ownership (next state in flow)
+    db.exec("UPDATE map_transactions SET state = 'transferring_ownership' WHERE state = 'verifying_invite_accepted'");
+    db.exec("DROP TABLE IF EXISTS map_transactions_no_via_new");
+    db.exec(`
+      CREATE TABLE map_transactions_no_via_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sell_order_id INTEGER NOT NULL REFERENCES map_orders(id),
+        buy_order_id INTEGER NOT NULL REFERENCES map_orders(id),
+        seller_user_id INTEGER NOT NULL REFERENCES users(id),
+        buyer_user_id INTEGER NOT NULL REFERENCES users(id),
+        map_type_id INTEGER NOT NULL REFERENCES map_types(id),
+        mode TEXT NOT NULL CHECK (mode IN ('unopened', 'completed')),
+        price INTEGER NOT NULL,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
+          'pending', 'risk_checking', 'validating_seller', 'validating_buyer',
+          'inviting', 'verifying_invite_sent', 'verifying_map_valid', 'transferring_sb', 'verifying_sb_receipt',
+          'verifying_map_free', 'opening_scroll', 'verifying_scroll_opened',
+          'accepting', 'transferring_ownership', 'verifying_ownership',
+          'seller_leaving', 'verifying_seller_left',
+          'reversing_sb', 'cancelling_invite', 'pending_completion',
+          'completed', 'failed'
+        )),
+        mh_map_id INTEGER,
+        scroll_item_type TEXT,
+        seller_mh_sn_user_id TEXT NOT NULL,
+        buyer_mh_sn_user_id TEXT NOT NULL,
+        failure_reason TEXT,
+        retry_count INTEGER NOT NULL DEFAULT 0,
+        sb_transfer_ts TEXT,
+        is_demo INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )
+    `);
+    db.exec(`
+      INSERT INTO map_transactions_no_via_new
+      SELECT * FROM map_transactions
+    `);
+    db.exec("DROP TABLE map_transactions");
+    db.exec("ALTER TABLE map_transactions_no_via_new RENAME TO map_transactions");
+    db.exec("CREATE INDEX idx_map_transactions_state ON map_transactions(state)");
+    db.exec("CREATE INDEX idx_map_transactions_users ON map_transactions(seller_user_id, buyer_user_id)");
+    db.exec("PRAGMA foreign_keys = ON");
+    console.log("[db] migration: map_transactions recreated without verifying_invite_accepted");
+  }
+
   // is_demo columns for map tables
   const mapDemoTables = [
     "map_orders", "map_transactions", "map_price_history",

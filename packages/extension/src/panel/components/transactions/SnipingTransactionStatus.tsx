@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import type { SnipingTransaction, SnipingTransactionState } from "@mhcm/shared";
 import { activeSnipingTransactions, recentlyFailedSnipingTxns } from "../../signals/sniping.js";
+import { playerIdentity } from "../../signals/game-state.js";
 import { IconEllipsis, IconX } from "../common/Icons.js";
 
 function stateLabel(state: SnipingTransactionState, goalType: string): string {
@@ -9,10 +10,13 @@ function stateLabel(state: SnipingTransactionState, goalType: string): string {
     case "inviting": return "Sending invite...";
     case "invite_sent": return "Invite sent";
     case "sniping": return "Sniping in progress...";
+    case "verifying_goal_completed": return goalType === "item" ? "Verifying item found..." : "Verifying catch...";
     case "awaiting_payment": return goalType === "item" ? "All items found!" : "All mice caught!";
     case "pending_payment": return "Awaiting payment...";
     case "transferring": return "Transferring SB...";
+    case "verifying_sb_receipt": return "Verifying payment...";
     case "awaiting_leave": return "Leaving map...";
+    case "verifying_sniper_left": return "Verifying sniper left...";
     case "completed": return "Completed";
     case "failed": return "Failed";
     default: return state;
@@ -32,27 +36,32 @@ const STATE_PROGRESS: Record<SnipingTransactionState, number> = {
   inviting: 10,
   invite_sent: 20,
   sniping: 40,
+  verifying_goal_completed: 45,
   awaiting_payment: 65,
   pending_payment: 65,
   transferring: 80,
+  verifying_sb_receipt: 85,
   awaiting_leave: 90,
+  verifying_sniper_left: 95,
   completed: 100,
   failed: 0,
 };
 
+const GOAL_PROGRESS_STATES = new Set<SnipingTransactionState>([
+  "sniping", "pending_payment", "verifying_goal_completed", "verifying_sb_receipt",
+]);
+
 function getTxnProgress(txn: SnipingTransaction): number {
   let progress = STATE_PROGRESS[txn.state];
   const goals = txnGoals(txn);
-  if ((txn.state === "sniping" || txn.state === "pending_payment") && goals.length > 0) {
+  if (GOAL_PROGRESS_STATES.has(txn.state) && goals.length > 0) {
     const completedCount = goals.filter((g) => g.completed).length;
     const snipingBase = STATE_PROGRESS.sniping;
     const snipingEnd = STATE_PROGRESS.awaiting_leave;
     const isGroup = txn.mouseGroupId != null || txn.itemGroupId != null;
     if (isGroup) {
-      // Group transactions: only completions count (bulk payment happens after all done)
       progress = snipingBase + ((snipingEnd - snipingBase) * completedCount) / goals.length;
     } else {
-      // Individual: each goal has two sub-steps: complete and pay
       const paidCount = goals.filter((g) => g.paid).length;
       const subStepsDone = completedCount + paidCount;
       const totalSubSteps = goals.length * 2;
@@ -62,6 +71,25 @@ function getTxnProgress(txn: SnipingTransaction): number {
   return progress;
 }
 
+function getParkedNotice(txn: SnipingTransaction): string | null {
+  if (!txn.parked || !txn.parkedWaitingFor) return null;
+  const mySnUserId = playerIdentity.value?.snUserId;
+  if (!mySnUserId) return null;
+
+  // In sniping: seller = sniper, buyer = maptain
+  const isMaptain = txn.maptainMhSnUserId === mySnUserId;
+  const isSniper = txn.sniperMhSnUserId === mySnUserId;
+  const iAmActingParty =
+    (txn.parkedWaitingFor === "seller" && isSniper) ||
+    (txn.parkedWaitingFor === "buyer" && isMaptain);
+
+  if (iAmActingParty) {
+    return "Your connection was lost during this step. Refresh the MouseHunt page to continue.";
+  }
+  const waitingFor = txn.parkedWaitingFor === "seller" ? "sniper" : "maptain";
+  return `Waiting for the ${waitingFor} to reconnect. No action needed on your end.`;
+}
+
 /** Compact per-transaction detail row shown inside the expanded drawer. */
 function SnipingDetailCard({ txn }: { txn: SnipingTransaction }) {
   const goals = txnGoals(txn);
@@ -69,6 +97,7 @@ function SnipingDetailCard({ txn }: { txn: SnipingTransaction }) {
   const progress = getTxnProgress(txn);
   const groupName = txn.goalType === "item" ? txn.itemGroupName : txn.mouseGroupName;
   const goalLabel = txn.goalType === "item" ? "items" : "mice";
+  const parkedNotice = getParkedNotice(txn);
 
   return (
     <div class="sniping-detail-card">
@@ -80,6 +109,11 @@ function SnipingDetailCard({ txn }: { txn: SnipingTransaction }) {
         <div class="progress-fill" style={{ width: `${progress}%` }} />
       </div>
       <p class="state-label">{stateLabel(txn.state, txn.goalType)}</p>
+      {parkedNotice && (
+        <div class="txn-parked-notice">
+          {parkedNotice}
+        </div>
+      )}
       {goals.length > 0 && (
         <div class="sniping-mice-list">
           {goals.map((goal) => (

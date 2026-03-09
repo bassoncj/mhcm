@@ -1,5 +1,5 @@
-// Flow: pending → risk_checking → validating → inviting → verifying_invite_sent → accepting
-//   → transferring → verifying_sb_receipt → completed
+// Flow: pending → risk_checking → validating → inviting → verifying_invite_sent → verifying_map_valid
+//   → accepting → transferring → verifying_sb_receipt → completed
 // RT: ... → verifying_sb_receipt → awaiting_map_completion → claiming_chest → opening_chest
 //   → transferring_rt → completed
 
@@ -313,8 +313,27 @@ export function handleStepResult(payload: {
           verificationType: "invite_received",
           mapId: row.mh_map_id,
         },
-        () => advanceState(transactionId, "accepting"),
+        () => {
+          advanceState(transactionId, "verifying_map_valid");
+          const sellOrder = findOrderById(row.sell_order_id);
+          const mapType = sellOrder ? findMapTypeById(sellOrder.map_type_id) : undefined;
+          startVerification(
+            transactionId,
+            row.buyer_user_id,
+            "slots",
+            {
+              verificationType: "map_valid",
+              mapId: row.mh_map_id,
+              expectedHunterSnUserId: row.seller_mh_sn_user_id,
+              expectedMapType: mapType?.map_type,
+            },
+            () => advanceState(transactionId, "accepting"),
+            () => suspendSellerAndFail(transactionId, "Map type could not be verified after 3 attempts"),
+            () => { slotParkedTransactions.set(transactionId, "buyer"); broadcastTransactionUpdate(rowToTransaction(findTransactionById(transactionId)!)); },
+          );
+        },
         () => suspendSellerAndFail(transactionId, "Invite receipt could not be verified after 3 attempts"),
+        () => { slotParkedTransactions.set(transactionId, "buyer"); broadcastTransactionUpdate(rowToTransaction(findTransactionById(transactionId)!)); },
         );
       }
       break;
@@ -350,6 +369,7 @@ export function handleStepResult(payload: {
           }
         },
         () => suspendBuyerAndFailSlot(transactionId, "SB receipt could not be verified after 3 attempts"),
+        () => { slotParkedTransactions.set(transactionId, "seller"); broadcastTransactionUpdate(rowToTransaction(findTransactionById(transactionId)!)); },
         );
       }
       break;
@@ -570,6 +590,7 @@ function advanceState(
 function completeTransaction(txnId: number): void {
   cancelVerification(txnId);
   clearStepTimeout(txnId);
+  slotParkedTransactions.delete(txnId);
   updateSlotTransactionState(txnId, "completed");
 
   const row = findTransactionById(txnId);
@@ -615,6 +636,7 @@ function failTransaction(txnId: number, reason: string): void {
   cancelVerification(txnId);
   clearStepTimeout(txnId);
   clearRiskCheckTimer(txnId);
+  slotParkedTransactions.delete(txnId);
   updateSlotTransactionState(txnId, "failed", reason);
 
   const row = findTransactionById(txnId);
@@ -673,6 +695,86 @@ function failTransaction(txnId: number, reason: string): void {
       );
       broadcastOrderBook(mapTypeId);
     }
+  }
+}
+
+const slotParkedTransactions = new Map<number, "seller" | "buyer">();
+
+/**
+ * Re-start verification for the current state. Called by the reconnect handler
+ * and by the restart handler.
+ */
+function restartSlotVerification(txnId: number, row: TransactionRow): void {
+  if (row.state === "verifying_invite_sent") {
+    startVerification(
+      txnId,
+      row.buyer_user_id,
+      "slots",
+      { verificationType: "invite_received", mapId: row.mh_map_id },
+      () => {
+        advanceState(txnId, "verifying_map_valid");
+        const sellOrder = findOrderById(row.sell_order_id);
+        const mapType = sellOrder ? findMapTypeById(sellOrder.map_type_id) : undefined;
+        startVerification(
+          txnId,
+          row.buyer_user_id,
+          "slots",
+          {
+            verificationType: "map_valid",
+            mapId: row.mh_map_id,
+            expectedHunterSnUserId: row.seller_mh_sn_user_id,
+            expectedMapType: mapType?.map_type,
+          },
+          () => advanceState(txnId, "accepting"),
+          () => suspendSellerAndFail(txnId, "Map type could not be verified after 3 attempts"),
+          () => { slotParkedTransactions.set(txnId, "buyer"); broadcastTransactionUpdate(rowToTransaction(row)); },
+        );
+      },
+      () => suspendSellerAndFail(txnId, "Invite receipt could not be verified after 3 attempts"),
+      () => { slotParkedTransactions.set(txnId, "buyer"); broadcastTransactionUpdate(rowToTransaction(row)); },
+    );
+  } else if (row.state === "verifying_map_valid") {
+    const sellOrder = findOrderById(row.sell_order_id);
+    const mapType = sellOrder ? findMapTypeById(sellOrder.map_type_id) : undefined;
+    startVerification(
+      txnId,
+      row.buyer_user_id,
+      "slots",
+      {
+        verificationType: "map_valid",
+        mapId: row.mh_map_id,
+        expectedHunterSnUserId: row.seller_mh_sn_user_id,
+        expectedMapType: mapType?.map_type,
+      },
+      () => advanceState(txnId, "accepting"),
+      () => suspendSellerAndFail(txnId, "Map type could not be verified after 3 attempts"),
+      () => { slotParkedTransactions.set(txnId, "buyer"); broadcastTransactionUpdate(rowToTransaction(row)); },
+    );
+  } else if (row.state === "verifying_sb_receipt") {
+    const buyerMhAccount = findMHAccountByUserId(row.buyer_user_id);
+    const isRt = !!row.is_rt;
+    const timeAnchor = row.sb_transfer_ts ?? row.updated_at;
+    startVerification(
+      txnId,
+      row.seller_user_id,
+      "slots",
+      {
+        verificationType: "sb_receipt",
+        senderMhUserId: buyerMhAccount ? String(buyerMhAccount.mh_user_id) : "",
+        itemDisplayName: "SUPER|brie+",
+        quantity: row.price * row.quantity,
+        transferTimestampUtc: timeAnchor,
+      },
+      () => {
+        if (isRt) {
+          advanceState(txnId, "awaiting_map_completion");
+        } else {
+          completeTransaction(txnId);
+        }
+      },
+      () => suspendBuyerAndFailSlot(txnId, "SB receipt could not be verified after 3 attempts"),
+      () => { slotParkedTransactions.set(txnId, "seller"); broadcastTransactionUpdate(rowToTransaction(row)); },
+    );
   }
 }
 
@@ -1005,13 +1107,17 @@ function scheduleRematch(mapTypeId: number): void {
 }
 
 function broadcastTransactionUpdate(txn: SlotTransaction): void {
+  const parkedWaitingFor = slotParkedTransactions.get(txn.id);
+  const payload: SlotTransaction = parkedWaitingFor != null
+    ? { ...txn, parked: true, parkedWaitingFor }
+    : txn;
   sendToUser(txn.sellerUserId, {
     type: "transaction_update",
-    payload: { transaction: txn },
+    payload: { transaction: payload },
   });
   sendToUser(txn.buyerUserId, {
     type: "transaction_update",
-    payload: { transaction: txn },
+    payload: { transaction: payload },
   });
 }
 
@@ -1099,6 +1205,7 @@ export function cleanupStuckTransactions(): void {
           }
         },
         () => suspendBuyerAndFailSlot(row.id, "SB receipt could not be verified after server restart"),
+        () => { slotParkedTransactions.set(row.id, "seller"); broadcastTransactionUpdate(rowToTransaction(row)); },
       );
       console.log(`[orchestrator] txn ${row.id} in verifying_sb_receipt at restart – re-verifying with seller`);
       continue;
@@ -1137,6 +1244,80 @@ export function cleanupStuckTransactions(): void {
       continue;
     }
 
+    if (row.state === "verifying_invite_sent") {
+      // Invite was sent before restart – re-verify with buyer instead of failing
+      startVerification(
+        row.id,
+        row.buyer_user_id,
+        "slots",
+        { verificationType: "invite_received", mapId: row.mh_map_id },
+        () => {
+          advanceState(row.id, "verifying_map_valid");
+          const sellOrder = findOrderById(row.sell_order_id);
+          const mapType = sellOrder ? findMapTypeById(sellOrder.map_type_id) : undefined;
+          startVerification(
+            row.id,
+            row.buyer_user_id,
+            "slots",
+            {
+              verificationType: "map_valid",
+              mapId: row.mh_map_id,
+              expectedHunterSnUserId: row.seller_mh_sn_user_id,
+              expectedMapType: mapType?.map_type,
+            },
+            () => advanceState(row.id, "accepting"),
+            () => suspendSellerAndFail(row.id, "Map type could not be verified after 3 attempts"),
+            () => { slotParkedTransactions.set(row.id, "buyer"); broadcastTransactionUpdate(rowToTransaction(row)); },
+          );
+        },
+        () => {
+          // Restart: fail without suspension (invite may have been lost in restart)
+          audit("verification_failed", undefined, {
+            txnId: row.id,
+            marketplace: "slots",
+            verificationType: "invite_received",
+            failingParty: row.seller_user_id,
+            reason: "invite not verified after server restart",
+          });
+          failTransaction(row.id, "Invite could not be verified after server restart");
+        },
+        () => { slotParkedTransactions.set(row.id, "buyer"); broadcastTransactionUpdate(rowToTransaction(row)); },
+      );
+      console.log(`[orchestrator] txn ${row.id} in verifying_invite_sent at restart – re-verifying with buyer`);
+      continue;
+    }
+
+    if (row.state === "verifying_map_valid") {
+      const sellOrder = findOrderById(row.sell_order_id);
+      const mapType = sellOrder ? findMapTypeById(sellOrder.map_type_id) : undefined;
+      startVerification(
+        row.id,
+        row.buyer_user_id,
+        "slots",
+        {
+          verificationType: "map_valid",
+          mapId: row.mh_map_id,
+          expectedHunterSnUserId: row.seller_mh_sn_user_id,
+          expectedMapType: mapType?.map_type,
+        },
+        () => advanceState(row.id, "accepting"),
+        () => {
+          // Restart: fail without suspension (map may have been valid before restart)
+          audit("verification_failed", undefined, {
+            txnId: row.id,
+            marketplace: "slots",
+            verificationType: "map_valid",
+            failingParty: row.seller_user_id,
+            reason: "map type not verified after server restart",
+          });
+          failTransaction(row.id, "Map type could not be verified after server restart");
+        },
+        () => { slotParkedTransactions.set(row.id, "buyer"); broadcastTransactionUpdate(rowToTransaction(row)); },
+      );
+      console.log(`[orchestrator] txn ${row.id} in verifying_map_valid at restart – re-verifying with buyer`);
+      continue;
+    }
+
     // All other states (including risk_checking) – fail and reverse fills.
     // No blocked pair for risk_checking – server restart is not the buyer's fault.
     updateSlotTransactionState(row.id, "failed", "server restarted");
@@ -1152,6 +1333,22 @@ export function cleanupStuckTransactions(): void {
     });
 
     console.log(`[orchestrator] failed txn ${row.id} (was ${row.state})`);
+  }
+}
+
+export function resumeSlotVerificationsOnConnect(userId: number): void {
+  for (const [txnId, waitingFor] of slotParkedTransactions) {
+    const row = findTransactionById(txnId);
+    if (!row || row.state === "completed" || row.state === "failed") {
+      slotParkedTransactions.delete(txnId);
+      continue;
+    }
+    const reconnectedAs = userId === row.seller_user_id ? "seller" : userId === row.buyer_user_id ? "buyer" : null;
+    if (reconnectedAs !== waitingFor) continue;
+
+    slotParkedTransactions.delete(txnId);
+    console.log(`[orchestrator] txn ${txnId} unparking – ${waitingFor} reconnected, restarting verification in ${row.state}`);
+    restartSlotVerification(txnId, row);
   }
 }
 

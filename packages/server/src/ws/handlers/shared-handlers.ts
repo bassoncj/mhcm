@@ -47,7 +47,7 @@ import { findPendingSnipingOrderTargets, findPendingSnipingSellTargets } from ".
 import { trySnipingMatch } from "../../orders/sniping-matcher.js";
 import { broadcastSnipingOrderBook } from "../../orders/sniping-book.js";
 import { handleSniperLeftMap, resumePendingPayments } from "../../transactions/sniping-orchestrator.js";
-import { advanceRtTransactionsForMap, resumeDeferredRtAdvancements, triggerRtManualFallback } from "../../transactions/slot-orchestrator.js";
+import { advanceRtTransactionsForMap, resumeDeferredRtAdvancements, triggerRtManualFallback, resumeSlotVerificationsOnConnect } from "../../transactions/slot-orchestrator.js";
 import { findRtAwaitingCompletionByBuyer } from "../../db/queries/rt-pending-items.js";
 import { findActiveSnipingTransactionsAsSniper } from "../../db/queries/sniping-transactions.js";
 import { findPendingItemOrderTypes } from "../../db/queries/item-orders.js";
@@ -66,6 +66,8 @@ import {
   resumeActiveMapTransactionsOnConnect,
   probeForOpenedMap,
 } from "../../transactions/map-orchestrator.js";
+import { resumeItemVerificationsOnConnect } from "../../transactions/item-orchestrator.js";
+import { resumeSnipingVerificationsOnConnect } from "../../transactions/sniping-orchestrator.js";
 
 export function handleSharedMessage(
   userId: number,
@@ -122,6 +124,11 @@ export function handleSharedMessage(
 
       // Resume any post-PONR transactions that were preserved through server restart
       resumeActiveMapTransactionsOnConnect(userId);
+
+      // Resume parked slot/item/sniping verifications when the verifier reconnects
+      resumeSlotVerificationsOnConnect(userId);
+      resumeItemVerificationsOnConnect(userId);
+      resumeSnipingVerificationsOnConnect(userId);
 
       // Re-send any pending verification challenges (user may have been offline when challenged)
       resendPendingVerificationsForUser(userId);
@@ -373,8 +380,8 @@ export function handleSharedMessage(
     }
 
     case "verify_transfer_result": {
-      const { transactionId, verificationType, verified } = message.payload;
-      handleVerificationResult(transactionId, verificationType, verified);
+      const { transactionId, verificationType, verified, error } = message.payload;
+      handleVerificationResult(transactionId, verificationType, verified, error);
       return true;
     }
 
@@ -551,11 +558,19 @@ function handleConfirmMHLink(
 ): void {
   const existingForUser = findMHAccountByUserId(userId);
   if (existingForUser && existingForUser.verified_at) {
+    // Account already verified. Return success so the panel initialises its
+    // mhAccount state correctly (e.g. after the success response was lost in
+    // a disconnect and the user refreshed).
     sendToUser(userId, {
       type: "mh_link_result",
       payload: {
-        success: false,
-        error: "Your account already has a linked MouseHunt account.",
+        success: true,
+        mhAccount: {
+          userId: existingForUser.user_id,
+          mhUserId: existingForUser.mh_user_id,
+          mhSnUserId: existingForUser.mh_sn_user_id,
+          verifiedAt: existingForUser.verified_at,
+        },
       },
     });
     return;

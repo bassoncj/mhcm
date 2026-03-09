@@ -14,7 +14,7 @@ export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
   useEffect(() => {
     const expectedOrigin = new URL(getApiBaseUrl()).origin;
     const handleMessage = (event: MessageEvent) => {
-      // Validate origin — only accept messages from our server's OAuth callback
+      // Validate origin – only accept messages from our server's OAuth callback
       if (event.origin !== expectedOrigin) return;
       if (event.data?.type === "mhcm_discord_auth" && event.data.data) {
         const data = event.data.data;

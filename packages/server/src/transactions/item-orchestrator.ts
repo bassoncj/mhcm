@@ -61,6 +61,7 @@ export function rowToItemTransaction(row: ItemTransactionRow): ItemTransaction {
 }
 
 const stepTimeouts = new Map<number, ReturnType<typeof setTimeout>>();
+const itemParkedTransactions = new Map<number, "seller" | "buyer">();
 
 const failureTracker = new Map<number, { count: number; lastFail: number }>();
 const MAX_CONSECUTIVE_FAILURES = 3;
@@ -259,6 +260,11 @@ export function handleItemStepResult(payload: {
               });
             }
           },
+          () => {
+            itemParkedTransactions.set(transactionId, "buyer");
+            const r = findItemTransactionById(transactionId);
+            if (r) broadcastTransactionUpdate(rowToItemTransaction(r));
+          },
         );
       }
       break;
@@ -282,6 +288,11 @@ export function handleItemStepResult(payload: {
           },
           () => completeTransaction(transactionId),
           () => suspendBuyerAndFail(transactionId, "SB receipt could not be verified after 3 attempts"),
+          () => {
+            itemParkedTransactions.set(transactionId, "seller");
+            const r = findItemTransactionById(transactionId);
+            if (r) broadcastTransactionUpdate(rowToItemTransaction(r));
+          },
         );
       }
       break;
@@ -336,6 +347,7 @@ function advanceState(
 function completeTransaction(txnId: number): void {
   cancelVerification(txnId);
   clearStepTimeout(txnId);
+  itemParkedTransactions.delete(txnId);
   updateItemTransactionState(txnId, "completed");
 
   const row = findItemTransactionById(txnId);
@@ -363,6 +375,7 @@ function completeTransaction(txnId: number): void {
 function failTransaction(txnId: number, reason: string): void {
   cancelVerification(txnId);
   clearStepTimeout(txnId);
+  itemParkedTransactions.delete(txnId);
   updateItemTransactionState(txnId, "failed", reason);
 
   const row = findItemTransactionById(txnId);
@@ -579,14 +592,86 @@ export function checkItemPendingPaymentsOnConnect(userId: number): void {
   }
 }
 
+export function resumeItemVerificationsOnConnect(userId: number): void {
+  for (const [txnId, waitingFor] of itemParkedTransactions) {
+    const row = findItemTransactionById(txnId);
+    if (!row || row.state === "completed" || row.state === "failed") {
+      itemParkedTransactions.delete(txnId);
+      continue;
+    }
+    const reconnectedAs = userId === row.seller_user_id ? "seller" : userId === row.buyer_user_id ? "buyer" : null;
+    if (reconnectedAs !== waitingFor) continue;
+
+    itemParkedTransactions.delete(txnId);
+    console.log(`[item-orchestrator] txn ${txnId} unparking – ${waitingFor} reconnected, restarting verification in ${row.state}`);
+
+    if (row.state === "verifying_item_receipt") {
+      const sellerMhAccount = findMHAccountByUserId(row.seller_user_id);
+      const itemType = findItemTypeById(row.item_type_id);
+      const timeAnchor = row.seller_transfer_ts ?? row.updated_at;
+      startVerification(
+        txnId,
+        row.buyer_user_id,
+        "items",
+        {
+          verificationType: "item_receipt",
+          senderMhUserId: sellerMhAccount ? String(sellerMhAccount.mh_user_id) : "",
+          itemDisplayName: itemType?.name ?? "",
+          quantity: row.quantity,
+          transferTimestampUtc: timeAnchor,
+        },
+        () => advanceState(txnId, "buyer_transferring"),
+        () => {
+          const currentRow = findItemTransactionById(txnId);
+          if (currentRow) {
+            createSuspension(currentRow.seller_user_id, null, "Item transfer could not be verified (possible fraud)", null);
+            getConnection(currentRow.seller_user_id)?.ws.close(4003, "Account suspended");
+            closeOrderAndFail(txnId, currentRow, "seller", "Item receipt could not be verified after 3 attempts");
+            audit("verification_failed", undefined, {
+              txnId,
+              marketplace: "items",
+              verificationType: "item_receipt",
+              failingParty: currentRow.seller_user_id,
+              attemptCount: 3,
+            });
+          }
+        },
+        () => { itemParkedTransactions.set(txnId, "buyer"); broadcastTransactionUpdate(rowToItemTransaction(row)); },
+      );
+    } else if (row.state === "verifying_sb_receipt") {
+      const buyerMhAccount = findMHAccountByUserId(row.buyer_user_id);
+      const timeAnchor = row.buyer_transfer_ts ?? row.updated_at;
+      startVerification(
+        txnId,
+        row.seller_user_id,
+        "items",
+        {
+          verificationType: "sb_receipt",
+          senderMhUserId: buyerMhAccount ? String(buyerMhAccount.mh_user_id) : "",
+          itemDisplayName: "SUPER|brie+",
+          quantity: itemSbTotal(row.price, row.quantity),
+          transferTimestampUtc: timeAnchor,
+        },
+        () => completeTransaction(txnId),
+        () => suspendBuyerAndFail(txnId, "SB receipt could not be verified after 3 attempts"),
+        () => { itemParkedTransactions.set(txnId, "seller"); broadcastTransactionUpdate(rowToItemTransaction(row)); },
+      );
+    }
+  }
+}
+
 function broadcastTransactionUpdate(txn: ItemTransaction): void {
+  const parkedWaitingFor = itemParkedTransactions.get(txn.id);
+  const payload: ItemTransaction = parkedWaitingFor != null
+    ? { ...txn, parked: true, parkedWaitingFor }
+    : txn;
   sendToUser(txn.sellerUserId, {
     type: "item_transaction_update",
-    payload: { transaction: txn },
+    payload: { transaction: payload },
   });
   sendToUser(txn.buyerUserId, {
     type: "item_transaction_update",
-    payload: { transaction: txn },
+    payload: { transaction: payload },
   });
 }
 
@@ -685,6 +770,7 @@ export function cleanupStuckItemTransactions(): void {
         },
         () => advanceState(row.id, "buyer_transferring"),
         () => failTransaction(row.id, "Item receipt could not be verified after server restart"),
+        () => { itemParkedTransactions.set(row.id, "buyer"); broadcastTransactionUpdate(rowToItemTransaction(row)); },
       );
       console.log(`[item-orchestrator] txn ${row.id} in seller_transferring at restart – verifying with buyer`);
       continue;
@@ -730,6 +816,7 @@ export function cleanupStuckItemTransactions(): void {
             reason: "SB verification failed after restart",
           });
         },
+        () => { itemParkedTransactions.set(row.id, "seller"); broadcastTransactionUpdate(rowToItemTransaction(row)); },
       );
       console.log(`[item-orchestrator] txn ${row.id} in verifying_sb_receipt at restart – re-verifying with seller`);
       continue;

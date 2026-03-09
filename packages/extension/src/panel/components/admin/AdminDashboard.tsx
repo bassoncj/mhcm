@@ -661,7 +661,7 @@ function RateLimitGrid({ rows, rl, onChange }: {
   rl: Record<string, { burst: number; rate: number }>;
   onChange: (key: string, field: "burst" | "rate", raw: string) => void;
 }) {
-  // Flat array of keyed elements — avoids Preact Fragment-in-grid rendering bugs
+  // Flat array of keyed elements – avoids Preact Fragment-in-grid rendering bugs
   const cells = [
     <span key="h0" class="rl-header" />,
     <span key="h1" class="rl-header">Burst</span>,

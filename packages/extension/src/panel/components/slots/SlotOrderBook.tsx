@@ -134,7 +134,7 @@ export function OrderBook() {
           return { ...level, quantity: rtQty };
         })
         .filter((l): l is OrderBookLevel => l !== null)
-    : filteredSells; // "all" — show everything
+    : filteredSells; // "all" – show everything
 
   const rtFilteredBuys = rt === "off"
     ? filteredBuys

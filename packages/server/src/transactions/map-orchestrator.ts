@@ -1,18 +1,23 @@
-// UNOPENED FLOW:
-//   pending → validating_seller → validating_buyer → transferring_sb → opening_scroll
-//   → [PONR] → inviting → accepting → transferring_ownership → seller_leaving
+// UNOPENED FLOW (with cross-verification):
+//   pending → validating_seller → validating_buyer → transferring_sb
+//   → verifying_sb_receipt → verifying_map_free → opening_scroll
+//   → verifying_scroll_opened → [PONR] → inviting → verifying_invite_sent
+//   → accepting → transferring_ownership
+//   → verifying_ownership → seller_leaving → verifying_seller_left
 //   → pending_completion → completed
 //
-// COMPLETED FLOW:
+// COMPLETED FLOW (with cross-verification):
 //   pending → risk_checking → validating_seller → validating_buyer → inviting
-//   → transferring_sb → [PONR] → accepting → transferring_ownership → seller_leaving
-//   → pending_completion → completed
+//   → verifying_invite_sent → transferring_sb → verifying_sb_receipt → [PONR]
+//   → accepting → transferring_ownership → verifying_ownership
+//   → seller_leaving → verifying_seller_left → pending_completion → completed
 //
 // Recovery:
 //   - Pre-PONR failures → rollback + fail
 //   - Post-PONR failures → pending_completion → retry on reconnect (max 1 retry)
 //   - Unopened: scroll open failed after SB paid → reversing_sb → refund + fail
 //   - Completed: SB transfer failed after invite → cancelling_invite → fail
+//   - Completed: verifying_sb_receipt fraud → suspend buyer, cancelling_invite (fraud path)
 
 import type {
   MapTransaction,
@@ -35,6 +40,7 @@ import {
   getMapRetryCount,
   incrementMapRetryCount,
   recordMapPriceHistory,
+  setMapSbTransferTs,
   type MapTransactionRow,
 } from "../db/queries/map-transactions.js";
 import {
@@ -52,11 +58,15 @@ import {
   addUserActiveMap,
   getUserActiveMaps,
   getUserActiveMapsFull,
+  getConnection,
 } from "../ws/connections.js";
 import { audit } from "../audit.js";
 import { matchMapOrders } from "../orders/map-matcher.js";
 import { broadcastMapOrderBook } from "../orders/map-book.js";
 import { enrichGoalData } from "./risk-check-utils.js";
+import { startVerification, cancelVerification, isVerificationPending } from "./verify-utils.js";
+import { createSuspension } from "../db/queries/users.js";
+import { findMHAccountByUserId } from "../db/queries/mh-accounts.js";
 import { getItemRiskConfig } from "../db/queries/item-types.js";
 import { getRiskCheckTimeoutSeconds } from "../settings.js";
 import {
@@ -132,10 +142,44 @@ function handleTimeout(txnId: number): void {
       advanceCompletedState(row, row.state);
     }
   } else {
-    console.error(
-      `[map-orchestrator] transaction ${txnId} timed out in state ${row.state}, max retries (${STEP_TIMEOUT_MAX_RETRIES}) exhausted`
-    );
-    failTransaction(txnId, row, "Step timeout (max retries exceeded)", false);
+    if (row.mode === "unopened" && UNOPENED_POST_PONR_STEP_STATES.has(row.state as MapTransactionState)) {
+      // Post-PONR step timed out after max retries in unopened flow -- advance to pending_completion.
+      console.warn(
+        `[map-orchestrator] txn ${txnId} post-PONR step ${row.state} timed out (max retries) -- advancing to pending_completion`
+      );
+      advanceState(txnId, "pending_completion");
+    } else if (row.state === "cancelling_invite") {
+      // cancelling_invite is a recovery state, not truly post-PONR.
+      // Timeout should fail the txn (same as step failure), not complete it.
+      reverseMapOrderFill(row.sell_order_id, row.quantity);
+      reverseMapOrderFill(row.buy_order_id, row.quantity);
+      failTransaction(txnId, row, "Step timeout (max retries exceeded)", true);
+    } else if (row.mode === "completed" && !COMPLETED_PRE_PONR_STEP_STATES.has(row.state as MapTransactionState)) {
+      // Post-PONR step timed out after max retries in completed flow – advance to pending_completion.
+      // SB has been paid; reversing fills is incorrect.
+      console.warn(
+        `[map-orchestrator] txn ${txnId} post-PONR step ${row.state} timed out (max retries) – advancing to pending_completion`
+      );
+      advanceState(txnId, "pending_completion");
+    } else if (row.mode === "unopened" && row.state === "opening_scroll") {
+      // Scroll open timed out after SB paid -- refund buyer via reversing_sb
+      console.warn(
+        `[map-orchestrator] txn ${txnId} opening_scroll timed out (max retries) – reversing SB`
+      );
+      advanceState(txnId, "reversing_sb");
+    } else if (row.mode === "unopened" && row.state === "reversing_sb") {
+      // SB refund timed out -- park and retry on seller reconnect
+      console.warn(
+        `[map-orchestrator] txn ${txnId} reversing_sb timed out (max retries) – parking for seller reconnect`
+      );
+      parkedTransactions.set(txnId, "seller");
+      broadcastTransactionUpdate(rowToMapTransaction(row));
+    } else {
+      console.error(
+        `[map-orchestrator] transaction ${txnId} timed out in state ${row.state}, max retries (${STEP_TIMEOUT_MAX_RETRIES}) exhausted`
+      );
+      failTransaction(txnId, row, "Step timeout (max retries exceeded)", false);
+    }
   }
 
   if (userId != null) {
@@ -157,6 +201,11 @@ function getTimeoutUserId(row: MapTransactionRow): number | null {
     case "transferring_sb":
     case "accepting":
       return row.buyer_user_id;
+    // Verifying states have no active step – no timeout user
+    case "verifying_invite_sent":
+    case "verifying_sb_receipt":
+    case "verifying_ownership":
+    case "verifying_seller_left":
     default:
       return null;
   }
@@ -188,6 +237,48 @@ function resetFailureTracker(mapTypeId: number, mode: MapOrderMode): void {
   const key = `${mapTypeId}:${mode}`;
   failureTracker.delete(key);
 }
+
+/**
+ * Txn IDs whose cancelling_invite was triggered by buyer SB fraud
+ * (verifying_sb_receipt failure). In fraud path: buy order is closed permanently
+ * and sell order re-matches; in the normal path both orders re-open.
+ */
+const buyerFraudCancellations = new Set<number>();
+
+/**
+ * Tracks completed-map txns where `inviting` state was found at server restart.
+ * "first" = initial verification after restart (invite may not have been sent).
+ * "retry" = invite was retried once after first failure.
+ * Failure handling: first → retry invite without suspension; retry → closeOrderAndFail without suspension.
+ */
+const inviteRestartRecovery = new Map<number, "first" | "retry">();
+
+/**
+ * Tracks completed-map txns where `transferring_sb` state was found at server restart.
+ * SB transfer status is unknown – if verification fails, enter cancelling_invite without
+ * buyer suspension (not fraud, genuine uncertainty from restart).
+ */
+const sbTransferRestartTxns = new Set<number>();
+
+/**
+ * Tracks unopened-map txns where `transferring_sb` was found at server restart.
+ * SB transfer status unknown – if verifying_sb_receipt fails, close without buyer suspension.
+ */
+const unopenedSbTransferRestartTxns = new Set<number>();
+
+/**
+ * Tracks unopened-map txns where `opening_scroll` was found at server restart with a
+ * known mh_map_id (scroll was opened before crash). These txns advance directly to
+ * verifying_scroll_opened; if verification fails, treat as fraud (seller fabricated map).
+ */
+const openScrollRestartTxns = new Set<number>();
+
+/**
+ * Tracks post-PONR unopened txns that are parked waiting for a party to reconnect.
+ * Value = which party must reconnect and retry.
+ * Cleared when the step is successfully re-enqueued on reconnect.
+ */
+const parkedTransactions = new Map<number, "seller" | "buyer">();
 
 /** Txn IDs awaiting active maps from seller to probe for opened scroll. */
 const pendingMapIdRecovery = new Set<number>();
@@ -279,7 +370,8 @@ function handleRecoveryProbeResult(
       .prepare("UPDATE map_transactions SET mh_map_id = ? WHERE id = ?")
       .run(mapId, txnId);
     recoveryProbeQueue.delete(txnId);
-    advanceState(txnId, "inviting");
+    openScrollRestartTxns.add(txnId);
+    advanceState(txnId, "verifying_scroll_opened");
     return;
   }
 
@@ -410,8 +502,9 @@ export function handleMapStepResult(payload: {
   mapId?: number;
   mapType?: string;
   mapInfo?: unknown;
+  transferTimestampUtc?: string;
 }): void {
-  const { transactionId, step, success, error, code, quantity, mapId, mapType, mapInfo } = payload;
+  const { transactionId, step, success, error, code, quantity, mapId, mapType, mapInfo, transferTimestampUtc } = payload;
 
   clearStepTimeout(transactionId);
 
@@ -440,9 +533,9 @@ export function handleMapStepResult(payload: {
   }
 
   if (row.mode === "unopened") {
-    handleUnopenedStepSuccess(row, step, { quantity, mapId, mapType });
+    handleUnopenedStepSuccess(row, step, { quantity, mapId, mapType, transferTimestampUtc });
   } else {
-    handleCompletedStepSuccess(row, step, { quantity, mapInfo });
+    handleCompletedStepSuccess(row, step, { quantity, mapInfo, transferTimestampUtc });
   }
 
   drainUserQueue(stepUserId);
@@ -455,7 +548,7 @@ function startUnopenedFlow(txnId: number): void {
 function handleUnopenedStepSuccess(
   row: MapTransactionRow,
   step: MapStepType,
-  data: { quantity?: number; mapId?: number; mapType?: string }
+  data: { quantity?: number; mapId?: number; mapType?: string; transferTimestampUtc?: string }
 ): void {
   const txnId = row.id;
 
@@ -483,7 +576,10 @@ function handleUnopenedStepSuccess(
 
     case "map_transfer_sb":
       if (row.state === "transferring_sb") {
-        advanceState(txnId, "opening_scroll");
+        if (data.transferTimestampUtc) {
+          setMapSbTransferTs(txnId, data.transferTimestampUtc);
+        }
+        advanceState(txnId, "verifying_sb_receipt");
       }
       break;
 
@@ -497,14 +593,14 @@ function handleUnopenedStepSuccess(
           data.mapId,
           txnId
         );
-        // === POINT OF NO RETURN ===
-        advanceState(txnId, "inviting");
+        // PONR is crossed when verifying_scroll_opened passes (in advanceUnopenedState)
+        advanceState(txnId, "verifying_scroll_opened");
       }
       break;
 
     case "map_send_invite":
       if (row.state === "inviting") {
-        advanceState(txnId, "accepting");
+        advanceState(txnId, "verifying_invite_sent");
       }
       break;
 
@@ -516,13 +612,13 @@ function handleUnopenedStepSuccess(
 
     case "map_transfer_ownership":
       if (row.state === "transferring_ownership") {
-        advanceState(txnId, "seller_leaving");
+        advanceState(txnId, "verifying_ownership");
       }
       break;
 
     case "map_leave_map":
       if (row.state === "seller_leaving") {
-        advanceState(txnId, "pending_completion");
+        advanceState(txnId, "verifying_seller_left");
       }
       break;
 
@@ -541,7 +637,7 @@ function startCompletedFlow(txnId: number): void {
 function handleCompletedStepSuccess(
   row: MapTransactionRow,
   step: MapStepType,
-  data: { quantity?: number; mapInfo?: any }
+  data: { quantity?: number; mapInfo?: any; transferTimestampUtc?: string }
 ): void {
   const txnId = row.id;
 
@@ -624,14 +720,15 @@ function handleCompletedStepSuccess(
 
     case "map_send_invite":
       if (row.state === "inviting") {
-        advanceState(txnId, "transferring_sb");
+        advanceState(txnId, "verifying_invite_sent");
       }
       break;
 
     case "map_transfer_sb":
       if (row.state === "transferring_sb") {
-        // === POINT OF NO RETURN ===
-        advanceState(txnId, "accepting");
+        const ts = data.transferTimestampUtc ?? new Date().toISOString();
+        setMapSbTransferTs(txnId, ts);
+        advanceState(txnId, "verifying_sb_receipt");
       }
       break;
 
@@ -643,13 +740,13 @@ function handleCompletedStepSuccess(
 
     case "map_transfer_ownership":
       if (row.state === "transferring_ownership") {
-        advanceState(txnId, "seller_leaving");
+        advanceState(txnId, "verifying_ownership");
       }
       break;
 
     case "map_leave_map":
       if (row.state === "seller_leaving") {
-        advanceState(txnId, "pending_completion");
+        advanceState(txnId, "verifying_seller_left");
       }
       break;
 
@@ -657,7 +754,17 @@ function handleCompletedStepSuccess(
       if (row.state === "cancelling_invite") {
         reverseMapOrderFill(row.sell_order_id, row.quantity);
         reverseMapOrderFill(row.buy_order_id, row.quantity);
-        failTransaction(txnId, row, "SB transfer failed, invite cancelled", true);
+        if (buyerFraudCancellations.has(txnId)) {
+          // Buyer committed SB fraud: close buy order permanently, re-match sell order
+          buyerFraudCancellations.delete(txnId);
+          closeMapOrderWithReason(row.buy_order_id, "Buyer suspended for SB transfer fraud");
+          deleteMapRiskDecisionsForSellOrder(row.sell_order_id);
+          failTransaction(txnId, row, "SB receipt verification failed, buyer suspended", true);
+          queueMicrotask(() => matchMapOrders(row.map_type_id, row.mode));
+        } else {
+          // Normal SB transfer failure: both fills reversed, both orders can re-match
+          failTransaction(txnId, row, "SB transfer failed, invite cancelled", true);
+        }
       }
       break;
   }
@@ -686,6 +793,26 @@ function advanceState(
   } else {
     advanceCompletedState(row, newState);
   }
+}
+
+function getVerificationParty(row: MapTransactionRow): number {
+  // States where seller's extension is the verifier
+  const sellerVerifies: MapTransactionState[] = [
+    "verifying_sb_receipt",
+  ];
+  return sellerVerifies.includes(row.state as MapTransactionState)
+    ? row.seller_user_id
+    : row.buyer_user_id;
+}
+
+function parkVerificationTimeout(txnId: number, verifier: "seller" | "buyer"): void {
+  const row = findMapTransactionById(txnId);
+  if (!row || row.state === "completed" || row.state === "failed") return;
+  parkedTransactions.set(txnId, verifier);
+  console.warn(
+    `[map-orchestrator] txn ${txnId} verification timed out in ${row.state} -- parked waiting for ${verifier} to reconnect`
+  );
+  broadcastTransactionUpdate(rowToMapTransaction(row));
 }
 
 function advanceUnopenedState(row: MapTransactionRow, state: MapTransactionState): void {
@@ -751,8 +878,247 @@ function advanceUnopenedState(row: MapTransactionRow, state: MapTransactionState
       });
       break;
 
+    case "verifying_sb_receipt": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const buyerMhAccount = findMHAccountByUserId(freshRow.buyer_user_id);
+      if (!buyerMhAccount) {
+        console.error(
+          `[map-orchestrator] txn ${txnId}: buyer (user ${freshRow.buyer_user_id}) has no linked MH account – cannot verify SB receipt`
+        );
+        failTransaction(txnId, freshRow, "Buyer MH account not found – cannot verify SB receipt", false);
+        break;
+      }
+      const timeAnchor = freshRow.sb_transfer_ts ?? freshRow.updated_at;
+      const onUnopenedSbFail = () => {
+        const fr = findMapTransactionById(txnId);
+        if (!fr) return;
+        const wasRestart = unopenedSbTransferRestartTxns.has(txnId);
+        unopenedSbTransferRestartTxns.delete(txnId);
+        if (wasRestart) {
+          console.log(
+            `[map-orchestrator] txn ${txnId}: restart SB verification failed – closing both orders (not fraud)`
+          );
+          audit("verification_failed", undefined, {
+            txnId,
+            marketplace: "maps:unopened",
+            verificationType: "sb_receipt",
+            failingParty: fr.buyer_user_id,
+            attemptCount: 3,
+          });
+          reverseMapOrderFill(fr.sell_order_id, fr.quantity);
+          reverseMapOrderFill(fr.buy_order_id, fr.quantity);
+          closeMapOrderWithReason(fr.sell_order_id, "SB transfer status unknown after server restart");
+          closeMapOrderWithReason(fr.buy_order_id, "SB transfer status unknown after server restart");
+          deleteMapRiskDecisionsForSellOrder(fr.sell_order_id);
+          failTransaction(txnId, fr, "SB receipt verification failed after restart recovery", true);
+        } else {
+          createSuspension(fr.buyer_user_id, null, "SB transfer verification failed (possible fraud)", null);
+          getConnection(fr.buyer_user_id)?.ws.close(4003, "Account suspended");
+          audit("verification_failed", undefined, {
+            txnId,
+            marketplace: "maps:unopened",
+            verificationType: "sb_receipt",
+            failingParty: fr.buyer_user_id,
+            attemptCount: 3,
+          });
+          reverseMapOrderFill(fr.sell_order_id, fr.quantity);
+          reverseMapOrderFill(fr.buy_order_id, fr.quantity);
+          closeMapOrderWithReason(fr.buy_order_id, "SB transfer verification failed after 3 attempts");
+          deleteMapRiskDecisionsForSellOrder(fr.sell_order_id);
+          failTransaction(txnId, fr, "SB receipt verification failed after 3 attempts", true);
+        }
+      };
+      startVerification(
+        txnId,
+        freshRow.seller_user_id,
+        "maps:unopened",
+        {
+          verificationType: "sb_receipt",
+          senderMhUserId: String(buyerMhAccount.mh_user_id),
+          itemDisplayName: "SUPER|brie+",
+          quantity: freshRow.price * freshRow.quantity,
+          transferTimestampUtc: timeAnchor,
+        },
+        () => {
+          unopenedSbTransferRestartTxns.delete(txnId);
+          advanceState(txnId, "verifying_map_free");
+        },
+        onUnopenedSbFail,
+        () => parkVerificationTimeout(txnId, "seller"),
+      );
+      break;
+    }
+
+    case "verifying_map_free": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const mapClass = getMapTypeClass(freshRow.map_type_id);
+      if (!mapClass) {
+        console.warn(
+          `[map-orchestrator] txn ${txnId}: map type ${freshRow.map_type_id} has no class – skipping verifying_map_free`
+        );
+        advanceState(txnId, "opening_scroll");
+        break;
+      }
+      const onMapFreeFail = () => {
+        const fr = findMapTransactionById(txnId);
+        if (!fr) return;
+        suspendSellerAndCloseAll(txnId, fr, "Seller map status verification failed (possible fraud)", "map_free", "maps:unopened");
+      };
+      startVerification(
+        txnId,
+        freshRow.buyer_user_id,
+        "maps:unopened",
+        {
+          verificationType: "map_free",
+          expectedHunterSnUserId: freshRow.seller_mh_sn_user_id,
+          mapClass,
+        },
+        () => advanceState(txnId, "opening_scroll"),
+        onMapFreeFail,
+        () => parkVerificationTimeout(txnId, "buyer"),
+      );
+      break;
+    }
+
+    case "verifying_scroll_opened": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const onScrollFail = () => {
+        const fr = findMapTransactionById(txnId);
+        if (!fr) return;
+        suspendSellerAndCloseAll(txnId, fr, "Scroll open verification failed (possible fraud)", "scroll_opened", "maps:unopened");
+      };
+      const scrollMapType = findMapTypeById(freshRow.map_type_id);
+      startVerification(
+        txnId,
+        freshRow.buyer_user_id,
+        "maps:unopened",
+        {
+          verificationType: "scroll_opened",
+          mapId: freshRow.mh_map_id!,
+          expectedHunterSnUserId: freshRow.seller_mh_sn_user_id,
+          expectedMapType: scrollMapType?.map_type,
+        },
+        // === POINT OF NO RETURN ===
+        () => { openScrollRestartTxns.delete(txnId); advanceState(txnId, "inviting"); },
+        onScrollFail,
+        () => parkVerificationTimeout(txnId, "buyer"),
+      );
+      break;
+    }
+
+    case "verifying_invite_sent": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const onUnopenedInviteFail = () => {
+        const fr = findMapTransactionById(txnId);
+        if (!fr) return;
+        suspendSellerAndCloseAll(txnId, fr, "Invite receipt verification failed (possible fraud)", "invite_received", "maps:unopened");
+      };
+      startVerification(
+        txnId,
+        freshRow.buyer_user_id,
+        "maps:unopened",
+        {
+          verificationType: "invite_received",
+          mapId: freshRow.mh_map_id!,
+        },
+        () => advanceState(txnId, "accepting"),
+        onUnopenedInviteFail,
+        () => parkVerificationTimeout(txnId, "buyer"),
+      );
+      break;
+    }
+
+    case "verifying_ownership": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const onUnopenedOwnershipFail = () => {
+        // Post-PONR: scroll consumed, SB paid. Do NOT reverse fills -- buyer would re-match
+        // and lose SB again. Suspend seller, fail, flag for admin review.
+        const fr = findMapTransactionById(txnId);
+        if (!fr) return;
+        const suspendReason = "Ownership transfer could not be verified after 3 attempts";
+        updateMapTransactionState(txnId, "failed", suspendReason);
+        markBuyerAvailable(fr.buyer_user_id);
+        trackFailure(fr.map_type_id, fr.mode);
+        audit("map_transaction_failed", undefined, {
+          transactionId: txnId,
+          mapTypeId: fr.map_type_id,
+          mode: fr.mode,
+          reason: suspendReason,
+        });
+        audit("verification_failed", undefined, {
+          txnId,
+          marketplace: "maps:unopened",
+          verificationType: "ownership_transferred",
+          failingParty: fr.seller_user_id,
+          attemptCount: 3,
+        });
+        createSuspension(fr.seller_user_id, null, suspendReason, null);
+        getConnection(fr.seller_user_id)?.ws.close(4003, "Account suspended");
+        const txn2 = rowToMapTransaction({ ...fr, failure_reason: suspendReason, state: "failed" });
+        broadcastTransactionUpdate(txn2);
+        broadcastMapOrderBook(fr.map_type_id, fr.mode);
+      };
+      startVerification(
+        txnId,
+        freshRow.buyer_user_id,
+        "maps:unopened",
+        {
+          verificationType: "ownership_transferred",
+          mapId: freshRow.mh_map_id!,
+          expectedHunterSnUserId: freshRow.buyer_mh_sn_user_id,
+        },
+        () => advanceState(txnId, "seller_leaving"),
+        onUnopenedOwnershipFail,
+        () => parkVerificationTimeout(txnId, "buyer"),
+      );
+      break;
+    }
+
+    case "verifying_seller_left": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const onUnopenedLeftFail = () => {
+        // Seller is blocking a slot on buyer's map -- suspend and notify buyer
+        const fr = findMapTransactionById(txnId);
+        if (!fr) return;
+        const suspendReason = "Seller did not leave the map after 3 verification attempts";
+        audit("verification_failed", undefined, {
+          txnId,
+          marketplace: "maps:unopened",
+          verificationType: "party_left",
+          failingParty: fr.seller_user_id,
+          attemptCount: 3,
+        });
+        createSuspension(fr.seller_user_id, null, suspendReason, null);
+        getConnection(fr.seller_user_id)?.ws.close(4003, "Account suspended");
+        sendToUser(fr.buyer_user_id, {
+          type: "market_disabled_notice",
+          payload: { message: "The seller has been suspended for not leaving your map. Please contact admins for assistance." },
+        });
+        advanceState(txnId, "pending_completion");
+      };
+      startVerification(
+        txnId,
+        freshRow.buyer_user_id,
+        "maps:unopened",
+        {
+          verificationType: "party_left",
+          mapId: freshRow.mh_map_id!,
+          expectedHunterSnUserId: freshRow.seller_mh_sn_user_id,
+        },
+        () => advanceState(txnId, "pending_completion"),
+        onUnopenedLeftFail,
+        () => parkVerificationTimeout(txnId, "buyer"),
+      );
+      break;
+    }
+
     case "pending_completion":
-      // TODO: Implement retry logic
       completeTransaction(txnId);
       break;
   }
@@ -863,6 +1229,218 @@ function advanceCompletedState(row: MapTransactionRow, state: MapTransactionStat
       });
       break;
 
+    case "verifying_invite_sent": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const restartPhase = inviteRestartRecovery.get(txnId);
+      const onInviteFail =
+        restartPhase !== undefined
+          ? restartPhase === "first"
+            ? () => {
+                inviteRestartRecovery.set(txnId, "retry");
+                console.log(
+                  `[map-orchestrator] txn ${txnId}: restart invite verification failed – retrying invite once (no suspension)`
+                );
+                advanceState(txnId, "inviting");
+              }
+            : () => {
+                inviteRestartRecovery.delete(txnId);
+                const fr = findMapTransactionById(txnId);
+                if (!fr) return;
+                audit("verification_failed", undefined, {
+                  txnId,
+                  marketplace: "maps:completed",
+                  verificationType: "invite_received",
+                  failingParty: fr.seller_user_id,
+                  attemptCount: 3,
+                });
+                closeOrderAndFail(txnId, fr, "seller", "Invite could not be verified after restart recovery");
+              }
+          : () => suspendSellerAndFailMap(txnId, "Invite receipt could not be verified after 3 attempts", "invite_received");
+      startVerification(
+        txnId,
+        freshRow.buyer_user_id,
+        "maps:completed",
+        { verificationType: "invite_received", mapId: freshRow.mh_map_id! },
+        () => {
+          inviteRestartRecovery.delete(txnId);
+          advanceState(txnId, "verifying_map_valid");
+        },
+        onInviteFail,
+        () => parkVerificationTimeout(txnId, "buyer"),
+      );
+      break;
+    }
+
+    case "verifying_map_valid": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const mapType = findMapTypeById(freshRow.map_type_id);
+      startVerification(
+        txnId,
+        freshRow.buyer_user_id,
+        "maps:completed",
+        {
+          verificationType: "map_valid",
+          mapId: freshRow.mh_map_id!,
+          expectedHunterSnUserId: freshRow.seller_mh_sn_user_id,
+          expectedMapType: mapType?.map_type,
+          goal: mapType?.goal,
+        },
+        () => advanceState(txnId, "transferring_sb"),
+        () => suspendSellerAndFailMap(txnId, "Map type could not be verified after 3 attempts", "map_valid"),
+        () => parkVerificationTimeout(txnId, "buyer"),
+      );
+      break;
+    }
+
+    case "verifying_sb_receipt": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const buyerMhAccount = findMHAccountByUserId(freshRow.buyer_user_id);
+      if (!buyerMhAccount) {
+        console.error(
+          `[map-orchestrator] txn ${txnId}: buyer (user ${freshRow.buyer_user_id}) has no linked MH account – cannot verify SB receipt`
+        );
+        failTransaction(txnId, freshRow, "Buyer MH account not found – cannot verify SB receipt", false);
+        break;
+      }
+      const timeAnchor = freshRow.sb_transfer_ts ?? freshRow.updated_at;
+      const onSbFail = () => {
+        const fr = findMapTransactionById(txnId);
+        if (!fr) return;
+        const isRestart = sbTransferRestartTxns.has(txnId);
+        sbTransferRestartTxns.delete(txnId);
+        if (isRestart) {
+          console.log(
+            `[map-orchestrator] txn ${txnId}: restart SB verification failed – cancelling invite without buyer suspension`
+          );
+          audit("verification_failed", undefined, {
+            txnId,
+            marketplace: "maps:completed",
+            verificationType: "sb_receipt",
+            failingParty: fr.buyer_user_id,
+            attemptCount: 3,
+          });
+          advanceState(txnId, "cancelling_invite");
+        } else {
+          buyerFraudCancellations.add(txnId);
+          createSuspension(fr.buyer_user_id, null, "Failed to complete SB payment (possible fraud)", null);
+          getConnection(fr.buyer_user_id)?.ws.close(4003, "Account suspended");
+          audit("verification_failed", undefined, {
+            txnId,
+            marketplace: "maps:completed",
+            verificationType: "sb_receipt",
+            failingParty: fr.buyer_user_id,
+            attemptCount: 3,
+          });
+          advanceState(txnId, "cancelling_invite");
+        }
+      };
+      startVerification(
+        txnId,
+        freshRow.seller_user_id,
+        "maps:completed",
+        {
+          verificationType: "sb_receipt",
+          senderMhUserId: buyerMhAccount ? String(buyerMhAccount.mh_user_id) : "",
+          itemDisplayName: "SUPER|brie+",
+          quantity: freshRow.price * freshRow.quantity,
+          transferTimestampUtc: timeAnchor,
+        },
+        // === POINT OF NO RETURN ===
+        () => {
+          sbTransferRestartTxns.delete(txnId);
+          advanceState(txnId, "accepting");
+        },
+        onSbFail,
+        () => parkVerificationTimeout(txnId, "seller"),
+      );
+      break;
+    }
+
+    case "verifying_ownership": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const onOwnershipFail = () => {
+        // Post-PONR: SB already paid. Do NOT reverse fills – buyer would re-match
+        // and lose SB again. Suspend seller, fail, flag for admin review.
+        const fr = findMapTransactionById(txnId);
+        if (!fr) return;
+        const suspendReason = "Ownership transfer could not be verified after 3 attempts";
+        updateMapTransactionState(txnId, "failed", suspendReason);
+        markBuyerAvailable(fr.buyer_user_id);
+        trackFailure(fr.map_type_id, fr.mode);
+        audit("map_transaction_failed", undefined, {
+          transactionId: txnId,
+          mapTypeId: fr.map_type_id,
+          mode: fr.mode,
+          reason: suspendReason,
+        });
+        audit("verification_failed", undefined, {
+          txnId,
+          marketplace: "maps:completed",
+          verificationType: "ownership_transferred",
+          failingParty: fr.seller_user_id,
+          attemptCount: 3,
+        });
+        createSuspension(fr.seller_user_id, null, suspendReason, null);
+        getConnection(fr.seller_user_id)?.ws.close(4003, "Account suspended");
+        const txn2 = rowToMapTransaction({ ...fr, failure_reason: suspendReason, state: "failed" });
+        broadcastTransactionUpdate(txn2);
+        broadcastMapOrderBook(fr.map_type_id, fr.mode);
+      };
+      startVerification(
+        txnId,
+        freshRow.buyer_user_id,
+        "maps:completed",
+        { verificationType: "ownership_transferred", mapId: freshRow.mh_map_id! },
+        () => advanceState(txnId, "seller_leaving"),
+        onOwnershipFail,
+        () => parkVerificationTimeout(txnId, "buyer"),
+      );
+      break;
+    }
+
+    case "verifying_seller_left": {
+      const freshRow = findMapTransactionById(txnId);
+      if (!freshRow) break;
+      const onLeftFail = () => {
+        // Seller is blocking a slot on buyer's map -- suspend and notify buyer
+        const fr = findMapTransactionById(txnId);
+        if (!fr) return;
+        const suspendReason = "Seller did not leave the map after 3 verification attempts";
+        audit("verification_failed", undefined, {
+          txnId,
+          marketplace: "maps:completed",
+          verificationType: "party_left",
+          failingParty: fr.seller_user_id,
+          attemptCount: 3,
+        });
+        createSuspension(fr.seller_user_id, null, suspendReason, null);
+        getConnection(fr.seller_user_id)?.ws.close(4003, "Account suspended");
+        sendToUser(fr.buyer_user_id, {
+          type: "market_disabled_notice",
+          payload: { message: "The seller has been suspended for not leaving your map. Please contact admins for assistance." },
+        });
+        advanceState(txnId, "pending_completion");
+      };
+      startVerification(
+        txnId,
+        freshRow.buyer_user_id,
+        "maps:completed",
+        {
+          verificationType: "party_left",
+          mapId: freshRow.mh_map_id!,
+          expectedHunterSnUserId: freshRow.seller_mh_sn_user_id,
+        },
+        () => advanceState(txnId, "pending_completion"),
+        onLeftFail,
+        () => parkVerificationTimeout(txnId, "buyer"),
+      );
+      break;
+    }
+
     case "pending_completion":
       completeTransaction(txnId);
       break;
@@ -915,6 +1493,7 @@ function failTransaction(
   reason: string,
   skipReversal: boolean
 ): void {
+  cancelVerification(txnId);
   clearStepTimeout(txnId);
   updateMapTransactionState(txnId, "failed", reason);
 
@@ -939,6 +1518,85 @@ function failTransaction(
 
   // No matcher – matching on failure causes runaway fail->rematch->fail loops
   broadcastMapOrderBook(row.map_type_id, row.mode);
+}
+
+/**
+ * Suspend seller and permanently close BOTH orders with no re-match.
+ * Used for pre-PONR (verifying_map_free, verifying_scroll_opened) and
+ * post-PONR (verifying_invite_sent) seller fraud in the unopened flow.
+ * SB may already be with seller – admin must recover manually.
+ */
+function suspendSellerAndCloseAll(
+  txnId: number,
+  row: MapTransactionRow,
+  reason: string,
+  verificationType: string,
+  marketplace: string,
+): void {
+  reverseMapOrderFill(row.sell_order_id, row.quantity);
+  reverseMapOrderFill(row.buy_order_id, row.quantity);
+  closeMapOrderWithReason(row.sell_order_id, reason);
+  closeMapOrderWithReason(row.buy_order_id, reason + " – admin review required");
+  deleteMapRiskDecisionsForSellOrder(row.sell_order_id);
+
+  createSuspension(row.seller_user_id, null, reason, null);
+  getConnection(row.seller_user_id)?.ws.close(4003, "Account suspended");
+
+  audit("verification_failed", undefined, {
+    txnId,
+    marketplace,
+    verificationType,
+    failingParty: row.seller_user_id,
+    attemptCount: 3,
+  });
+
+  failTransaction(txnId, row, reason, true);
+}
+
+/**
+ * Suspend the seller for pre-PONR invite fraud and fail the transaction.
+ * Both fills are reversed (no SB sent yet, no irreversible action taken).
+ * Sell order is closed permanently; buy order fill is reversed so buyer can re-match.
+ */
+function suspendSellerAndFailMap(txnId: number, reason: string, verificationType: string): void {
+  cancelVerification(txnId);
+  clearStepTimeout(txnId);
+
+  const row = findMapTransactionById(txnId);
+  if (!row) return;
+
+  reverseMapOrderFill(row.sell_order_id, row.quantity);
+  reverseMapOrderFill(row.buy_order_id, row.quantity);
+  closeMapOrderWithReason(row.sell_order_id, reason);
+  deleteMapRiskDecisionsForSellOrder(row.sell_order_id);
+
+  updateMapTransactionState(txnId, "failed", reason);
+  markBuyerAvailable(row.buyer_user_id);
+  trackFailure(row.map_type_id, row.mode);
+
+  audit("map_transaction_failed", undefined, {
+    transactionId: txnId,
+    mapTypeId: row.map_type_id,
+    mode: row.mode,
+    reason,
+  });
+  audit("verification_failed", undefined, {
+    txnId,
+    marketplace: "maps:completed",
+    verificationType,
+    failingParty: row.seller_user_id,
+    attemptCount: 3,
+  });
+
+  createSuspension(row.seller_user_id, null, reason, null);
+  getConnection(row.seller_user_id)?.ws.close(4003, "Account suspended");
+
+  const txn = rowToMapTransaction({ ...row, failure_reason: reason, state: "failed" });
+  broadcastTransactionUpdate(txn);
+  broadcastMapOrderBook(row.map_type_id, row.mode);
+
+  // Buy order fill reversed – allow re-matching for buyer
+  queueMicrotask(() => matchMapOrders(row.map_type_id, row.mode));
 }
 
 function closeOrderAndFail(
@@ -1052,13 +1710,23 @@ function handleStepFailure(
 ): void {
   console.error(`[map-orchestrator] txn ${txnId} step ${step} failed: ${error}`);
 
-  // Pre-PONR states differ by mode
+  // Pre-PONR states differ by mode.
+  // For completed: PONR is crossed when verifying_sb_receipt passes and accepting begins.
   const prePonrStates: MapTransactionState[] =
     row.mode === "unopened"
       ? ["validating_seller", "validating_buyer", "transferring_sb", "opening_scroll"]
-      : ["validating_seller", "validating_buyer", "inviting", "transferring_sb"];
+      : ["validating_seller", "validating_buyer", "inviting", "verifying_invite_sent", "transferring_sb"];
 
   const isPonr = !prePonrStates.includes(row.state);
+
+  // cancelling_invite is a recovery state, not truly post-PONR.
+  // Step failure should fail the txn (same outcome as success), not complete it.
+  if (row.state === "cancelling_invite") {
+    reverseMapOrderFill(row.sell_order_id, row.quantity);
+    reverseMapOrderFill(row.buy_order_id, row.quantity);
+    failTransaction(txnId, row, error, true);
+    return;
+  }
 
   if (isPonr) {
     advanceState(txnId, "pending_completion");
@@ -1078,13 +1746,17 @@ function handleStepFailure(
 }
 
 function broadcastTransactionUpdate(txn: MapTransaction): void {
+  const parkedWaitingFor = parkedTransactions.get(txn.id);
+  const payload: MapTransaction = parkedWaitingFor != null
+    ? { ...txn, parked: true, parkedWaitingFor }
+    : txn;
   sendToUser(txn.sellerUserId, {
     type: "map_transaction_update",
-    payload: { transaction: txn },
+    payload: { transaction: payload },
   });
   sendToUser(txn.buyerUserId, {
     type: "map_transaction_update",
-    payload: { transaction: txn },
+    payload: { transaction: payload },
   });
 }
 
@@ -1094,11 +1766,22 @@ function broadcastTransactionUpdate(txn: MapTransaction): void {
  * reconnected within that window, the transaction is failed.
  */
 const PRE_PONR_GRACE_PERIOD_MS = 10 * 60 * 1000; // 10 minutes
+const MID_FLOW_GRACE_PERIOD_MS = 30 * 60 * 1000; // 30 minutes
+// States eligible for grace-period fail: both fills can be safely reversed
+// with no invite/scroll to undo. Deeper states resume via reconnect handling.
 const PRE_PONR_STATES: MapTransactionState[] = [
   "pending",
   "risk_checking",
   "validating_seller",
   "validating_buyer",
+];
+/** Mid-flow pre-PONR states for completed mode: past validation but before SB verified. */
+const MID_FLOW_PRE_PONR_STATES: MapTransactionState[] = [
+  "inviting",
+  "verifying_invite_sent",
+  "verifying_map_valid",
+  "transferring_sb",
+  "verifying_sb_receipt",
 ];
 
 export function cleanupStuckMapTransactions(): void {
@@ -1128,6 +1811,45 @@ export function cleanupStuckMapTransactions(): void {
       }
     }, PRE_PONR_GRACE_PERIOD_MS);
   }
+
+  // Mid-flow pre-PONR states get a longer grace period.
+  // These have invites/SB in flight and normally resume on reconnect,
+  // but if both parties permanently disappear the txn would be stuck forever.
+  const UNOPENED_MID_FLOW_STATES: MapTransactionState[] = [
+    "transferring_sb", "verifying_sb_receipt", "verifying_map_free", "opening_scroll",
+  ];
+  const hasMidFlow = stuck.some((r) =>
+    (r.mode === "completed" && MID_FLOW_PRE_PONR_STATES.includes(r.state)) ||
+    (r.mode === "unopened" && UNOPENED_MID_FLOW_STATES.includes(r.state as MapTransactionState))
+  );
+  if (hasMidFlow) {
+    setTimeout(() => {
+      const stillStuck = findPendingMapTransactions();
+      for (const row of stillStuck) {
+        const isCompletedMidFlow = row.mode === "completed" && MID_FLOW_PRE_PONR_STATES.includes(row.state);
+        const isUnopenedMidFlow = row.mode === "unopened" && UNOPENED_MID_FLOW_STATES.includes(row.state as MapTransactionState);
+        if (isCompletedMidFlow) {
+          console.log(
+            `[map-orchestrator] txn ${row.id} still in mid-flow state ${row.state} after extended grace period – failing`
+          );
+          if (row.state === "transferring_sb" || row.state === "verifying_sb_receipt") {
+            // SB may have been sent after invite -- cancel invite before failing
+            advanceState(row.id, "cancelling_invite");
+          } else {
+            failTransaction(row.id, row, "Other party did not reconnect in time", false);
+          }
+        } else if (isUnopenedMidFlow) {
+          // Unopened mid-flow: no invite to cancel, no PONR crossed -- reverse fills and fail
+          console.log(
+            `[map-orchestrator] txn ${row.id} still in unopened mid-flow state ${row.state} after extended grace period – failing`
+          );
+          reverseMapOrderFill(row.sell_order_id, row.quantity);
+          reverseMapOrderFill(row.buy_order_id, row.quantity);
+          failTransaction(row.id, row, "Other party did not reconnect in time", true);
+        }
+      }
+    }, MID_FLOW_GRACE_PERIOD_MS);
+  }
 }
 
 /**
@@ -1152,11 +1874,37 @@ export function checkMapPendingCompletionsOnConnect(userId: number): void {
   }
 }
 
+const VERIFYING_STATES: MapTransactionState[] = [
+  "verifying_invite_sent",
+  "verifying_map_valid",
+  "verifying_sb_receipt",
+  "verifying_map_free",
+  "verifying_scroll_opened",
+  "verifying_ownership",
+  "verifying_seller_left",
+];
+
+const COMPLETED_PRE_PONR_STEP_STATES = new Set<MapTransactionState>([
+  "validating_seller",
+  "validating_buyer",
+  "inviting",
+  "verifying_invite_sent",
+  "transferring_sb",
+]);
+
+const UNOPENED_POST_PONR_STEP_STATES = new Set<MapTransactionState>([
+  "inviting",
+  "accepting",
+  "transferring_ownership",
+  "seller_leaving",
+]);
+
 /**
  * Resume active map transactions when a user reconnects.
  *
  * - pending: starts the transaction
  * - validating_*: re-sends the validation step (idempotent)
+ * - verifying_*: re-starts verification if lost in a server restart
  * - opening_scroll with NULL mh_map_id: defers to probeForOpenedMap
  * - opening_scroll with mh_map_id: advances to inviting
  * - post-PONR states: re-sends the current step
@@ -1171,6 +1919,56 @@ export function resumeActiveMapTransactionsOnConnect(userId: number): void {
 
     // Handled by checkMapPendingCompletionsOnConnect
     if (row.state === "pending_completion") continue;
+
+    // Verifying states: re-start verification if in-memory state was lost (server restart).
+    // resendPendingVerificationsForUser handles the normal reconnect case (challenge already queued).
+    if (VERIFYING_STATES.includes(row.state) && row.mode === "completed") {
+      if (!isVerificationPending(row.id)) {
+        const verifierId = getVerificationParty(row);
+        if (!getConnection(verifierId)) continue; // wait for verifier to reconnect
+        parkedTransactions.delete(row.id);
+        markBuyerBusy(row.buyer_user_id);
+        // At restart, SB transfer outcome is unknown -- don't suspend buyer for fraud
+        if (row.state === "verifying_sb_receipt") {
+          sbTransferRestartTxns.add(row.id);
+        }
+        console.log(
+          `[map-orchestrator] txn ${row.id} in ${row.state} at restart – re-starting verification`
+        );
+        advanceCompletedState(row, row.state);
+      }
+      continue;
+    }
+
+    if (VERIFYING_STATES.includes(row.state) && row.mode === "unopened") {
+      if (!isVerificationPending(row.id)) {
+        const verifierId = getVerificationParty(row);
+        if (!getConnection(verifierId)) continue; // wait for verifier to reconnect
+        parkedTransactions.delete(row.id);
+        markBuyerBusy(row.buyer_user_id);
+        console.log(
+          `[map-orchestrator] txn ${row.id} in ${row.state} (unopened) at restart – re-starting verification`
+        );
+        advanceUnopenedState(row, row.state);
+      }
+      continue;
+    }
+
+    // Parked step (e.g. reversing_sb): unpark when the waiting party reconnects.
+    if (parkedTransactions.has(row.id)) {
+      const waitingFor = parkedTransactions.get(row.id)!;
+      const reconnectedParty = userId === row.seller_user_id ? "seller" : "buyer";
+      if (reconnectedParty === waitingFor) {
+        parkedTransactions.delete(row.id);
+        markBuyerBusy(row.buyer_user_id);
+        inflightStep.delete(userId);
+        console.log(
+          `[map-orchestrator] txn ${row.id} unparking – ${waitingFor} reconnected, re-advancing ${row.state}`
+        );
+        advanceUnopenedState(row, row.state);
+      }
+      continue;
+    }
 
     const otherUserId =
       userId === row.seller_user_id ? row.buyer_user_id : row.seller_user_id;
@@ -1204,6 +2002,17 @@ export function resumeActiveMapTransactionsOnConnect(userId: number): void {
     const stepUserId = getTimeoutUserId(row);
     if (stepUserId == null || !isUserOnline(stepUserId)) continue;
 
+    // Unknown whether SB was sent before restart – verify before re-sending (avoid double-transfer).
+    if (row.state === "transferring_sb" && row.mode === "unopened") {
+      markBuyerBusy(row.buyer_user_id);
+      unopenedSbTransferRestartTxns.add(row.id);
+      console.log(
+        `[map-orchestrator] txn ${row.id} in transferring_sb (unopened) at restart – advancing to verifying_sb_receipt`
+      );
+      advanceState(row.id, "verifying_sb_receipt");
+      continue;
+    }
+
     // opening_scroll with lost mh_map_id – defer to probeForOpenedMap
     if (row.state === "opening_scroll" && row.mh_map_id == null) {
       pendingMapIdRecovery.add(row.id);
@@ -1215,13 +2024,41 @@ export function resumeActiveMapTransactionsOnConnect(userId: number): void {
       continue;
     }
 
-    // opening_scroll WITH mh_map_id (manually recovered) – skip to inviting
+    // opening_scroll WITH mh_map_id (recovered) – scroll was opened before crash; verify it.
     if (row.state === "opening_scroll" && row.mh_map_id != null) {
       markBuyerBusy(row.buyer_user_id);
+      openScrollRestartTxns.add(row.id);
       console.log(
-        `[map-orchestrator] txn ${row.id} recovered opening_scroll with mh_map_id ${row.mh_map_id}, advancing to inviting`
+        `[map-orchestrator] txn ${row.id} recovered opening_scroll with mh_map_id ${row.mh_map_id}, advancing to verifying_scroll_opened`
       );
-      advanceState(row.id, "inviting");
+      advanceState(row.id, "verifying_scroll_opened");
+      continue;
+    }
+
+    // Unknown whether the invite was sent before restart; verify before re-sending.
+    if (row.state === "inviting" && row.mode === "completed") {
+      markBuyerBusy(row.buyer_user_id);
+      // Set restart flag BEFORE advanceState so advanceCompletedState sees it synchronously.
+      inviteRestartRecovery.set(row.id, "first");
+      console.log(
+        `[map-orchestrator] txn ${row.id} in inviting at restart – advancing to verifying_invite_sent (restart recovery)`
+      );
+      // advanceState broadcasts the state change to both parties and calls advanceCompletedState.
+      advanceState(row.id, "verifying_invite_sent");
+      continue;
+    }
+
+    // Gap 2: completed-mode `transferring_sb` at restart – avoid double-transfer by verifying first.
+    // Unknown whether the SB was sent before restart; verify before re-sending.
+    if (row.state === "transferring_sb" && row.mode === "completed") {
+      markBuyerBusy(row.buyer_user_id);
+      // Set restart flag BEFORE advanceState so advanceCompletedState sees it synchronously.
+      sbTransferRestartTxns.add(row.id);
+      console.log(
+        `[map-orchestrator] txn ${row.id} in transferring_sb at restart – advancing to verifying_sb_receipt (restart recovery)`
+      );
+      // advanceState broadcasts the state change to both parties and calls advanceCompletedState.
+      advanceState(row.id, "verifying_sb_receipt");
       continue;
     }
 
@@ -1240,6 +2077,8 @@ export function resumeActiveMapTransactionsOnConnect(userId: number): void {
   }
 }
 
+// Fast states = step is actively in-flight. Verifying states are NOT included
+// because they are waiting for a WS verify_transfer_result, not a game API step.
 const MAP_FAST_STATES = new Set<MapTransactionState>([
   "risk_checking",
   "validating_seller",

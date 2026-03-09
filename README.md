@@ -1,6 +1,6 @@
 # MH Community Marketplace
 
-A browser extension and server for trading MouseHunt treasure map slots, items, sniping services, and complete maps — with real-time order matching, automated transaction flows, and an admin/moderation panel.
+A browser extension and server for trading MouseHunt treasure map slots, items, sniping services, and complete maps – with real-time order matching, transaction flows, and an admin/moderation panel.
 
 ## Architecture
 
@@ -36,7 +36,8 @@ A browser extension and server for trading MouseHunt treasure map slots, items, 
 - **Four Marketplaces**: Slot trading, item trading, sniping services, and map trading (unopened/completed)
 - **Real-Time Order Book**: Live buy/sell aggregation with WebSocket push updates
 - **Order Matching**: Price-time priority engine with MOQ enforcement, tier-aware matching, and cross-price fill logic
-- **Automated Transactions**: Multi-step state machines handle invites, transfers, payments, and verifications via game API interception
+- **Transactions**: Multi-step state machines handle invites, transfers, payments, and verifications via game API interception
+- **Cross-Verification**: After each transaction step, the counterparty's extension independently verifies the outcome to prevent fraud
 - **Goal Risk Mitigation**: Buyers warned about difficult remaining goals before committing to a map slot
 - **Return Tradables**: Post-completion chest opening and tradable item transfer for supported map types
 - **Sniping Service**: Multi-target mouse/item sniping with AFK payment handling and grace periods
@@ -143,7 +144,7 @@ map-marketplace/
 │   │   └── src/
 │   │       ├── db/          # SQLite schema, queries, migrations, seed scripts
 │   │       ├── orders/      # Order books and matching engines (4 marketplaces)
-│   │       ├── transactions/ # Transaction orchestrators and state machines
+│   │       ├── transactions/ # Transaction orchestrators, verification, and state machines
 │   │       ├── ws/          # WebSocket handlers (domain-split)
 │   │       └── http/        # HTTP routes (auth only)
 │   └── extension/           # Browser extension (@mhcm/extension)

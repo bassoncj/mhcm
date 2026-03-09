@@ -273,7 +273,7 @@ export function findMapOrdersByUser(userId: number): MapOrderRow[] {
   return getDb()
     .prepare(
       `SELECT * FROM map_orders
-       WHERE user_id = ?
+       WHERE user_id = ?${demoOrderFilter("map_orders", "maps")}
        ORDER BY created_at DESC`
     )
     .all(userId) as MapOrderRow[];

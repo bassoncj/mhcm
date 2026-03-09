@@ -151,20 +151,21 @@ function extractMapHunterData(data: any): void {
   }
   if (!map?.map_id || !Array.isArray(map.hunters)) return;
 
-  // MH hunters array includes departed hunters – only count active ones
-  const activeCount = map.hunters.filter((h: any) => h.is_active !== false).length;
+  // MH hunters array includes departed hunters - only count active ones
+  const activeHunters = map.hunters.filter((h: any) => h.is_active !== false);
 
   window.postMessage({
     source: "mhcm-main-world",
     payload: {
       type: "map_hunters_updated",
       mapId: Number(map.map_id),
-      numActiveHunters: activeCount,
+      numActiveHunters: activeHunters.length,
       maxHunters: map.max_hunters ?? 0,
       invitedHunters: Array.isArray(map.invited_hunters)
         ? map.invited_hunters.map(String)
         : [],
       isOwner: !!map.is_owner,
+      activeHunterSnUserIds: activeHunters.map((h: any) => String(h.sn_user_id)),
     },
   }, "*");
 }

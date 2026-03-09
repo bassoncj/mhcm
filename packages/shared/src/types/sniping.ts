@@ -130,10 +130,13 @@ export type SnipingTransactionState =
   | "inviting"
   | "invite_sent"
   | "sniping"
+  | "verifying_goal_completed"
   | "awaiting_payment"
   | "pending_payment"
   | "transferring"
+  | "verifying_sb_receipt"
   | "awaiting_leave"
+  | "verifying_sniper_left"
   | "completed"
   | "failed";
 
@@ -158,6 +161,10 @@ export interface SnipingTransaction {
   items: SnipingTransactionItem[];
   createdAt: string;
   updatedAt: string;
+  /** True when transaction is parked waiting for a party to reconnect. */
+  parked?: boolean;
+  /** Which party the transaction is waiting for ("seller" = sniper, "buyer" = maptain). */
+  parkedWaitingFor?: "seller" | "buyer";
 }
 
 export interface SnipingTransactionMouse {

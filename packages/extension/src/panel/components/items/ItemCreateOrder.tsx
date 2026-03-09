@@ -128,7 +128,7 @@ export function ItemCreateOrder() {
     }
 
     if (side === "buy" && balance == null) {
-      setError("SB balance not available — cannot validate order");
+      setError("SB balance not available – cannot validate order");
       return;
     }
     if (side === "buy" && (insufficientBalance || insufficientAvailable)) {

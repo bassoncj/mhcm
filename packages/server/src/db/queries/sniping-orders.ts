@@ -1,6 +1,6 @@
 import type { SnipingOrderSide, SnipingOrderStatus, SnipingTarget } from "@mhcm/shared";
 import { getDb } from "../connection.js";
-import { demoOrderFilter } from "../../demo/demo-mode.js";
+import { demoOrderFilter, demoTxnFilter } from "../../demo/demo-mode.js";
 
 export interface SnipingOrderRow {
   id: number;
@@ -87,7 +87,7 @@ export function findSnipingOrdersByUser(
   return getDb()
     .prepare(
       `SELECT * FROM sniping_orders
-       WHERE user_id = ? AND status IN (${placeholders})
+       WHERE user_id = ? AND status IN (${placeholders})${demoOrderFilter("sniping_orders", "sniping")}
        ORDER BY created_at DESC`
     )
     .all(userId, ...statuses) as SnipingOrderRow[];
@@ -312,7 +312,7 @@ function queryAvgPriceHistory(
          AVG(CASE WHEN DATE(completed_at) >= DATE('now', '-30 days') THEN price END) as avg_30d
        FROM ${table}
        WHERE ${idCol} = ?
-         AND DATE(completed_at) >= DATE('now', '-30 days')`
+         AND DATE(completed_at) >= DATE('now', '-30 days')${demoTxnFilter(table, "sniping")}`
     )
     .get(idVal) as { avg_7d: number | null; avg_30d: number | null };
 

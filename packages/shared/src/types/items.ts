@@ -144,6 +144,8 @@ export interface ItemTransaction {
   failureReason?: string;
   createdAt: string;
   updatedAt: string;
+  parked?: boolean;
+  parkedWaitingFor?: "seller" | "buyer";
 }
 
 export type ItemStepType =

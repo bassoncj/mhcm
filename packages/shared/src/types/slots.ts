@@ -166,6 +166,7 @@ export type SlotTransactionState =
   | "inviting"
   | "invite_sent"
   | "verifying_invite_sent" // Buyer confirms invite was received
+  | "verifying_map_valid" // Buyer confirms map type matches listing
   | "accepting"
   | "cancelling_invite" // Buyer couldn't find invite, seller revoking it
   | "invite_accepted"
@@ -203,6 +204,8 @@ export interface SlotTransaction {
   /** Total RT items to transfer (populated after chest opened). */
   rtItemsTotal?: number;
   rtItemsTransferred?: number;
+  parked?: boolean;
+  parkedWaitingFor?: "seller" | "buyer";
 }
 
 export interface SlotTransactionHistoryLine {

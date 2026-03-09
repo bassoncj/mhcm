@@ -15,6 +15,17 @@ export interface TrackedSnipingTransaction {
   reportedCompletedIds: Set<number>;
 }
 
+/** Tracked maptain-side sniping transaction for detecting sniper goals/departures. */
+export interface TrackedMaptainTransaction {
+  id: number;
+  mhMapId: number;
+  sniperSnUserId: string;
+  goalType: "mouse" | "item";
+  targetGoalIds: number[];
+  reportedCompletedIds: Set<number>;
+  reportedDeparture: boolean;
+}
+
 export interface ServiceWorkerState {
   /** JWT token for the marketplace server. */
   authToken: string | null;
@@ -40,8 +51,10 @@ export interface ServiceWorkerState {
   notificationPrefs: NotificationPrefs;
   /** Map IDs for which we've already sent a "map full" notification. */
   notifiedMapIds: Set<number>;
-  /** Active sniping transactions being tracked for catch detection (keyed by txn ID). */
+  /** Active sniping transactions being tracked for catch detection (sniper-side, keyed by txn ID). */
   trackedSnipingTxns: Map<number, TrackedSnipingTransaction>;
+  /** Active sniping transactions being tracked for maptain-side goal/departure detection (keyed by txn ID). */
+  trackedMaptainTxns: Map<number, TrackedMaptainTransaction>;
   /** Per-map timestamp of last catch data received (from XHR interception or proactive refresh). */
   lastCatchDataByMap: Map<number, number>;
   /** Interval timer for catch staleness polling (runs while transactions are being tracked). */
@@ -98,6 +111,7 @@ const state: ServiceWorkerState = {
   notificationPrefs: { ...DEFAULT_NOTIFICATION_PREFS },
   notifiedMapIds: new Set(),
   trackedSnipingTxns: new Map(),
+  trackedMaptainTxns: new Map(),
   lastCatchDataByMap: new Map(),
   catchStalenessTimer: null,
   // Reconnection validation state
@@ -194,6 +208,14 @@ export function addTrackedSnipingTxn(txn: TrackedSnipingTransaction): void {
 
 export function removeTrackedSnipingTxn(txnId: number): void {
   state.trackedSnipingTxns.delete(txnId);
+}
+
+export function addTrackedMaptainTxn(txn: TrackedMaptainTransaction): void {
+  state.trackedMaptainTxns.set(txn.id, txn);
+}
+
+export function removeTrackedMaptainTxn(txnId: number): void {
+  state.trackedMaptainTxns.delete(txnId);
 }
 
 export function touchCatchDataTimestamp(mapId: number): void {

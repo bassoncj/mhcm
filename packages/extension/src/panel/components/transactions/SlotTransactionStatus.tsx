@@ -1,5 +1,6 @@
 import type { SlotTransactionState } from "@mhcm/shared";
 import { activeTransaction } from "../../signals/slots.js";
+import { currentUser } from "../../signals/auth.js";
 
 const STATE_LABELS: Record<SlotTransactionState, string> = {
   pending: "Pending",
@@ -8,6 +9,7 @@ const STATE_LABELS: Record<SlotTransactionState, string> = {
   inviting: "Sending invite...",
   invite_sent: "Invite sent",
   verifying_invite_sent: "Verifying invite received...",
+  verifying_map_valid: "Verifying map...",
   accepting: "Accepting invite...",
   cancelling_invite: "Cancelling invite...",
   invite_accepted: "Invite accepted",
@@ -29,6 +31,7 @@ const STATE_PROGRESS: Record<SlotTransactionState, number> = {
   inviting: 25,
   invite_sent: 40,
   verifying_invite_sent: 45,
+  verifying_map_valid: 48,
   accepting: 55,
   cancelling_invite: 50,
   invite_accepted: 70,
@@ -62,6 +65,23 @@ export function SlotTransactionStatus() {
 
   const isRtPhase = RT_STATES.includes(txn.state);
 
+  const userId = currentUser.value?.id;
+  const isSellerViewing = userId === txn.sellerUserId;
+
+  let parkedNotice: string | null = null;
+  if (txn.parked && txn.parkedWaitingFor) {
+    const iAmActingParty =
+      (txn.parkedWaitingFor === "seller" && isSellerViewing) ||
+      (txn.parkedWaitingFor === "buyer" && !isSellerViewing);
+
+    if (iAmActingParty) {
+      parkedNotice = "Your connection was lost during this step. Refresh the MouseHunt page to continue.";
+    } else {
+      const waitingFor = txn.parkedWaitingFor === "seller" ? "seller" : "buyer";
+      parkedNotice = `Waiting for the ${waitingFor} to reconnect. No action needed on your end.`;
+    }
+  }
+
   return (
     <div class="transaction-status active">
       <h3>
@@ -85,6 +105,11 @@ export function SlotTransactionStatus() {
           <span class="rt-progress-label">
             Items: {txn.rtItemsTransferred ?? 0}/{txn.rtItemsTotal}
           </span>
+        </div>
+      )}
+      {parkedNotice && (
+        <div class="txn-parked-notice">
+          {parkedNotice}
         </div>
       )}
     </div>

@@ -31,8 +31,8 @@ src/
 │   ├── connection.ts     # SQLite connection + migration runner
 │   ├── schema.ts         # Table definitions (programmatic)
 │   ├── schema.sql        # Reference schema
-│   ├── migrations/       # Schema migrations (core, slots, sniping, items, maps, risk)
-│   ├── queries/          # Query functions by domain (42 files)
+│   ├── migrations/       # Schema migrations (core, slots, sniping, items, maps, risk, index)
+│   ├── queries/          # Query functions by domain (44 files)
 │   └── seed-*.ts         # Seed scripts (mice, maps, items, scrolls, ranks, environments, prices)
 ├── orders/               # Order books and matchers (one pair per marketplace)
 │   ├── slot-book.ts      # Slot order CRUD + validation
@@ -48,7 +48,8 @@ src/
 │   ├── sniping-orchestrator.ts
 │   ├── item-orchestrator.ts
 │   ├── map-orchestrator.ts
-│   └── risk-check-utils.ts  # Goal risk evaluation (shared)
+│   ├── verify-utils.ts       # Cross-verification (3 attempts, exponential backoff, park-on-timeout)
+│   └── risk-check-utils.ts   # Goal risk evaluation (shared)
 ├── maps/
 │   └── catalog.ts        # Map type catalog management, auto-learning
 ├── demo/
@@ -65,7 +66,7 @@ src/
 │                         # admin and mod each backed by domain sub-files (5 + 4 files)
 └── http/
     ├── router.ts         # Route dispatcher
-    └── routes/           # Route handlers (auth only — all other operations are WS)
+    └── routes/           # Route handlers (auth only – all other operations are WS)
 ```
 
 ## Database

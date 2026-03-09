@@ -6,7 +6,7 @@ import githubIcon from "../../assets/github.svg";
 
 const S = 16;
 
-// Shield with check — generic (no brand logo for privacy policy)
+// Shield with check – generic (no brand logo for privacy policy)
 function IconPrivacy() {
   return (
     <svg width={S} height={S} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

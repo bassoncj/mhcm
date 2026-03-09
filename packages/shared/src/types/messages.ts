@@ -719,6 +719,8 @@ export interface ClientMouseCaught {
   payload: {
     transactionId: number;
     mouseTypeId: number;
+    /** Who detected the catch: "sniper" (sniper's extension) or "maptain" (maptain's extension). */
+    reportedBy?: "sniper" | "maptain";
   };
 }
 
@@ -727,6 +729,8 @@ export interface ClientSniperLeftMap {
   type: "sniper_left_map";
   payload: {
     transactionId: number;
+    /** Who detected the departure: "sniper" (sniper's extension) or "maptain" (maptain's extension). */
+    reportedBy?: "sniper" | "maptain";
   };
 }
 
@@ -1037,7 +1041,12 @@ export interface ClientListItems {
 /** Extension reports that a target item was found (auto-detected from XHR). */
 export interface ClientItemFound {
   type: "item_found";
-  payload: { transactionId: number; itemTypeId: number };
+  payload: {
+    transactionId: number;
+    itemTypeId: number;
+    /** Who detected the find: "sniper" (sniper's extension) or "maptain" (maptain's extension). */
+    reportedBy?: "sniper" | "maptain";
+  };
 }
 
 export interface ClientGetSnipingItemWizardData {
@@ -1199,6 +1208,8 @@ export type VerificationType =
   | "invite_accepted"
   | "ownership_transferred"
   | "scroll_opened"
+  | "map_free"
+  | "map_valid"
   | "goal_completed"
   | "party_left";
 
@@ -1222,6 +1233,14 @@ export interface ServerVerifyTransfer {
     mapId?: number;
     /** SN user ID of the hunter expected to be present/absent – for map-state checks. */
     expectedHunterSnUserId?: string;
+    /** Map class to check for map_free verification (e.g. "treasure", "event", "poster"). */
+    mapClass?: string;
+    /** Expected map reward type (e.g. "rift_valour_treasure_chest"). For map_valid and scroll_opened checks. */
+    expectedMapType?: string;
+    /** Goal type ("mouse" or "item"). For map_valid completed-mode goal verification. */
+    goal?: string;
+    /** MH type key string for goal_completed verification (e.g. "desert_nomad"). */
+    goalKey?: string;
   };
 }
 
@@ -1232,6 +1251,8 @@ export interface ClientVerifyTransferResult {
     transactionId: number;
     verificationType: VerificationType;
     verified: boolean;
+    /** Set when verified=false due to infrastructure failure, not fraud. */
+    error?: string;
   };
 }
 

@@ -47,7 +47,7 @@ export function findItemOrdersByUser(
   return getDb()
     .prepare(
       `SELECT * FROM item_orders
-       WHERE user_id = ? AND status IN (${placeholders})
+       WHERE user_id = ? AND status IN (${placeholders})${demoOrderFilter("item_orders", "items")}
        ORDER BY created_at DESC`
     )
     .all(userId, ...statuses) as ItemOrderRow[];

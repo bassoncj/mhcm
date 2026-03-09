@@ -1,6 +1,7 @@
 import type { ItemTransactionState } from "@mhcm/shared";
 import { itemSbTotal } from "@mhcm/shared";
 import { activeItemTransaction } from "../../signals/items.js";
+import { currentUser } from "../../signals/auth.js";
 
 const STATE_LABELS: Record<ItemTransactionState, string> = {
   pending: "Pending",
@@ -38,6 +39,23 @@ export function ItemTransactionStatus() {
 
   const total = itemSbTotal(txn.price, txn.quantity);
 
+  const userId = currentUser.value?.id;
+  const isSellerViewing = userId === txn.sellerUserId;
+
+  let parkedNotice: string | null = null;
+  if (txn.parked && txn.parkedWaitingFor) {
+    const iAmActingParty =
+      (txn.parkedWaitingFor === "seller" && isSellerViewing) ||
+      (txn.parkedWaitingFor === "buyer" && !isSellerViewing);
+
+    if (iAmActingParty) {
+      parkedNotice = "Your connection was lost during this step. Refresh the MouseHunt page to continue.";
+    } else {
+      const waitingFor = txn.parkedWaitingFor === "seller" ? "seller" : "buyer";
+      parkedNotice = `Waiting for the ${waitingFor} to reconnect. No action needed on your end.`;
+    }
+  }
+
   return (
     <div class="transaction-status active">
       <h3>Item Transaction #{txn.id}</h3>
@@ -52,6 +70,11 @@ export function ItemTransactionStatus() {
         <span>{txn.itemName} &times; {txn.quantity.toLocaleString()}</span>
         <span>Total: {total.toLocaleString()} SB</span>
       </div>
+      {parkedNotice && (
+        <div class="txn-parked-notice">
+          {parkedNotice}
+        </div>
+      )}
     </div>
   );
 }

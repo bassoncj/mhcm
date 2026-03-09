@@ -64,10 +64,10 @@ src/
 │   ├── hooks/
 │   │   ├── useServiceWorker.ts    # SW message router
 │   │   ├── useAuth.ts             # Authentication hook
-│   │   └── message-handlers/      # Domain-split message handlers (7 files)
+│   │   └── message-handlers/      # Domain-split message handlers (8 files)
 │   ├── utils/               # Shared panel utilities (format, markdown)
 │   ├── signals/             # Preact Signals state (17 files, one per domain)
-│   ├── styles/              # CSS split by domain (20 files, imported via main.css)
+│   ├── styles/              # CSS split by domain (23 files, imported via main.css)
 │   ├── data/                # Generated data (FAQ, onboarding content)
 │   └── platform/            # Browser API abstraction
 ├── options/                 # Extension options page
@@ -125,4 +125,4 @@ Uses [Preact Signals](https://preactjs.com/guide/v10/signals/) for reactive stat
 
 ## Styling
 
-CSS split by domain into 20 files, imported via `styles/main.css`. Theme variables defined in `variables.css` with light/dark mode support via `[data-theme="light"]`.
+CSS split by domain into 23 files, imported via `styles/main.css`. Theme variables defined in `variables.css` with light/dark mode support via `[data-theme="light"]`.

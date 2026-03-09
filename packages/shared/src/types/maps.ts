@@ -133,12 +133,19 @@ export type MapTransactionState =
   | "risk_checking"
   | "validating_seller"
   | "validating_buyer"
-  | "transferring_sb"
-  | "opening_scroll"
   | "inviting"
+  | "verifying_invite_sent"
+  | "verifying_map_valid"
+  | "transferring_sb"
+  | "verifying_sb_receipt"
+  | "verifying_map_free"
+  | "opening_scroll"
+  | "verifying_scroll_opened"
   | "accepting"
   | "transferring_ownership"
+  | "verifying_ownership"
   | "seller_leaving"
+  | "verifying_seller_left"
   | "reversing_sb"
   | "cancelling_invite"
   | "pending_completion"
@@ -164,6 +171,10 @@ export interface MapTransaction {
   retryCount: number;
   createdAt: string;
   updatedAt: string;
+  /** True when a post-PONR step has parked waiting for a party to reconnect. */
+  parked?: boolean;
+  /** Which party must reconnect and retry to unpark. */
+  parkedWaitingFor?: "seller" | "buyer";
 }
 
 /** Typed step data interfaces prevent field name bugs at compile time. */
