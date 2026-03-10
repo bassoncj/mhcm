@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MouseHunt Community Marketplace",
-  "version": "0.9.0",
+  "version": "0.9.3",
   "description": "A community marketplace for MouseHunt",
   "permissions": [
     "storage",

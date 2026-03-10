@@ -1566,7 +1566,6 @@ setMessageHandler((message: ServerMessage) => {
     const txn = message.payload.transaction;
     if (txn.state === "completed" || txn.state === "failed") {
       refreshGameTab();
-      verificationAttemptSeen.delete(txn.id);
     }
 
     // Show notification for completed transactions
@@ -1644,7 +1643,6 @@ setMessageHandler((message: ServerMessage) => {
       verboseLog("snipe-sw", `  untracking txn #${txn.id} (${txn.state})`);
       removeTrackedSnipingTxn(txn.id);
       removeTrackedMaptainTxn(txn.id);
-      verificationAttemptSeen.delete(txn.id);
       if (getState().trackedSnipingTxns.size === 0) stopCatchStalenessPolling();
       // Only refresh game tab on success
       if (txn.state === "completed") refreshGameTab();
@@ -1729,9 +1727,6 @@ setMessageHandler((message: ServerMessage) => {
 
   if (message.type === "item_transaction_update") {
     const txn = message.payload.transaction;
-    if (txn.state === "completed" || txn.state === "failed") {
-      verificationAttemptSeen.delete(txn.id);
-    }
     if (txn.state === "completed") {
       refreshGameTab();
       // Item sold/purchased notifications
@@ -1749,9 +1744,6 @@ setMessageHandler((message: ServerMessage) => {
 
   if (message.type === "map_transaction_update") {
     const txn = message.payload.transaction;
-    if (txn.state === "completed" || txn.state === "failed") {
-      verificationAttemptSeen.delete(txn.id);
-    }
     if (txn.state === "completed") {
       refreshGameTab();
       // Map sold/purchased notifications
@@ -3028,8 +3020,6 @@ function broadcastRawToPanel(message: any): void {
     });
 }
 
-const verificationAttemptSeen = new Map<number, number>();
-
 async function handleVerifyTransfer(payload: {
   transactionId: number;
   verificationType: VerificationType;
@@ -3044,11 +3034,7 @@ async function handleVerifyTransfer(payload: {
   expectedMapType?: string;
   goal?: string;
 }): Promise<void> {
-  const { transactionId, verificationType, attemptNumber } = payload;
-
-  const seen = verificationAttemptSeen.get(transactionId) ?? 0;
-  if (seen >= attemptNumber) return;
-  verificationAttemptSeen.set(transactionId, attemptNumber);
+  const { transactionId, verificationType } = payload;
 
   let verified = false;
   let error: string | undefined;

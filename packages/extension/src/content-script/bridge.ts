@@ -5,6 +5,7 @@ import type {
 } from "../shared/messaging.js";
 import * as gameApi from "./game-api.js";
 import { setXhrLogCallback } from "./game-api.js";
+import { enqueueApiCall } from "./api-queue.js";
 
 const API_METHODS: Record<GameApiMethod, (...args: any[]) => Promise<any>> = {
   getMapInventory: gameApi.getMapInventory,
@@ -54,17 +55,7 @@ export const bridge = {
       return;
     }
 
-    fn(...args)
-      .then((data) => {
-        sendResponse({ requestId, success: true, data });
-      })
-      .catch((err) => {
-        sendResponse({
-          requestId,
-          success: false,
-          error: err instanceof Error ? err.message : String(err),
-        });
-      });
+    enqueueApiCall(fn, args, requestId, sendResponse);
   },
 };
 

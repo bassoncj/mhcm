@@ -89,7 +89,7 @@ export function ModerationPanel() {
       if (!mapType.scrollItemType || !mapType.mapClass) return;
       if (market === "unopened" && !mapType.minRank) return;
     }
-    wsSend({ type: "mod_toggle_map_type_market", payload: { mapTypeId: id, market, enable } });
+    wsSend({ type: "mod_toggle_map_type_market", payload: { id, market, enable } });
   };
 
   const handleSaveAlias = (id: number, rawInput: string) => {

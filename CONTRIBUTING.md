@@ -23,11 +23,16 @@ Build order matters: `shared` must build before `server` and `extension`. The ro
 
 ## Making Changes
 
-1. Create a branch from `main`
-2. Make your changes
+1. Create a branch from `main` for your feature or fix
+2. Make your changes, keeping commits small and focused (one logical change per commit)
 3. Build all packages to verify: `npm run build`
 4. Test manually in the browser with the extension loaded
 5. Open a pull request with a clear description of what changed and why
+
+### Commit Guidelines
+
+- **One concern per commit.** Separate bug fixes, new features, and refactors into individual commits. This makes history easier to review, bisect, and revert.
+- **Write descriptive commit messages.** Lead with a short summary line, then use the body to explain *what* changed and *why*. Avoid referencing internal development phases that won't make sense to other readers.
 
 ## Code Style
 

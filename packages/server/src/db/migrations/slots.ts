@@ -324,6 +324,62 @@ export function migrateSlots(db: Database.Database): void {
     console.log("[db] migration: transactions recreated without verifying_invite_accepted");
   }
 
+  // Fix: earlier migration removed verifying_invite_accepted but may not have added verifying_map_valid
+  // (if the code at that time didn't include it yet). Re-create if verifying_map_valid is missing.
+  const txnSchemaFixVmv = db.prepare(
+    "SELECT sql FROM sqlite_master WHERE type='table' AND name='transactions'"
+  ).get() as { sql: string } | undefined;
+
+  if (txnSchemaFixVmv && txnSchemaFixVmv.sql.includes("verifying_invite_sent") && !txnSchemaFixVmv.sql.includes("verifying_map_valid")) {
+    console.log("[db] migration: adding verifying_map_valid state to transactions");
+    db.exec("PRAGMA foreign_keys = OFF");
+    db.exec("DROP TABLE IF EXISTS transactions_new");
+    db.exec(`
+      CREATE TABLE transactions_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sell_order_id INTEGER NOT NULL REFERENCES orders(id),
+        buy_order_id INTEGER NOT NULL REFERENCES orders(id),
+        seller_user_id INTEGER NOT NULL REFERENCES users(id),
+        buyer_user_id INTEGER NOT NULL REFERENCES users(id),
+        price INTEGER NOT NULL,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
+          'pending', 'risk_checking', 'validating', 'inviting', 'invite_sent', 'accepting',
+          'cancelling_invite', 'invite_accepted', 'transferring', 'pending_payment',
+          'verifying_invite_sent', 'verifying_map_valid', 'verifying_sb_receipt',
+          'awaiting_map_completion', 'claiming_chest', 'opening_chest', 'transferring_rt',
+          'completed', 'failed'
+        )),
+        mh_map_id INTEGER NOT NULL,
+        buyer_mh_sn_user_id TEXT NOT NULL,
+        seller_mh_sn_user_id TEXT NOT NULL,
+        failure_reason TEXT,
+        payment_retry_count INTEGER NOT NULL DEFAULT 0,
+        is_rt INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+        is_demo INTEGER NOT NULL DEFAULT 0
+      )
+    `);
+    db.exec(`
+      INSERT INTO transactions_new
+      SELECT id, sell_order_id, buy_order_id, seller_user_id, buyer_user_id,
+        price, quantity, state, mh_map_id, buyer_mh_sn_user_id, seller_mh_sn_user_id,
+        failure_reason, payment_retry_count, is_rt,
+        created_at, updated_at, is_demo
+      FROM transactions
+    `);
+    db.exec("DROP TABLE transactions");
+    db.exec("ALTER TABLE transactions_new RENAME TO transactions");
+    db.exec("CREATE INDEX idx_transactions_state ON transactions(state)");
+    db.exec("CREATE INDEX idx_transactions_sell ON transactions(sell_order_id)");
+    db.exec("CREATE INDEX idx_transactions_buy ON transactions(buy_order_id)");
+    db.exec("CREATE INDEX idx_transactions_seller ON transactions(seller_user_id)");
+    db.exec("CREATE INDEX idx_transactions_buyer ON transactions(buyer_user_id)");
+    db.exec("PRAGMA foreign_keys = ON");
+    console.log("[db] migration: transactions recreated with verifying_map_valid state");
+  }
+
   // Add sb_transfer_ts column for cross-verification time anchor
   const txnColsSbTs = db.prepare("PRAGMA table_info(transactions)").all() as { name: string }[];
   if (!txnColsSbTs.some((c) => c.name === "sb_transfer_ts")) {
