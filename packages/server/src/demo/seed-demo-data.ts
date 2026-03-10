@@ -174,8 +174,8 @@ function pickOther<T>(pool: T[], exclude: T): T {
   return pick;
 }
 
-// Purge all demo data. Deletes in FK-safe order (children before parents).
-export function purgeDemoData(): void {
+// Purge demo market data only (orders, transactions, price history). Keeps demo users.
+export function purgeDemoMarketData(): void {
   const db = getDb();
   db.transaction(() => {
     // Sniping (transaction_mice/items CASCADE from transactions)
@@ -196,12 +196,21 @@ export function purgeDemoData(): void {
     db.exec("DELETE FROM map_transactions WHERE is_demo = 1");
     db.exec("DELETE FROM map_orders WHERE is_demo = 1");
 
-    // Slots (existing) – rt_pending_items has FK to transactions, delete first
+    // Slots – rt_pending_items has FK to transactions, delete first
     db.exec("DELETE FROM rt_pending_items WHERE transaction_id IN (SELECT id FROM transactions WHERE is_demo = 1)");
     db.exec("DELETE FROM transactions WHERE is_demo = 1");
     db.exec("DELETE FROM orders WHERE is_demo = 1");
+  })();
+}
+
+// Purge all demo data including users. Used by admin purge.
+export function purgeDemoData(): void {
+  const db = getDb();
+  db.transaction(() => {
+    purgeDemoMarketData();
 
     // Users
+    db.exec("DELETE FROM onboarding_tasks WHERE user_id IN (SELECT id FROM users WHERE is_demo = 1)");
     db.exec("DELETE FROM mh_accounts WHERE user_id IN (SELECT id FROM users WHERE is_demo = 1)");
     db.exec("DELETE FROM user_favourites WHERE user_id IN (SELECT id FROM users WHERE is_demo = 1)");
     db.exec("DELETE FROM users WHERE is_demo = 1");
@@ -223,14 +232,6 @@ interface SeedCounts {
 export function seedDemoData(): { users: number } & SeedCounts {
   const db = getDb();
 
-  // Check if demo users already exist
-  const existingDemo = db
-    .prepare("SELECT COUNT(*) as cnt FROM users WHERE is_demo = 1")
-    .get() as { cnt: number };
-  if (existingDemo.cnt > 0) {
-    return { users: existingDemo.cnt, ...getDemoCounts() };
-  }
-
   // Verify types exist in DB
   const verified = verifyAndEnableTypes();
 
@@ -249,20 +250,29 @@ export function seedDemoData(): { users: number } & SeedCounts {
   };
 
   db.transaction(() => {
-    // 1. Create demo users
-    const demoUserIds: number[] = [];
-    const insertUser = db.prepare(
-      "INSERT INTO users (username, password_hash, is_demo) VALUES (?, ?, 1) RETURNING id"
-    );
-    const insertMhAccount = db.prepare(
-      `INSERT INTO mh_accounts (user_id, mh_user_id, mh_sn_user_id, verified_at)
-       VALUES (?, ?, ?, datetime('now'))`
-    );
+    // 1. Reuse existing demo users or create new ones
+    const existingDemoUsers = db
+      .prepare("SELECT id FROM users WHERE is_demo = 1 ORDER BY id ASC")
+      .all() as Array<{ id: number }>;
 
-    for (let i = 0; i < DEMO_USERNAMES.length; i++) {
-      const row = insertUser.get(DEMO_USERNAMES[i], "demo_no_login") as { id: number };
-      demoUserIds.push(row.id);
-      insertMhAccount.run(row.id, `demo_mh_${i + 1}`, `demo-${i + 1}`);
+    let demoUserIds: number[];
+    if (existingDemoUsers.length > 0) {
+      demoUserIds = existingDemoUsers.map((u) => u.id);
+    } else {
+      demoUserIds = [];
+      const insertUser = db.prepare(
+        "INSERT INTO users (username, password_hash, is_demo) VALUES (?, ?, 1) RETURNING id"
+      );
+      const insertMhAccount = db.prepare(
+        `INSERT INTO mh_accounts (user_id, mh_user_id, mh_sn_user_id, verified_at)
+         VALUES (?, ?, ?, datetime('now'))`
+      );
+
+      for (let i = 0; i < DEMO_USERNAMES.length; i++) {
+        const row = insertUser.get(DEMO_USERNAMES[i], "demo_no_login") as { id: number };
+        demoUserIds.push(row.id);
+        insertMhAccount.run(row.id, `demo_mh_${i + 1}`, `demo-${i + 1}`);
+      }
     }
     totalUsers = demoUserIds.length;
 

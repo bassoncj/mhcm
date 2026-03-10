@@ -3,7 +3,7 @@ import type { JWTPayload } from "../../auth/sessions.js";
 import { sendToUser, broadcast, broadcastPerUser, getAllSubscriptions } from "../connections.js";
 import { isAdmin } from "./handler-utils.js";
 import { isDemoEnabled, setDemoEnabled, setDemoMarketVisible, getDemoMarketConfig } from "../../demo/demo-mode.js";
-import { seedDemoData, purgeDemoData, getDemoStats } from "../../demo/seed-demo-data.js";
+import { seedDemoData, purgeDemoData, purgeDemoMarketData, getDemoStats } from "../../demo/seed-demo-data.js";
 import { invalidateHomeCache } from "../../db/queries/slot-home.js";
 import { computeHomeData } from "../../db/queries/slot-home.js";
 import { computeItemHomeData, invalidateItemHomeCache } from "../../db/queries/item-home.js";
@@ -91,7 +91,7 @@ export function handleAdminDemoMessage(
         sendToUser(userId, { type: "error", payload: { message: "Unauthorized", source: "admin_seed_demo" } });
         return true;
       }
-      purgeDemoData();
+      purgeDemoMarketData();
       seedDemoData();
       invalidateAndBroadcast();
       sendToUser(userId, { type: "admin_demo_status", payload: getDemoStats() });

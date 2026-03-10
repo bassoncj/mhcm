@@ -1,7 +1,7 @@
 {
   "name": "@mhcm/extension",
   "description": "Chrome/Firefox browser extension with Preact side panel UI",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "repository": {

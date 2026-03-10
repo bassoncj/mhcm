@@ -12,7 +12,7 @@ import { seedItemTypes } from "./seed-item-types.js";
 import { seedScrolls } from "./seed-scrolls.js";
 import { seedRanks } from "./seed-ranks.js";
 import { seedEnvironments } from "./seed-environments.js";
-import { purgeDemoData, seedDemoData } from "../demo/seed-demo-data.js";
+import { purgeDemoMarketData, seedDemoData } from "../demo/seed-demo-data.js";
 import { ONBOARDING_STEPS } from "@mhcm/shared";
 import { onboardingVersionExists, insertOnboardingTasksForNewVersion } from "./queries/onboarding.js";
 
@@ -49,7 +49,7 @@ export async function initDb(): Promise<Database.Database> {
   await seedRanks();
   await seedEnvironments();
 
-  purgeDemoData();
+  purgeDemoMarketData();
   seedDemoData();
   syncOnboardingTasks();
 
