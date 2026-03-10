@@ -8,6 +8,10 @@ CREATE TABLE IF NOT EXISTS users (
   discord_id TEXT UNIQUE,
   discord_username TEXT,
   notification_prefs TEXT DEFAULT '{}',
+  utc_offset REAL DEFAULT 0,
+  rank_id INTEGER,
+  last_connected_at TEXT,
+  is_demo INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -18,6 +22,9 @@ CREATE TABLE IF NOT EXISTS mh_accounts (
   mh_sn_user_id TEXT NOT NULL UNIQUE,
   verification_token TEXT,
   verified_at TEXT,
+  email TEXT,
+  verification_code_hash TEXT,
+  code_expires_at TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -37,6 +44,9 @@ CREATE TABLE IF NOT EXISTS map_types (
   scroll_item_type TEXT,
   min_rank TEXT,
   supports_rt INTEGER NOT NULL DEFAULT 0,
+  enabled_slots INTEGER NOT NULL DEFAULT 0,
+  enabled_unopened INTEGER NOT NULL DEFAULT 0,
+  enabled_complete INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   UNIQUE(map_type, quality, goal)
 );
@@ -77,7 +87,8 @@ CREATE TABLE IF NOT EXISTS orders (
   is_rt INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now')),
-  priority_at TEXT NOT NULL DEFAULT (datetime('now'))
+  priority_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_orders_matching
@@ -85,6 +96,9 @@ CREATE INDEX IF NOT EXISTS idx_orders_matching
 
 CREATE INDEX IF NOT EXISTS idx_orders_user
   ON orders(user_id, status);
+
+CREATE INDEX IF NOT EXISTS idx_orders_mh_map_id
+  ON orders(mh_map_id) WHERE mh_map_id IS NOT NULL;
 
 CREATE TABLE IF NOT EXISTS transactions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -97,6 +111,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
     'pending', 'risk_checking', 'validating', 'inviting', 'invite_sent', 'accepting',
     'cancelling_invite', 'invite_accepted', 'transferring', 'pending_payment',
+    'verifying_invite_sent', 'verifying_map_valid', 'verifying_sb_receipt',
     'awaiting_map_completion', 'claiming_chest', 'opening_chest', 'transferring_rt',
     'completed', 'failed'
   )),
@@ -106,12 +121,26 @@ CREATE TABLE IF NOT EXISTS transactions (
   failure_reason TEXT,
   payment_retry_count INTEGER NOT NULL DEFAULT 0,
   is_rt INTEGER NOT NULL DEFAULT 0,
+  sb_transfer_ts TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_transactions_state
   ON transactions(state);
+
+CREATE INDEX IF NOT EXISTS idx_transactions_sell
+  ON transactions(sell_order_id);
+
+CREATE INDEX IF NOT EXISTS idx_transactions_buy
+  ON transactions(buy_order_id);
+
+CREATE INDEX IF NOT EXISTS idx_transactions_seller
+  ON transactions(seller_user_id);
+
+CREATE INDEX IF NOT EXISTS idx_transactions_buyer
+  ON transactions(buyer_user_id);
 
 CREATE TABLE IF NOT EXISTS slot_risk_decisions (
   buy_order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
@@ -120,9 +149,6 @@ CREATE TABLE IF NOT EXISTS slot_risk_decisions (
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   PRIMARY KEY (buy_order_id, sell_order_id)
 );
-
-CREATE INDEX IF NOT EXISTS idx_transactions_users
-  ON transactions(seller_user_id, buyer_user_id);
 
 CREATE TABLE IF NOT EXISTS rt_pending_items (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -208,9 +234,11 @@ CREATE TABLE IF NOT EXISTS sniping_orders (
   map_class TEXT CHECK (map_class IN ('treasure', 'event', 'poster')),
   paused_at TEXT,
   paused_reason TEXT,
+  min_rank_id INTEGER,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now')),
   priority_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0,
   CHECK (
     (mouse_type_id IS NOT NULL AND mouse_group_id IS NULL AND item_type_id IS NULL AND item_group_id IS NULL) OR
     (mouse_type_id IS NULL AND mouse_group_id IS NOT NULL AND item_type_id IS NULL AND item_group_id IS NULL) OR
@@ -235,13 +263,15 @@ CREATE TABLE IF NOT EXISTS sniping_transactions (
   mh_map_id INTEGER NOT NULL,
   total_price INTEGER NOT NULL,
   state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
-    'pending', 'inviting', 'invite_sent', 'sniping',
-    'awaiting_payment', 'pending_payment', 'transferring', 'awaiting_leave',
+    'pending', 'inviting', 'invite_sent', 'sniping', 'verifying_goal_completed',
+    'awaiting_payment', 'pending_payment', 'transferring', 'verifying_sb_receipt',
+    'awaiting_leave', 'verifying_sniper_left',
     'completed', 'failed'
   )),
   sniper_mh_sn_user_id TEXT NOT NULL,
   maptain_mh_sn_user_id TEXT NOT NULL,
   failure_reason TEXT,
+  is_demo INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -267,7 +297,8 @@ CREATE TABLE IF NOT EXISTS sniping_price_history (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   mouse_type_id INTEGER NOT NULL REFERENCES mouse_types(id),
   price INTEGER NOT NULL,
-  completed_at TEXT NOT NULL DEFAULT (datetime('now'))
+  completed_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_sniping_price_history ON sniping_price_history(mouse_type_id, completed_at);
 
@@ -275,7 +306,8 @@ CREATE TABLE IF NOT EXISTS sniping_group_price_history (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   group_id INTEGER NOT NULL REFERENCES sniping_mouse_groups(id),
   price INTEGER NOT NULL,
-  completed_at TEXT NOT NULL DEFAULT (datetime('now'))
+  completed_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_sniping_group_price_history
   ON sniping_group_price_history(group_id, completed_at);
@@ -312,7 +344,8 @@ CREATE TABLE IF NOT EXISTS sniping_item_price_history (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   item_type_id INTEGER NOT NULL REFERENCES item_types(id),
   price INTEGER NOT NULL,
-  completed_at TEXT NOT NULL DEFAULT (datetime('now'))
+  completed_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_sniping_item_price_history
   ON sniping_item_price_history(item_type_id, completed_at);
@@ -321,7 +354,8 @@ CREATE TABLE IF NOT EXISTS sniping_item_group_price_history (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   item_group_id INTEGER NOT NULL REFERENCES sniping_item_groups(id),
   price INTEGER NOT NULL,
-  completed_at TEXT NOT NULL DEFAULT (datetime('now'))
+  completed_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_sniping_item_group_price_history
   ON sniping_item_group_price_history(item_group_id, completed_at);
@@ -392,7 +426,8 @@ CREATE TABLE IF NOT EXISTS item_orders (
   close_reason TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now')),
-  priority_at TEXT NOT NULL DEFAULT (datetime('now'))
+  priority_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_item_orders_matching
@@ -412,15 +447,18 @@ CREATE TABLE IF NOT EXISTS item_transactions (
   price REAL NOT NULL,
   quantity INTEGER NOT NULL,
   state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
-    'pending', 'validating', 'seller_transferring', 'buyer_transferring',
-    'pending_payment', 'completed', 'failed'
+    'pending', 'validating', 'seller_transferring', 'verifying_item_receipt',
+    'buyer_transferring', 'verifying_sb_receipt', 'pending_payment', 'completed', 'failed'
   )),
   seller_mh_sn_user_id TEXT NOT NULL,
   buyer_mh_sn_user_id TEXT NOT NULL,
   failure_reason TEXT,
   payment_retry_count INTEGER NOT NULL DEFAULT 0,
+  seller_transfer_ts TEXT,
+  buyer_transfer_ts TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_item_transactions_state
@@ -434,7 +472,8 @@ CREATE TABLE IF NOT EXISTS item_price_history (
   item_type_id INTEGER NOT NULL REFERENCES item_types(id),
   price REAL NOT NULL,
   quantity INTEGER NOT NULL,
-  completed_at TEXT NOT NULL DEFAULT (datetime('now'))
+  completed_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_item_price_history
@@ -490,7 +529,8 @@ CREATE TABLE IF NOT EXISTS map_orders (
   remaining_goals TEXT,
   priority_at TEXT NOT NULL DEFAULT (datetime('now')),
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_map_orders_matching
@@ -510,9 +550,12 @@ CREATE TABLE IF NOT EXISTS map_transactions (
   price INTEGER NOT NULL,
   quantity INTEGER NOT NULL DEFAULT 1,
   state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN (
-    'pending', 'risk_checking', 'validating_seller', 'validating_buyer', 'transferring_sb',
-    'opening_scroll', 'inviting', 'accepting', 'transferring_ownership',
-    'seller_leaving', 'reversing_sb', 'cancelling_invite', 'pending_completion',
+    'pending', 'risk_checking', 'validating_seller', 'validating_buyer',
+    'inviting', 'verifying_invite_sent', 'verifying_map_valid', 'transferring_sb', 'verifying_sb_receipt',
+    'verifying_map_free', 'opening_scroll', 'verifying_scroll_opened',
+    'accepting', 'transferring_ownership', 'verifying_ownership',
+    'seller_leaving', 'verifying_seller_left',
+    'reversing_sb', 'cancelling_invite', 'pending_completion',
     'completed', 'failed'
   )),
   mh_map_id INTEGER,
@@ -521,6 +564,8 @@ CREATE TABLE IF NOT EXISTS map_transactions (
   buyer_mh_sn_user_id TEXT NOT NULL,
   failure_reason TEXT,
   retry_count INTEGER NOT NULL DEFAULT 0,
+  sb_transfer_ts TEXT,
+  is_demo INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -545,13 +590,36 @@ CREATE TABLE IF NOT EXISTS map_price_history (
   mode TEXT NOT NULL CHECK (mode IN ('unopened', 'completed')),
   price INTEGER NOT NULL,
   quantity INTEGER NOT NULL DEFAULT 1,
-  completed_at TEXT NOT NULL DEFAULT (datetime('now'))
+  completed_at TEXT NOT NULL DEFAULT (datetime('now')),
+  is_demo INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_map_price_history
   ON map_price_history(map_type_id, mode, completed_at);
 
 CREATE TABLE IF NOT EXISTS map_type_notifications (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  map_type_id INTEGER NOT NULL REFERENCES map_types(id),
+  mode TEXT CHECK (mode IN ('unopened', 'completed')),
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_map_type_notif_slot
+  ON map_type_notifications(user_id, map_type_id) WHERE mode IS NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_map_type_notif_mode
+  ON map_type_notifications(user_id, map_type_id, mode) WHERE mode IS NOT NULL;
+
+CREATE TABLE IF NOT EXISTS user_favourites (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  map_type_id INTEGER NOT NULL REFERENCES map_types(id),
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(user_id, map_type_id)
+);
+
+CREATE TABLE IF NOT EXISTS user_map_favourites (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   map_type_id INTEGER NOT NULL REFERENCES map_types(id),
