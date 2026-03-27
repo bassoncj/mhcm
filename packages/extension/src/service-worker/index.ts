@@ -3033,6 +3033,7 @@ async function handleVerifyTransfer(payload: {
   mapClass?: string;
   expectedMapType?: string;
   goal?: string;
+  utcOffset?: number;
 }): Promise<void> {
   const { transactionId, verificationType } = payload;
 
@@ -3276,16 +3277,23 @@ async function checkMessageReceipt(payload: Parameters<typeof handleVerifyTransf
     return { verified: false, error: "invalid_challenge" };
   }
 
-  const [result, utcOffset] = await Promise.all([
-    executeApiViaContentScript("fetchMessages", []),
-    (async (): Promise<number> => {
-      if (getState().gameSettings?.utcOffset != null) return getState().gameSettings!.utcOffset;
-      const uh = getState().playerIdentity?.uniqueHash;
-      if (!uh) return 0;
+  // Use server-provided utcOffset (from DB) if available; fall back to local cache
+  let utcOffset: number;
+  if (payload.utcOffset != null) {
+    utcOffset = payload.utcOffset;
+  } else if (getState().gameSettings?.utcOffset != null) {
+    utcOffset = getState().gameSettings!.utcOffset;
+  } else {
+    const uh = getState().playerIdentity?.uniqueHash;
+    if (!uh) {
+      utcOffset = 0;
+    } else {
       const r = await executeApiViaContentScript("fetchPreferencesPage", [uh]);
-      return r.success ? ((r.data?.utc_offset as number) ?? 0) : 0;
-    })(),
-  ]);
+      utcOffset = r.success ? (Number(r.data?.utc_offset) || 0) : 0;
+    }
+  }
+
+  const result = await executeApiViaContentScript("fetchMessages", []);
 
   if (!result.success || !Array.isArray(result.data)) return { verified: false, error: "api_unavailable" };
 

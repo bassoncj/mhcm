@@ -463,8 +463,8 @@ export async function fetchPreferencesPage(
 
   const settings = data?.page?.game_settings;
   const formData = data?.page?.form_data;
-  const timezone = (formData?.timezone as number) ?? 0;
-  const timezoneOffset = (formData?.timezone_offset as number) ?? 0;
+  const timezone = Number(formData?.timezone) || 0;
+  const timezoneOffset = Number(formData?.timezone_offset) || 0;
   return {
     allow_map_invites: !!settings?.allow_map_invites,
     allow_anonymous_supply_transfers: !!settings?.allow_anonymous_supply_transfers,

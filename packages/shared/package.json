@@ -1,7 +1,7 @@
 {
   "name": "@mhcm/shared",
   "description": "Shared TypeScript types, constants, and pricing utilities",
-  "version": "0.9.4",
+  "version": "0.9.6",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "repository": {

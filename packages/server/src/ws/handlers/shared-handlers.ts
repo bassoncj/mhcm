@@ -209,7 +209,8 @@ export function handleSharedMessage(
 
     case "report_game_settings": {
       const { allowMapInvites, allowAnonymousSupplyTransfers, utcOffset } = message.payload;
-      setUserUtcOffset(userId, utcOffset ?? 0);
+      const safeOffset = typeof utcOffset === "number" && utcOffset >= -12 && utcOffset <= 14 ? utcOffset : 0;
+      setUserUtcOffset(userId, safeOffset);
       const valid = allowMapInvites && allowAnonymousSupplyTransfers;
 
       if (valid) {

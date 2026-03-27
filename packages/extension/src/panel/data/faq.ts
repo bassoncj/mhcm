@@ -45,6 +45,10 @@ export const faqData: FAQCategory[] = [
       {
         "question": "Can I unlink my MouseHunt account?",
         "answer": "No, the link between your Discord and MouseHunt accounts is permanent. This prevents users who violate marketplace rules from creating new accounts to evade restrictions."
+      },
+      {
+        "question": "Where can I get help?",
+        "answer": "If you have questions, run into issues, or want to give feedback, visit the [Community Marketplace](https://discordapp.com/channels/275500976662773761/1475039782672531649) channel on the MouseHunt Community Discord server."
       }
     ]
   },

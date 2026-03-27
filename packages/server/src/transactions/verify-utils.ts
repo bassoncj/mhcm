@@ -8,6 +8,7 @@
 import type { VerificationType } from "@mhcm/shared";
 import { sendToUser } from "../ws/connections.js";
 import { isUserOnline } from "../ws/connections.js";
+import { getUserUtcOffset } from "../db/queries/users.js";
 
 const RETRY_DELAYS_MS = [1_000, 3_000, 10_000] as const;
 const ATTEMPT_TIMEOUT_MS = 30_000; // 30s per attempt
@@ -234,6 +235,9 @@ function sendChallenge(entry: PendingVerification): void {
     handleAttemptFailure(entry, true);
   }, ATTEMPT_TIMEOUT_MS);
 
+  // Look up verifying user's UTC offset from DB for message timestamp checks
+  const utcOffset = getUserUtcOffset(entry.verifyingUserId);
+
   sendToUser(entry.verifyingUserId, {
     type: "verify_transfer",
     payload: {
@@ -250,6 +254,7 @@ function sendChallenge(entry: PendingVerification): void {
       expectedMapType: entry.challenge.expectedMapType,
       goal: entry.challenge.goal,
       goalKey: entry.challenge.goalKey,
+      utcOffset,
     },
   });
 }

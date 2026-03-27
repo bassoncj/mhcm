@@ -1241,6 +1241,8 @@ export interface ServerVerifyTransfer {
     goal?: string;
     /** MH type key string for goal_completed verification (e.g. "desert_nomad"). */
     goalKey?: string;
+    /** Verifying user's UTC offset from DB – for message timestamp conversion. */
+    utcOffset?: number;
   };
 }
 

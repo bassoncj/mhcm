@@ -17,6 +17,9 @@ There is no official endorsement, but the extension has been carefully designed 
 ### Can I unlink my MouseHunt account?
 No, the link between your Discord and MouseHunt accounts is permanent. This prevents users who violate marketplace rules from creating new accounts to evade restrictions.
 
+### Where can I get help?
+If you have questions, run into issues, or want to give feedback, visit the [Community Marketplace](https://discordapp.com/channels/275500976662773761/1475039782672531649) channel on the MouseHunt Community Discord server.
+
 ## General
 
 Common questions about features that work across all markets.

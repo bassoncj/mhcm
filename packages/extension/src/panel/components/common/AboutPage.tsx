@@ -37,7 +37,7 @@ export function AboutPage() {
             <div class="about-links">
               <a
                 class="about-link"
-                href="https://discordapp.com/channels/275500976662773761/1029053362483773480"
+                href="https://discordapp.com/channels/275500976662773761/1475039782672531649"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -56,7 +56,7 @@ export function AboutPage() {
                   height={S}
                   class="about-kofi-icon"
                 />
-                Support on Ko-fi
+                Donate on Ko-fi
               </a>
               <a
                 class="about-link"
@@ -82,7 +82,7 @@ export function AboutPage() {
             <p>
               Found a bug or have an idea? Let us know in the{" "}
               <a
-                href="https://discordapp.com/channels/275500976662773761/1029053362483773480"
+                href="https://discordapp.com/channels/275500976662773761/1475039782672531649"
                 target="_blank"
                 rel="noopener noreferrer"
               >
